@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
+import TestingValidation from './TestingValidation';
 
 interface TaskValidationProps {
   taskName: string;
   taskDescription: string;
   validationCriteria: string[];
-  onValidationComplete: (validated: boolean, feedback?: string, errors?: string[]) => void;
+  onValidationComplete: (validated: boolean, feedback?: string, errors?: string[], testResults?: TestResults) => void;
   onCancel: () => void;
+}
+
+interface TestResults {
+  testsWritten: number;
+  testsPassing: number;
+  testsFailing: number;
+  coveragePercentage: number;
+  framework: string;
+  executionTime: number;
+  qualityScore: 'high' | 'medium' | 'low';
+  issues: string[];
 }
 
 const TaskValidation: React.FC<TaskValidationProps> = ({
@@ -19,6 +31,18 @@ const TaskValidation: React.FC<TaskValidationProps> = ({
   const [userFeedback, setUserFeedback] = useState('');
   const [encounteredErrors, setEncounteredErrors] = useState<string[]>(['']);
   const [showErrorSection, setShowErrorSection] = useState(false);
+  const [showTestingSection, setShowTestingSection] = useState(true);
+  const [testResults, setTestResults] = useState<TestResults>({
+    testsWritten: 0,
+    testsPassing: 0,
+    testsFailing: 0,
+    coveragePercentage: 0,
+    framework: '',
+    executionTime: 0,
+    qualityScore: 'low',
+    issues: []
+  });
+  const [testingComplete, setTestingComplete] = useState(false);
 
   const handleCriterionChange = (criterion: string, passed: boolean) => {
     setValidationResults((prev: { [key: string]: boolean }) => ({
@@ -42,6 +66,11 @@ const TaskValidation: React.FC<TaskValidationProps> = ({
     setEncounteredErrors(newErrors.length > 0 ? newErrors : ['']);
   };
 
+  const handleTestingComplete = (results: TestResults) => {
+    setTestResults(results);
+    setTestingComplete(true);
+  };
+  
   const handleSubmit = () => {
     const allCriteriaMet = validationCriteria.every(criterion => 
       validationResults[criterion] === true
@@ -49,10 +78,19 @@ const TaskValidation: React.FC<TaskValidationProps> = ({
     
     const nonEmptyErrors = encounteredErrors.filter(error => error.trim() !== '');
     
+    // Check if testing requirements are met
+    const testingRequirementsMet = testingComplete && 
+                                   testResults.testsPassing > 0 && 
+                                   testResults.testsFailing === 0 &&
+                                   testResults.coveragePercentage >= 75; // Minimum 75% coverage
+    
+    const validated = allCriteriaMet && testingRequirementsMet;
+    
     onValidationComplete(
-      allCriteriaMet,
+      validated,
       userFeedback.trim() || undefined,
-      nonEmptyErrors.length > 0 ? nonEmptyErrors : undefined
+      nonEmptyErrors.length > 0 ? nonEmptyErrors : undefined,
+      testResults
     );
   };
 
@@ -63,6 +101,13 @@ const TaskValidation: React.FC<TaskValidationProps> = ({
   const allCriteriaPassed = validationCriteria.every(criterion => 
     validationResults[criterion] === true
   );
+  
+  const testingRequirementsMet = testingComplete && 
+                                 testResults.testsPassing > 0 && 
+                                 testResults.testsFailing === 0 &&
+                                 testResults.coveragePercentage >= 75;
+                                 
+  const allRequirementsMet = allCriteriaPassed && testingRequirementsMet;
 
   return (
     <div className="task-validation-modal">
@@ -76,6 +121,26 @@ const TaskValidation: React.FC<TaskValidationProps> = ({
         <div className="task-info">
           <h4>{taskName}</h4>
           <p className="task-description">{taskDescription}</p>
+        </div>
+
+        <div className="testing-section">
+          <div className="testing-section-header">
+            <h5>🧪 Mandatory Testing Requirements</h5>
+            <button 
+              className="toggle-testing"
+              onClick={() => setShowTestingSection(!showTestingSection)}
+            >
+              {showTestingSection ? 'Hide' : 'Show'} Testing
+            </button>
+          </div>
+          
+          {showTestingSection && (
+            <TestingValidation 
+              taskName={taskName}
+              taskDescription={taskDescription}
+              onTestingComplete={handleTestingComplete}
+            />
+          )}
         </div>
 
         <div className="validation-section">
@@ -173,11 +238,30 @@ const TaskValidation: React.FC<TaskValidationProps> = ({
 
         <div className="validation-summary">
           {allCriteriaChecked && (
-            <div className={`summary-status ${allCriteriaPassed ? 'success' : 'warning'}`}>
-              {allCriteriaPassed 
-                ? '✓ All validation criteria passed' 
-                : '⚠ Some validation criteria failed'
-              }
+            <div className="summary-container">
+              <div className={`summary-status ${allCriteriaPassed ? 'success' : 'warning'}`}>
+                {allCriteriaPassed 
+                  ? '✓ All validation criteria passed' 
+                  : '⚠ Some validation criteria failed'
+                }
+              </div>
+              
+              <div className={`summary-status ${testingRequirementsMet ? 'success' : 'warning'}`}>
+                {testingRequirementsMet 
+                  ? '✅ Testing requirements met'
+                  : '❌ Testing requirements not met'
+                }
+              </div>
+              
+              {testingComplete && (
+                <div className="testing-summary">
+                  <h6>Testing Summary:</h6>
+                  <p>Tests: {testResults.testsPassing}/{testResults.testsWritten} passing</p>
+                  <p>Coverage: {testResults.coveragePercentage}%</p>
+                  <p>Framework: {testResults.framework}</p>
+                  <p>Quality: {testResults.qualityScore}</p>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -192,9 +276,9 @@ const TaskValidation: React.FC<TaskValidationProps> = ({
           <button 
             className="submit-validation"
             onClick={handleSubmit}
-            disabled={!allCriteriaChecked}
+            disabled={!allCriteriaChecked || !testingComplete}
           >
-            {allCriteriaPassed ? 'Confirm & Continue' : 'Report Issues & Continue'}
+            {allRequirementsMet ? 'All Requirements Met - Continue' : 'Requirements Not Met - Report Issues'}
           </button>
         </div>
       </div>

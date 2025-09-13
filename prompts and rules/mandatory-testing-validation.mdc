@@ -1,0 +1,688 @@
+---
+description: "CRITICAL: Mandatory unit testing for every task completion across all application types"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# CRITICAL: Mandatory Testing Validation Protocol
+
+## 🚨 ABSOLUTE RULE: NO TASK COMPLETION WITHOUT PASSING TESTS
+
+**MANDATORY TESTING SEQUENCE FOR EVERY TASK:**
+
+```
+TASK IMPLEMENTATION → UNIT TESTS → TEST EXECUTION → TEST PASS → TASK COMPLETE
+```
+
+**❌ NEVER mark a task complete without:**
+- Writing appropriate unit tests
+- Running tests successfully
+- Achieving minimum test coverage
+- Verifying test quality and effectiveness
+
+**✅ ALWAYS require:**
+- Test-driven development approach
+- Platform-appropriate testing frameworks
+- Comprehensive test coverage
+- Automated test execution
+- Test result validation
+
+## UNIVERSAL TESTING FRAMEWORK SELECTION
+
+### Technology Stack Detection and Framework Selection
+
+**BEFORE writing any tests, research and select appropriate testing framework:**
+
+```javascript
+TESTING_FRAMEWORK_SELECTION: {
+  web_applications: {
+    react: {
+      unit_testing: "Jest + React Testing Library",
+      integration: "Jest + Enzyme (legacy) or Testing Library",
+      e2e: "Playwright or Cypress",
+      research_required: [
+        "React Testing Library best practices 2025",
+        "Jest configuration React 2025",
+        "React component testing patterns"
+      ]
+    },
+    vue: {
+      unit_testing: "Vue Test Utils + Jest/Vitest",
+      integration: "Vue Test Utils + Jest",
+      e2e: "Playwright or Cypress",
+      research_required: [
+        "Vue Test Utils latest version 2025",
+        "Vue 3 testing best practices",
+        "Vitest vs Jest for Vue comparison"
+      ]
+    },
+    angular: {
+      unit_testing: "Jasmine + Karma",
+      integration: "Angular Testing Utilities",
+      e2e: "Protractor (deprecated) → Playwright/Cypress",
+      research_required: [
+        "Angular testing guide 2025",
+        "Jasmine Karma configuration",
+        "Angular component testing patterns"
+      ]
+    },
+    vanilla_js: {
+      unit_testing: "Jest or Vitest",
+      integration: "Jest + jsdom",
+      e2e: "Playwright or Puppeteer",
+      research_required: [
+        "JavaScript unit testing best practices 2025",
+        "Jest configuration vanilla JS",
+        "DOM testing strategies"
+      ]
+    }
+  },
+  desktop_applications: {
+    electron: {
+      unit_testing: "Jest + Electron specific mocks",
+      integration: "Spectron (deprecated) → Playwright for Electron",
+      e2e: "Playwright for Electron",
+      research_required: [
+        "Electron testing strategies 2025",
+        "Playwright Electron support",
+        "Electron main process testing"
+      ]
+    },
+    windows_uwp: {
+      unit_testing: "MSTest or xUnit with Visual Studio",
+      integration: "Visual Studio Test Framework",
+      ui_testing: "Coded UI Tests or Windows Application Driver",
+      research_required: [
+        "UWP unit testing Visual Studio 2025",
+        "Windows Application Driver setup",
+        "UWP testing best practices"
+      ]
+    },
+    windows_forms: {
+      unit_testing: "NUnit or MSTest",
+      ui_testing: "White Framework or TestStack.White",
+      integration: "MSTest with MVP pattern",
+      research_required: [
+        "Windows Forms testing patterns 2025",
+        "MVP pattern testing strategies",
+        "White Framework alternatives"
+      ]
+    },
+    wpf: {
+      unit_testing: "NUnit or xUnit",
+      ui_testing: "White Framework or FlaUI",
+      integration: "MVVM pattern testing",
+      research_required: [
+        "WPF MVVM testing patterns 2025",
+        "FlaUI vs White Framework",
+        "WPF unit testing best practices"
+      ]
+    },
+    macos: {
+      unit_testing: "XCTest for Swift/Objective-C",
+      ui_testing: "XCTest UI Testing",
+      integration: "XCTest with app bundles",
+      research_required: [
+        "macOS app testing Xcode 2025",
+        "XCTest best practices",
+        "macOS UI automation testing"
+      ]
+    },
+    linux_gtk: {
+      unit_testing: "pytest for Python GTK",
+      ui_testing: "dogtail or pyautogui",
+      integration: "unittest or pytest",
+      research_required: [
+        "GTK application testing 2025",
+        "Python GUI testing frameworks",
+        "Linux desktop automation"
+      ]
+    }
+  },
+  mobile_applications: {
+    react_native: {
+      unit_testing: "Jest + React Native Testing Library",
+      integration: "Jest with React Native mocks",
+      e2e: "Detox or Appium",
+      research_required: [
+        "React Native testing library 2025",
+        "Detox setup configuration",
+        "React Native component testing"
+      ]
+    },
+    flutter: {
+      unit_testing: "Flutter Test framework",
+      widget_testing: "Flutter Widget Tests",
+      integration: "Flutter Integration Tests",
+      research_required: [
+        "Flutter testing guide 2025",
+        "Flutter widget testing patterns",
+        "Flutter integration testing setup"
+      ]
+    },
+    ios_native: {
+      unit_testing: "XCTest",
+      ui_testing: "XCTest UI Testing",
+      integration: "XCTest with simulators",
+      research_required: [
+        "iOS unit testing best practices 2025",
+        "XCTest Swift testing patterns",
+        "iOS simulator testing strategies"
+      ]
+    },
+    android_native: {
+      unit_testing: "JUnit + Robolectric",
+      instrumentation: "AndroidX Test",
+      ui_testing: "Espresso",
+      research_required: [
+        "Android testing framework 2025",
+        "Espresso UI testing guide",
+        "Android unit testing patterns"
+      ]
+    }
+  },
+  backend_api: {
+    nodejs: {
+      unit_testing: "Jest or Vitest",
+      integration: "Supertest + Jest",
+      e2e: "Jest + test database",
+      research_required: [
+        "Node.js API testing best practices 2025",
+        "Supertest configuration",
+        "Database testing strategies"
+      ]
+    },
+    python: {
+      unit_testing: "pytest or unittest",
+      integration: "pytest with fixtures",
+      api_testing: "pytest + requests or httpx",
+      research_required: [
+        "Python API testing pytest 2025",
+        "FastAPI testing strategies",
+        "Django testing best practices"
+      ]
+    },
+    dotnet: {
+      unit_testing: "xUnit or NUnit",
+      integration: "ASP.NET Core Test Host",
+      api_testing: "WebApplicationFactory",
+      research_required: [
+        ".NET Core testing framework 2025",
+        "ASP.NET Core integration testing",
+        "Entity Framework testing patterns"
+      ]
+    }
+  }
+}
+```
+
+## MANDATORY TESTING RESEARCH PHASE
+
+### BEFORE Writing Any Tests (REQUIRED)
+
+**Technology Stack Analysis:**
+```
+1. IDENTIFY application type and technology stack
+2. RESEARCH appropriate testing frameworks for the stack
+3. SEARCH for latest testing best practices (2025-2026)
+4. VERIFY framework compatibility and stability
+5. DOCUMENT testing strategy and tools selection
+```
+
+**Research Queries (ALL REQUIRED):**
+```
+Search: "[technology-stack] unit testing best practices 2025 2026"
+Search: "[framework] testing configuration setup guide latest"
+Search: "[testing-framework] vs alternatives comparison 2025"
+Search: "[application-type] testing patterns examples github"
+Search: "[technology] test coverage standards industry"
+```
+
+### Testing Strategy Documentation Template
+
+```markdown
+# Testing Strategy - [Feature Name]
+
+## Technology Stack Analysis
+- **Application Type**: [Web/Desktop/Mobile/Backend/Game]
+- **Primary Framework**: [React/Vue/Angular/Electron/etc]
+- **Language**: [JavaScript/TypeScript/C#/Python/etc]
+- **Platform**: [Windows/macOS/Linux/iOS/Android/Web]
+
+## Selected Testing Frameworks
+### Unit Testing
+- **Framework**: [Jest/Vitest/xUnit/pytest/etc]
+- **Version**: [Latest researched version]
+- **Reason**: [Why this framework was chosen]
+- **Source**: [Research documentation URL]
+
+### Integration Testing
+- **Framework**: [Testing Library/Supertest/etc]
+- **Purpose**: [Component integration, API testing, etc]
+- **Configuration**: [Special setup requirements]
+
+### End-to-End Testing (if applicable)
+- **Framework**: [Playwright/Cypress/Detox/etc]
+- **Scope**: [Critical user flows to test]
+- **Environment**: [Testing environment setup]
+
+## Testing Standards
+- **Minimum Coverage**: [80% for critical code, 60% overall]
+- **Test Types Required**: [Unit, Integration, E2E as applicable]
+- **Naming Convention**: [*.test.js, *.spec.js, etc]
+- **File Structure**: [Co-located, separate test folders, etc]
+
+## Quality Gates
+- [ ] All unit tests pass
+- [ ] Minimum coverage achieved
+- [ ] Integration tests cover key workflows
+- [ ] No test warnings or errors
+- [ ] Tests are maintainable and readable
+```
+
+## TASK-LEVEL TESTING REQUIREMENTS
+
+### For EVERY Task Implementation
+
+**MANDATORY Testing Sequence:**
+
+```markdown
+## Testing Protocol for Task: [Task Name]
+
+### Step 1: Pre-Implementation Testing Setup
+- [ ] Testing framework installed and configured
+- [ ] Test file structure created
+- [ ] Test utilities and mocks prepared
+- [ ] Testing environment verified
+
+### Step 2: Test-Driven Development
+- [ ] Write failing tests first (TDD approach)
+- [ ] Define test cases covering:
+  - Happy path scenarios
+  - Error conditions
+  - Edge cases
+  - Boundary conditions
+- [ ] Verify tests fail before implementation
+
+### Step 3: Implementation with Testing
+- [ ] Implement feature to make tests pass
+- [ ] Write additional tests as needed
+- [ ] Ensure comprehensive coverage
+- [ ] Refactor tests for clarity and maintainability
+
+### Step 4: Test Execution and Validation
+- [ ] Run all unit tests - MUST PASS
+- [ ] Run integration tests - MUST PASS
+- [ ] Check test coverage - MUST MEET MINIMUM
+- [ ] Verify test quality and effectiveness
+- [ ] Run performance tests (if applicable)
+
+### Step 5: Test Documentation
+- [ ] Document test approach and coverage
+- [ ] Add test maintenance notes
+- [ ] Update testing documentation
+- [ ] Record any testing decisions or trade-offs
+```
+
+## TESTING IMPLEMENTATION BY APPLICATION TYPE
+
+### Web Applications Testing
+
+**React Component Testing Example:**
+```javascript
+// Component: Button.tsx
+import React from 'react';
+
+interface ButtonProps {
+  onClick: () => void;
+  children: React.ReactNode;
+  disabled?: boolean;
+}
+
+export const Button: React.FC<ButtonProps> = ({ onClick, children, disabled }) => (
+  <button onClick={onClick} disabled={disabled}>
+    {children}
+  </button>
+);
+
+// Test: Button.test.tsx
+import { render, fireEvent, screen } from '@testing-library/react';
+import { Button } from './Button';
+
+describe('Button Component', () => {
+  test('renders with correct text', () => {
+    render(<Button onClick={() => {}}>Click me</Button>);
+    expect(screen.getByText('Click me')).toBeInTheDocument();
+  });
+
+  test('calls onClick handler when clicked', () => {
+    const handleClick = jest.fn();
+    render(<Button onClick={handleClick}>Click me</Button>);
+    
+    fireEvent.click(screen.getByText('Click me'));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('is disabled when disabled prop is true', () => {
+    render(<Button onClick={() => {}} disabled>Click me</Button>);
+    expect(screen.getByText('Click me')).toBeDisabled();
+  });
+});
+```
+
+### Desktop Application Testing
+
+**Electron Main Process Testing:**
+```javascript
+// main.test.js
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+
+describe('Electron Main Process', () => {
+  let mainWindow;
+
+  beforeEach(() => {
+    mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false
+      }
+    });
+  });
+
+  afterEach(() => {
+    if (mainWindow) {
+      mainWindow.close();
+      mainWindow = null;
+    }
+  });
+
+  test('creates main window', () => {
+    expect(mainWindow).toBeTruthy();
+    expect(mainWindow.getSize()).toEqual([800, 600]);
+  });
+
+  test('loads the correct URL', () => {
+    const url = mainWindow.webContents.getURL();
+    expect(url).toContain('index.html');
+  });
+});
+```
+
+### Mobile Application Testing
+
+**React Native Component Testing:**
+```javascript
+// Component.test.tsx
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react-native';
+import { LoginScreen } from './LoginScreen';
+
+describe('LoginScreen', () => {
+  test('validates email input', () => {
+    const { getByTestId, getByText } = render(<LoginScreen />);
+    
+    const emailInput = getByTestId('email-input');
+    const submitButton = getByTestId('submit-button');
+    
+    fireEvent.changeText(emailInput, 'invalid-email');
+    fireEvent.press(submitButton);
+    
+    expect(getByText('Please enter a valid email')).toBeTruthy();
+  });
+});
+```
+
+### Backend API Testing
+
+**Node.js API Testing:**
+```javascript
+// api.test.js
+const request = require('supertest');
+const app = require('../app');
+
+describe('User API', () => {
+  test('POST /users creates a new user', async () => {
+    const userData = {
+      name: 'John Doe',
+      email: 'john@example.com'
+    };
+
+    const response = await request(app)
+      .post('/users')
+      .send(userData)
+      .expect(201);
+
+    expect(response.body.name).toBe(userData.name);
+    expect(response.body.email).toBe(userData.email);
+    expect(response.body.id).toBeDefined();
+  });
+
+  test('GET /users returns all users', async () => {
+    const response = await request(app)
+      .get('/users')
+      .expect(200);
+
+    expect(Array.isArray(response.body)).toBe(true);
+  });
+});
+```
+
+## AUTOMATED TEST EXECUTION INTEGRATION
+
+### Package.json Scripts Configuration
+
+**Universal Testing Scripts:**
+```json
+{
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --passWithNoTests",
+    "test:unit": "jest --testPathPattern=unit",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:e2e": "playwright test",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e"
+  }
+}
+```
+
+### CI/CD Pipeline Integration
+
+**GitHub Actions Example:**
+```yaml
+name: Test Suite
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm install
+      - run: npm run test:ci
+      - run: npm run test:e2e
+```
+
+## TESTING QUALITY GATES
+
+### Minimum Testing Requirements (MANDATORY)
+
+**Coverage Requirements:**
+- **Critical Business Logic**: 90%+ coverage
+- **User Interface Components**: 80%+ coverage
+- **Utility Functions**: 95%+ coverage
+- **API Endpoints**: 85%+ coverage
+- **Overall Project**: 75%+ coverage
+
+**Test Quality Requirements:**
+- [ ] Tests are independent and isolated
+- [ ] Tests have clear, descriptive names
+- [ ] Tests cover happy path and error scenarios
+- [ ] Tests are maintainable and readable
+- [ ] Tests run quickly (unit tests < 10ms each)
+- [ ] Integration tests cover critical workflows
+- [ ] No flaky or inconsistent tests
+
+**Test Types Required by Application:**
+
+```javascript
+REQUIRED_TESTS_BY_TYPE: {
+  web_applications: [
+    "component_unit_tests",
+    "hook_unit_tests", 
+    "utility_function_tests",
+    "integration_tests",
+    "accessibility_tests",
+    "e2e_critical_paths"
+  ],
+  desktop_applications: [
+    "business_logic_tests",
+    "ui_component_tests",
+    "integration_tests",
+    "platform_specific_tests",
+    "performance_tests"
+  ],
+  mobile_applications: [
+    "component_tests",
+    "navigation_tests",
+    "device_integration_tests",
+    "platform_specific_tests",
+    "performance_tests"
+  ],
+  backend_apis: [
+    "endpoint_tests",
+    "business_logic_tests",
+    "database_integration_tests",
+    "authentication_tests",
+    "error_handling_tests"
+  ]
+}
+```
+
+## TESTING VALIDATION WORKFLOW
+
+### Enhanced Task Completion Protocol
+
+**BEFORE marking any task complete:**
+
+```markdown
+## MANDATORY TESTING VALIDATION CHECKLIST
+
+### Pre-Test Setup Validation
+- [ ] **Testing Framework**: Appropriate framework installed and configured
+- [ ] **Test Environment**: Testing environment properly set up
+- [ ] **Dependencies**: All testing dependencies installed
+- [ ] **Configuration**: Test configuration files properly set up
+
+### Test Implementation Validation
+- [ ] **Test Coverage**: Unit tests written for all new code
+- [ ] **Test Quality**: Tests follow best practices and conventions
+- [ ] **Test Types**: Appropriate test types implemented (unit/integration/e2e)
+- [ ] **Edge Cases**: Error conditions and edge cases covered
+
+### Test Execution Validation
+- [ ] **Unit Tests Pass**: All unit tests execute successfully
+- [ ] **Integration Tests Pass**: All integration tests execute successfully  
+- [ ] **Coverage Met**: Minimum coverage requirements achieved
+- [ ] **No Warnings**: Test execution produces no warnings or errors
+- [ ] **Performance**: Tests run within acceptable time limits
+
+### Test Quality Validation
+- [ ] **Maintainable**: Tests are well-written and maintainable
+- [ ] **Independent**: Tests don't depend on each other
+- [ ] **Reliable**: Tests pass consistently across runs
+- [ ] **Comprehensive**: Tests cover critical functionality thoroughly
+
+### Documentation Validation
+- [ ] **Test Documentation**: Testing approach documented
+- [ ] **Coverage Report**: Test coverage report generated and reviewed
+- [ ] **Known Issues**: Any testing limitations or known issues documented
+```
+
+### User Validation with Testing Requirements
+
+**Enhanced User Confirmation Template:**
+```markdown
+🧪 TASK COMPLETED WITH MANDATORY TESTING: [Task Name]
+
+📋 TESTING VALIDATION RESULTS:
+✅ Unit Tests: [X] tests written, [Y] passing
+✅ Coverage: [Z]% (Minimum [Required]% achieved)
+✅ Integration Tests: [X] tests passing
+✅ Quality Gates: All requirements met
+
+🔍 TEST EXECUTION SUMMARY:
+- **Framework Used**: [Jest/Vitest/xUnit/etc]
+- **Tests Written**: [Number] unit tests, [Number] integration tests
+- **Coverage Achieved**: [Percentage]% of new code covered
+- **Execution Time**: [X] seconds for full test suite
+- **Quality Score**: [High/Medium] based on coverage and test quality
+
+📊 COVERAGE BREAKDOWN:
+- Functions: [X]% covered
+- Statements: [Y]% covered  
+- Branches: [Z]% covered
+- Lines: [W]% covered
+
+🎯 QUALITY VERIFICATION:
+✅ All tests pass consistently
+✅ No flaky or unreliable tests
+✅ Tests cover critical functionality
+✅ Error scenarios properly tested
+✅ Tests are maintainable and well-documented
+
+❓ USER VALIDATION REQUIRED:
+1. Are you satisfied with the test coverage and quality?
+2. Do the tests adequately cover the implemented functionality?
+3. Any specific test scenarios you'd like to see added?
+4. Should I proceed to the next task?
+
+🚨 REMINDER: This task cannot be marked complete without your approval of the testing implementation.
+```
+
+## TESTING ERROR HANDLING
+
+### When Tests Fail
+
+**MANDATORY Protocol for Test Failures:**
+
+```markdown
+## TEST FAILURE RESOLUTION PROTOCOL
+
+### Step 1: Immediate Response
+- 🛑 STOP all development immediately
+- 📋 Document exact test failure details
+- 🔍 Analyze failure cause (implementation vs test issue)
+
+### Step 2: Failure Analysis
+- **Implementation Bug**: Fix the code to make tests pass
+- **Test Bug**: Fix the test to properly validate functionality  
+- **Requirements Gap**: Clarify requirements and update tests accordingly
+
+### Step 3: Research and Resolution
+Search: "[test-framework] [error-message] troubleshooting 2025"
+Search: "[technology] testing best practices debugging"
+Search: "[specific-error] testing solution examples"
+
+### Step 4: Fix and Verification
+- Apply researched solution
+- Verify all tests now pass
+- Ensure no regression in other tests
+- Document resolution for future reference
+
+### Step 5: User Communication
+Report test failure resolution:
+- What failed and why
+- How it was fixed
+- Verification that all tests now pass
+- Any improvements made to test suite
+```
+
+This comprehensive testing validation protocol ensures that every task completion is backed by thorough, automated testing across all application types and platforms, maintaining the highest code quality standards.

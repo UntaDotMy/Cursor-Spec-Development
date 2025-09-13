@@ -46,10 +46,12 @@ const App: React.FC = () => {
       switch (message.command) {
         case 'featuresLoaded':
           setAvailableFeatures(message.features || []);
+          // DON'T change current feature - stay where user is
           break;
         case 'filesLoaded':
           setFileContent(message.content);
-          if (message.currentFeature) {
+          if (message.currentFeature && message.currentFeature !== currentFeature) {
+            // Only update if explicitly loading a different feature
             setCurrentFeature(message.currentFeature);
           }
           break;
@@ -60,6 +62,13 @@ const App: React.FC = () => {
               ...prev,
               [message.type]: message.content
             }));
+          }
+          break;
+        case 'featureCreated':
+          // New feature created - automatically switch to it and load its content
+          if (message.featureName) {
+            setCurrentFeature(message.featureName);
+            loadSpecDevFiles(message.featureName);
           }
           break;
       }
@@ -122,13 +131,18 @@ const App: React.FC = () => {
   const handleCreateFeature = async () => {
     if (newFeatureName.trim()) {
       try {
+        const featureName = newFeatureName.trim();
         await window.vscode?.postMessage({
           command: 'createFeature',
-          featureName: newFeatureName.trim()
+          featureName: featureName
         });
+        
+        // Immediately update UI state to show the new feature
+        setCurrentFeature(featureName);
         setNewFeatureName('');
         setShowCreateFeature(false);
-        // No need for setTimeout - the extension will automatically send featuresLoaded and filesLoaded messages
+        
+        // The extension will send updates, but we're already prepared
       } catch (error) {
         console.error('Failed to create feature:', error);
       }
@@ -299,7 +313,21 @@ sequenceDiagram
           <p>Create your first feature to get started with SpecDev.</p>
           <button onClick={() => setShowCreateFeature(true)}>Create First Feature</button>
         </div>
-      ) : currentFeature ? (
+      ) : (
+        <div className="feature-info">
+          {currentFeature && (
+            <div className="current-feature-info">
+              <h3>Current Feature: {currentFeature}</h3>
+              <div className="feature-status">
+                <span className="status-indicator active">⚡ Active</span>
+                <span className="last-updated">Last updated: {new Date().toLocaleTimeString()}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {currentFeature ? (
         <>
           <nav className="tab-navigation">
             {(['requirements', 'design', 'tasks'] as TabType[]).map((tab) => (
@@ -333,11 +361,27 @@ sequenceDiagram
             )}
           </main>
         </>
-      ) : (
+      ) : availableFeatures.length > 0 ? (
         <div className="select-feature">
-          <p>Please select a feature from the dropdown above to view and edit its specifications.</p>
+          <h3>Select a Feature</h3>
+          <p>Choose a feature from the dropdown above to view and edit its specifications.</p>
+          <div className="available-features">
+            <h4>Available Features:</h4>
+            <ul>
+              {availableFeatures.map(feature => (
+                <li key={feature}>
+                  <button 
+                    className="feature-button"
+                    onClick={() => handleFeatureChange(feature)}
+                  >
+                    📋 {feature}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

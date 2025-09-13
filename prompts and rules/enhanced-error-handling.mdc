@@ -1,0 +1,467 @@
+---
+description: "CRITICAL: Enhanced error handling with mandatory research-first approach and strict protocols"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# CRITICAL: Enhanced Error Handling Protocol
+
+## 🚨 MANDATORY ERROR HANDLING SEQUENCE
+
+**WHEN ANY ERROR OCCURS - FOLLOW THIS EXACT SEQUENCE (NO EXCEPTIONS):**
+
+### STEP 1: IMMEDIATE STOP ⛔
+```
+❌ NEVER ignore errors
+❌ NEVER apply quick fixes without research
+❌ NEVER proceed without understanding root cause
+❌ NEVER auto-execute after encountering error
+
+✅ IMMEDIATELY stop all execution
+✅ DOCUMENT complete error information
+✅ SWITCH to research mode
+✅ WAIT for user approval before proceeding
+```
+
+### STEP 2: MANDATORY RESEARCH 🔍
+```
+RESEARCH PHASE (PARALLEL EXECUTION):
+
+Web Searches (ALL REQUIRED):
+1. Search: "[exact-error-message] solution fix 2025 2026"
+2. Search: "[technology-name] [error-type] troubleshooting github"
+3. Search: "[error-category] common causes fixes reddit stackoverflow"
+4. Search: "[framework-name] [error-keyword] official documentation"
+5. Search: "[technology] version compatibility issues 2025"
+
+Codebase Analysis:
+1. Codebase Search: "similar error patterns in existing code"
+2. Codebase Search: "related configuration causing this issue"
+3. File Search: "package.json version conflicts"
+4. File Read: relevant configuration files
+
+Database Check:
+1. Read: .specdev/error-database.json for similar issues
+2. Search: existing solutions for this error pattern
+```
+
+### STEP 3: SOLUTION IMPLEMENTATION 🛠️
+```
+IMPLEMENTATION PROTOCOL:
+1. APPLY: Only research-backed solutions (with source links)
+2. TEST: Verify the fix actually resolves the error
+3. VALIDATE: Ensure no regression or new errors introduced
+4. DOCUMENT: Complete solution with verification steps
+```
+
+### STEP 4: KNOWLEDGE PRESERVATION 📝
+```
+DOCUMENTATION REQUIREMENTS:
+1. UPDATE: .specdev/error-database.json with complete solution
+2. RECORD: Prevention strategies for future occurrences
+3. VERIFY: Solution works and is reusable
+4. SHARE: Error context and solution for team learning
+```
+
+## ERROR DETECTION AND MANDATORY STOP
+
+### Immediate Response Protocol
+
+**When ANY error is detected:**
+
+```javascript
+ERROR_DETECTED_PROTOCOL: {
+  action: "IMMEDIATE_STOP",
+  message: "🚨 ERROR ENCOUNTERED - Switching to research mode",
+  next_steps: [
+    "STOP all automated execution",
+    "DOCUMENT complete error information", 
+    "BEGIN mandatory research phase",
+    "WAIT for user approval before proceeding"
+  ]
+}
+```
+
+### Complete Error Documentation Template
+
+```markdown
+# ERROR REPORT - [Timestamp]
+
+## 🚨 ERROR DETAILS
+- **Error ID**: ERR-[YYYYMMDD]-[HHmm]-[counter]
+- **Timestamp**: [ISO 8601 timestamp]
+- **Severity**: CRITICAL | HIGH | MEDIUM | LOW
+- **Task Context**: [Which specific task was being executed]
+- **User Action**: [What user was trying to accomplish]
+
+### Exact Error Information
+- **Error Message**: [Complete unmodified error text - copy/paste]
+- **Error Type**: compilation | runtime | dependency | configuration | network
+- **Stack Trace**: 
+```
+[Full stack trace with line numbers]
+```
+- **File/Location**: [Exact file and line where error occurred]
+- **Context**: [Detailed description of what was being attempted]
+
+### Environment Details
+- **Node.js**: [exact version]
+- **npm/yarn**: [package manager and version]
+- **Framework**: [React/Vue/Angular with exact version]
+- **Build Tool**: [Vite/Webpack/etc with version]
+- **Operating System**: [Windows/macOS/Linux with version]
+- **Terminal/Shell**: [PowerShell/bash/zsh]
+
+### Recent Actions Leading to Error
+1. [Action taken 3 steps before error]
+2. [Action taken 2 steps before error]  
+3. [Action taken 1 step before error]
+4. [ERROR OCCURRED HERE]
+
+### Dependencies Involved
+```json
+{
+  "direct": ["packages directly related to error"],
+  "peer": ["peer dependencies that might be involved"],
+  "dev": ["development dependencies in use"],
+  "global": ["globally installed packages"]
+}
+```
+
+## RESEARCH REQUIREMENTS
+
+### Phase 1: Immediate Research (Parallel Execution)
+
+**Search Queries (ALL REQUIRED):**
+```
+1. "[exact-error-message]" solution fix 2025 2026
+2. [technology-name] "[error-keyword]" troubleshooting guide
+3. "[error-type]" [framework-name] common causes fixes
+4. [package-name] "[error-pattern]" github issues resolved
+5. "[technology-stack]" "[error-category]" official documentation
+```
+
+**Codebase Analysis (Parallel):**
+```
+1. Codebase Search: "similar error patterns or messages"
+2. Codebase Search: "configuration related to this error"
+3. File Search: "*.json *.config.js *.env" for misconfigurations
+4. Grep Search: "[error-keyword]" for related issues
+```
+
+**Documentation Required:**
+```markdown
+## RESEARCH FINDINGS
+
+### Search Results Summary
+| Query | Source | Relevance | Solution Quality |
+|-------|--------|-----------|------------------|
+| [query 1] | [stackoverflow/github/docs] | HIGH/MED/LOW | [solution summary] |
+| [query 2] | [source] | [relevance] | [solution summary] |
+
+### Best Solutions Found
+1. **Solution 1** (Confidence: HIGH/MED/LOW)
+   - Source: [URL]
+   - Description: [detailed solution]
+   - Steps: [specific implementation steps]
+   - Verification: [how to verify it works]
+
+2. **Solution 2** (Backup)
+   - Source: [URL]
+   - Description: [alternative solution]
+   - Steps: [implementation steps]
+
+### Root Cause Analysis
+- **Primary Cause**: [underlying reason for error]
+- **Contributing Factors**: [what made this error possible]
+- **Version Issues**: [any version compatibility problems]
+- **Configuration Issues**: [any setup or config problems]
+```
+
+## SOLUTION IMPLEMENTATION PROTOCOL
+
+### Implementation Steps
+
+**Before Implementing ANY Solution:**
+
+1. **Verify Research Quality**
+   ```
+   ✅ Solution source is authoritative (official docs/GitHub/Stack Overflow)
+   ✅ Solution is recent (2024-2025 content preferred)
+   ✅ Solution has been tested by others (upvotes/success reports)
+   ✅ Solution matches exact error message and context
+   ✅ Solution includes verification steps
+   ```
+
+2. **Document Implementation Plan**
+   ```markdown
+   ## IMPLEMENTATION PLAN
+   
+   ### Selected Solution
+   - **Source**: [URL with high confidence]
+   - **Reason**: [why this solution was chosen]
+   - **Risk Level**: LOW | MEDIUM | HIGH
+   - **Rollback Plan**: [how to undo if it fails]
+   
+   ### Steps to Execute
+   1. [Specific step 1 with expected outcome]
+   2. [Specific step 2 with verification method]
+   3. [Final verification step]
+   
+   ### Success Criteria
+   - [ ] Error message no longer appears
+   - [ ] Original functionality works correctly  
+   - [ ] No new errors introduced
+   - [ ] All tests pass (if applicable)
+   ```
+
+3. **Implement with Verification**
+   ```markdown
+   ## IMPLEMENTATION LOG
+   
+   ### Step 1: [Action Description]
+   - **Command/Change**: [exact command or code change]
+   - **Expected Result**: [what should happen]
+   - **Actual Result**: [what actually happened]
+   - **Status**: ✅ SUCCESS | ❌ FAILED | ⚠️ PARTIAL
+   
+   ### Step 2: [Action Description]
+   - **Command/Change**: [exact command or code change]  
+   - **Expected Result**: [what should happen]
+   - **Actual Result**: [what actually happened]
+   - **Status**: ✅ SUCCESS | ❌ FAILED | ⚠️ PARTIAL
+   
+   ### Final Verification
+   - **Original Error**: [RESOLVED | PERSISTS | CHANGED]
+   - **Functionality Test**: [PASS | FAIL | NOT_TESTED]
+   - **Side Effects**: [any new issues or changes observed]
+   ```
+
+## ERROR DATABASE INTEGRATION
+
+### Database Update Requirements
+
+**After EVERY error resolution:**
+
+```json
+{
+  "errorId": "ERR-[YYYYMMDD]-[HHmm]-[counter]",
+  "timestamp": "2025-01-01T00:00:00Z",
+  "severity": "critical|high|medium|low",
+  "project": "project-name",
+  "feature": "feature-name", 
+  "task": "specific-task-name",
+  "error": {
+    "exactMessage": "complete unmodified error message",
+    "type": "compilation|runtime|dependency|configuration|network",
+    "category": "syntax|logic|environment|version|permission|network",
+    "stackTrace": "full stack trace",
+    "context": "what was being attempted when error occurred",
+    "triggerAction": "specific action that caused the error",
+    "affectedFiles": ["list of files involved in error"]
+  },
+  "environment": {
+    "nodeVersion": "18.x.x",
+    "npmVersion": "8.x.x", 
+    "framework": "React 18.2.0",
+    "buildTool": "Vite 4.x.x",
+    "os": "Windows 11 | macOS 13 | Ubuntu 22.04",
+    "shell": "PowerShell | bash | zsh",
+    "dependencies": {
+      "direct": ["packages directly related"],
+      "peer": ["peer dependencies involved"],
+      "global": ["global packages that might interfere"]
+    }
+  },
+  "research": {
+    "timeSpent": "research duration in minutes",
+    "searchQueries": ["list of search queries used"],
+    "sourcesConsulted": [
+      {
+        "url": "https://source-url",
+        "type": "official-docs|github|stackoverflow|blog|forum",
+        "relevance": "high|medium|low",
+        "solution": "summary of solution from this source",
+        "confidence": "high|medium|low"
+      }
+    ],
+    "similarIssues": ["references to similar resolved issues"],
+    "alternativeSolutions": ["other solutions considered"]
+  },
+  "resolution": {
+    "rootCause": "detailed explanation of underlying cause",
+    "solution": {
+      "description": "detailed solution description",
+      "sourceUrl": "primary source URL for solution",
+      "confidence": "high|medium|low",
+      "steps": [
+        "step 1: specific action taken",
+        "step 2: specific action taken"
+      ],
+      "codeChanges": [
+        {
+          "file": "filename",
+          "type": "create|modify|delete",
+          "description": "what was changed"
+        }
+      ],
+      "commands": ["terminal commands executed"],
+      "configChanges": ["configuration changes made"]
+    },
+    "verification": {
+      "steps": ["verification steps performed"],
+      "results": ["results of verification"],
+      "testsRun": ["tests executed to verify fix"],
+      "confirmed": true
+    },
+    "implementationTime": "time to implement solution in minutes"
+  },
+  "prevention": {
+    "earlyWarnings": ["signs that could indicate this error"],
+    "preventionChecks": ["checks to perform to avoid this error"],
+    "bestPractices": ["practices that prevent this type of error"],
+    "toolsToAdd": ["tools that could catch this earlier"]
+  },
+  "impact": {
+    "blockingLevel": "complete|partial|minor", 
+    "developmentTime": "time lost due to this error",
+    "affectedFeatures": ["features impacted by this error"],
+    "userImpact": "how this would affect end users if not caught"
+  },
+  "learning": {
+    "keyInsights": ["important lessons learned"],
+    "skillGaps": ["skills that would have prevented this"],
+    "processImprovements": ["process changes to prevent similar errors"],
+    "documentationNeeded": ["documentation that should be created"]
+  },
+  "followUp": {
+    "monitoring": ["what to monitor to ensure fix holds"],
+    "relatedChecks": ["other areas to check for similar issues"],
+    "teamCommunication": ["what to communicate to team about this error"]
+  },
+  "tags": ["error-category", "technology", "difficulty", "frequency"],
+  "relatedErrors": ["IDs of similar or related errors"],
+  "reusabilityScore": "how likely this solution is to help with future errors"
+}
+```
+
+## USER COMMUNICATION PROTOCOL
+
+### Error Reporting to User
+
+**When error occurs:**
+
+```markdown
+🚨 **ERROR ENCOUNTERED - Development Stopped**
+
+**Error Summary**: [Brief description of what went wrong]
+**Context**: [What was being attempted]
+**Impact**: [How this blocks progress]
+
+**Next Steps**:
+1. ✅ Error documented completely
+2. 🔍 Beginning mandatory research phase
+3. ⏱️ Estimated research time: 5-10 minutes
+4. 📋 Will present solution options after research
+
+**Research Progress**:
+- [ ] Searching for exact error solutions
+- [ ] Checking official documentation  
+- [ ] Reviewing similar GitHub issues
+- [ ] Analyzing codebase for patterns
+- [ ] Checking error database for known solutions
+
+**Please wait for research completion before proceeding.**
+```
+
+### Solution Presentation to User
+
+**After research is complete:**
+
+```markdown
+🔍 **RESEARCH COMPLETE - Solution Found**
+
+**Root Cause**: [Explanation of why error occurred]
+
+**Recommended Solution** (Confidence: HIGH/MEDIUM/LOW):
+- **Source**: [URL of authoritative source]
+- **Description**: [What the solution does]
+- **Steps**: 
+  1. [Specific step 1]
+  2. [Specific step 2]
+  3. [Verification step]
+
+**Alternative Solutions** (if applicable):
+- **Option 2**: [Brief description and source]
+- **Option 3**: [Brief description and source]
+
+**Implementation Plan**:
+- **Time Required**: [estimated time]
+- **Risk Level**: [LOW/MEDIUM/HIGH]
+- **Rollback Available**: [YES/NO]
+
+**Questions for User**:
+1. Should I proceed with the recommended solution?
+2. Would you prefer to try an alternative approach?
+3. Do you want to see more details about the solution?
+
+**Error Prevention**:
+Going forward, this error can be prevented by: [prevention strategy]
+```
+
+## QUALITY ASSURANCE INTEGRATION
+
+### Pre-Task Error Prevention
+
+**Before starting ANY task:**
+
+```markdown
+## PRE-TASK ERROR PREVENTION CHECKLIST
+
+### Environment Validation
+- [ ] Node.js version compatible with project requirements
+- [ ] Package manager (npm/yarn) up to date
+- [ ] All required dependencies installed and compatible
+- [ ] Build tools properly configured
+- [ ] Environment variables set correctly
+
+### Error Database Review
+- [ ] Check for known errors related to this task type
+- [ ] Review solutions for similar implementations
+- [ ] Identify potential pitfalls specific to technology stack
+- [ ] Prepare error monitoring for common issues
+
+### Prevention Setup
+- [ ] Enable relevant error detection tools
+- [ ] Configure proper logging for this task
+- [ ] Set up rollback procedures if needed
+- [ ] Document expected outcomes for verification
+```
+
+### Post-Error Learning Integration
+
+**After resolving ANY error:**
+
+```markdown
+## POST-ERROR LEARNING CHECKLIST
+
+### Documentation Complete
+- [ ] Error added to database with full context
+- [ ] Solution verified and documented with sources
+- [ ] Prevention strategies identified and recorded
+- [ ] Related errors cross-referenced
+
+### Process Improvement
+- [ ] Identify what could have prevented this error
+- [ ] Update pre-task checklists if needed
+- [ ] Add monitoring/validation steps for future
+- [ ] Share knowledge with team if applicable
+
+### Quality Enhancement
+- [ ] Add error-specific tests if applicable
+- [ ] Update documentation to prevent confusion
+- [ ] Improve error messages or validation
+- [ ] Consider tooling improvements
+```
+
+This enhanced error handling protocol ensures that every error becomes a learning opportunity and that the development process becomes more robust over time through systematic research, documentation, and prevention strategies.

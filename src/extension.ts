@@ -78,11 +78,20 @@ class SpecDevProvider {
           case 'createFeature':
             await this.createFeature(message.featureName);
             this.currentFeature = message.featureName; // Set the newly created feature as current
+            
+            // Send feature created notification first
+            panel.webview.postMessage({
+              command: 'featureCreated',
+              featureName: message.featureName
+            });
+            
+            // Update features list
             const updatedFeatures = await this.getAvailableFeatures();
             panel.webview.postMessage({
               command: 'featuresLoaded',
               features: updatedFeatures
             });
+            
             // Automatically load the newly created feature's files
             const newFeatureContent = await this.loadSpecDevFiles(message.featureName);
             panel.webview.postMessage({
@@ -230,22 +239,100 @@ sequenceDiagram
   private getDefaultTasksContent(featureName: string): string {
     return `# Task List - ${featureName}
 
-## Sprint 1
+> **CRITICAL**: All tasks MUST have checkboxes [ ] or [x]. Use Start button for main tasks. Every task REQUIRES passing unit tests before completion.
 
-- [ ] Task 1: Implement user authentication
-  - [ ] Create login form
-  - [ ] Add validation
-  - [ ] Integrate with backend API
+## Sprint 0: Testing Framework Setup (MANDATORY FIRST)
 
-- [ ] Task 2: Design database schema
-  - [x] Define user table
-  - [ ] Define product table
-  - [ ] Create relationships
+- [ ] 0.1: Testing Strategy and Framework Setup
+  - [ ] 0.1.1: Research appropriate testing framework for technology stack
+  - [ ] 0.1.2: Install and configure testing framework (Jest/Vitest/xUnit/pytest)
+  - [ ] 0.1.3: Setup test file structure and naming conventions
+  - [ ] 0.1.4: Configure test coverage reporting and thresholds
+  - [ ] 0.1.5: Create testing documentation and guidelines
+  - **Testing Required**: ✅ Framework installation tests pass
+  - **Coverage Minimum**: N/A (setup phase)
+  - **Validation**: Testing framework functional and ready
 
-- [ ] Task 3: Setup project infrastructure
-  - [x] Initialize repository
-  - [x] Setup CI/CD pipeline
-  - [ ] Configure deployment
+## Sprint 1: Foundation with Testing
+
+- [ ] 1.1: Dependencies Research and Installation
+  - [ ] 1.1.1: Research latest versions of required packages
+  - [ ] 1.1.2: Install and configure base dependencies
+  - [ ] 1.1.3: Setup development environment
+  - [ ] 1.1.4: Configure build tools and scripts
+  - [ ] 1.1.5: Write tests for configuration utilities
+  - **Testing Required**: ✅ Configuration tests (5+ tests, 80%+ coverage)
+  - **Test Types**: Unit tests for config validation, environment setup
+  - **Validation**: All dependency installations verified with tests
+
+- [ ] 1.2: Core Architecture Implementation
+  - [ ] 1.2.1: Create project structure following best practices
+  - [ ] 1.2.2: Implement base configuration files
+  - [ ] 1.2.3: Setup error handling framework
+  - [ ] 1.2.4: Add logging and monitoring setup
+  - [ ] 1.2.5: Write comprehensive unit tests for architecture components
+  - **Testing Required**: ✅ Architecture tests (10+ tests, 85%+ coverage)
+  - **Test Types**: Unit tests for error handlers, logging, core utilities
+  - **Validation**: All architecture components tested and verified
+
+- [ ] 1.3: Feature Implementation with TDD
+  - [ ] 1.3.1: Research implementation patterns for ${featureName}
+  - [ ] 1.3.2: Write failing tests for ${featureName} functionality (TDD)
+  - [ ] 1.3.3: Implement core feature functionality to pass tests
+  - [ ] 1.3.4: Add comprehensive error handling with tests
+  - [ ] 1.3.5: Add thorough code documentation and example tests
+  - **Testing Required**: ✅ Feature tests (15+ tests, 90%+ coverage)
+  - **Test Types**: Unit, integration, error scenario tests
+  - **Validation**: Complete feature test suite passing
+
+## Sprint 2: Advanced Testing and Quality
+
+- [ ] 2.1: Comprehensive Testing Implementation
+  - [ ] 2.1.1: Add integration tests for component interactions
+  - [ ] 2.1.2: Implement end-to-end tests for critical user flows
+  - [ ] 2.1.3: Add performance and load testing
+  - [ ] 2.1.4: Implement accessibility and security tests
+  - [ ] 2.1.5: Setup automated test execution in CI/CD
+  - **Testing Required**: ✅ Integration & E2E tests (10+ tests, 75%+ coverage)
+  - **Test Types**: Integration, E2E, performance, security tests
+  - **Validation**: Full test suite automated and passing
+
+- [ ] 2.2: Quality Assurance with Test Validation
+  - [ ] 2.2.1: Code review with test quality assessment
+  - [ ] 2.2.2: Security audit with penetration testing
+  - [ ] 2.2.3: Performance optimization with benchmark tests
+  - [ ] 2.2.4: Documentation completion with example tests
+  - [ ] 2.2.5: Final test suite optimization and cleanup
+  - **Testing Required**: ✅ Quality tests (5+ tests, 80%+ coverage)
+  - **Test Types**: Security, performance, documentation tests
+  - **Validation**: All quality gates pass with test verification
+
+---
+**MANDATORY Testing Rules:**
+1. 🧪 EVERY task MUST have passing unit tests before completion
+2. 🧪 MINIMUM 75% code coverage required for each task
+3. 🧪 NO task completion without test validation dialog
+4. 🧪 TDD approach: Write tests first, then implement
+5. 🧪 All tests MUST pass before proceeding to next task
+6. 🧪 Integration tests required for component interactions
+7. 🧪 E2E tests required for user-facing functionality
+
+**Testing Framework by Technology:**
+- **Web/React**: Jest + React Testing Library + Playwright
+- **Web/Vue**: Vue Test Utils + Jest/Vitest + Cypress
+- **Desktop/Electron**: Jest + Playwright for Electron
+- **Mobile/React Native**: Jest + React Native Testing Library + Detox
+- **Backend/Node.js**: Jest + Supertest + integration tests
+- **Desktop/.NET**: xUnit/NUnit + UI automation framework
+- **Mobile/Flutter**: Flutter Test + integration_test package
+
+**Quality Standards:**
+- ✅ Unit tests for all functions and components
+- ✅ Integration tests for component interactions
+- ✅ E2E tests for critical user workflows
+- ✅ Error scenario testing for all edge cases
+- ✅ Performance testing for critical operations
+- ✅ Security testing for user inputs and data handling
 `;
   }
 
