@@ -1,0 +1,312 @@
+---
+description: "Version migration and update management rules for seamless SpecDev upgrades"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Version Migration and Update Management Rules
+
+## Priority: Critical
+
+**Instruction: MUST handle version updates safely while preserving all user data and customizations**
+
+## Version Detection System
+
+### Current Version Tracking
+```json
+// .specdev/version-info.json
+{
+  "specdevVersion": "0.2.0",
+  "rulesVersion": "0.2.0",
+  "lastUpdated": "2025-01-15T10:30:00Z",
+  "installedFeatures": [
+    "enhanced-workflow",
+    "project-analysis", 
+    "error-tracking",
+    "context-summarization",
+    "testing-quality"
+  ],
+  "migrationHistory": [
+    {
+      "fromVersion": "0.1.0",
+      "toVersion": "0.2.0",
+      "migratedAt": "2025-01-15T10:30:00Z",
+      "changes": ["added context summarization", "updated rule format"]
+    }
+  ]
+}
+```
+
+### Version Compatibility Matrix
+```
+Version 0.1.0: Basic workflow, .md rules
+Version 0.2.0: Enhanced workflow, .mdc rules, context summarization
+Version 0.3.0: Advanced testing, performance optimization
+```
+
+## Migration Strategy Framework
+
+### Safe Migration Process
+1. **Backup Current Installation**
+   - Create `.specdev/backup/[timestamp]/` directory
+   - Copy all existing specs, rules, and configuration
+   - Preserve error database and summaries
+
+2. **Analyze Current State**
+   - Detect current version from version-info.json
+   - Identify installed features and customizations
+   - Check for user-modified files
+
+3. **Plan Migration Path**
+   - Determine required migrations
+   - Identify breaking changes
+   - Plan data transformation steps
+
+4. **Execute Migration**
+   - Apply transformations in dependency order
+   - Validate each step before proceeding
+   - Rollback on failure
+
+5. **Verify Installation**
+   - Test all features work correctly
+   - Validate user data integrity
+   - Update version tracking
+
+### Migration Types
+
+#### 1. Rule Format Migration (.md → .mdc)
+```
+DETECT: .cursor/rules/ contains .md files
+ACTION: Convert to .mdc format with proper frontmatter
+PRESERVE: All rule content and logic
+VALIDATE: Rules load correctly in Cursor
+```
+
+#### 2. Feature Addition Migration
+```
+DETECT: Missing new rule files or features
+ACTION: Add new .mdc rules to .cursor/rules/
+PRESERVE: Existing customizations and preferences
+VALIDATE: New features integrate properly
+```
+
+#### 3. Directory Structure Migration
+```
+DETECT: Missing new directories (e.g., summaries/)
+ACTION: Create new directories and initialize
+PRESERVE: All existing content in proper locations
+VALIDATE: File system structure is correct
+```
+
+#### 4. Configuration Migration
+```
+DETECT: Old configuration format or missing settings
+ACTION: Transform to new format, add new settings
+PRESERVE: User preferences and customizations
+VALIDATE: All settings work as expected
+```
+
+## Update Command Implementation
+
+### `/update` Command Workflow
+```
+1. Check for updates needed
+2. Show user what will change
+3. Create backup automatically
+4. Execute migration with progress
+5. Verify successful update
+6. Clean up old files (with user consent)
+```
+
+### Update Detection Logic
+```javascript
+function needsUpdate() {
+  const currentVersion = getCurrentVersion();
+  const latestVersion = getLatestVersion();
+  
+  return {
+    needsUpdate: currentVersion < latestVersion,
+    currentVersion,
+    latestVersion,
+    newFeatures: getNewFeatures(currentVersion, latestVersion),
+    breakingChanges: getBreakingChanges(currentVersion, latestVersion)
+  };
+}
+```
+
+## Specific Migration Scenarios
+
+### Scenario 1: First-Time Update (0.1.0 → 0.2.0)
+**Changes:**
+- Add context summarization rules
+- Create summaries/ directory
+- Update rule format to .mdc
+- Add version tracking
+
+**Migration Steps:**
+1. Create version-info.json
+2. Convert existing .md rules to .mdc
+3. Add new .mdc rule files
+4. Create summaries/ directory
+5. Update package.json commands
+
+### Scenario 2: Feature Addition Update
+**Changes:**
+- New testing framework rules
+- Additional project templates
+- Enhanced error tracking
+
+**Migration Steps:**
+1. Add new rule files
+2. Update version-info.json
+3. Initialize new features
+4. Preserve existing configurations
+
+### Scenario 3: Breaking Change Update
+**Changes:**
+- Changed file structure
+- Modified rule format
+- Updated API interfaces
+
+**Migration Steps:**
+1. **CRITICAL**: Create full backup
+2. Show user detailed change summary
+3. Get explicit user consent
+4. Transform data step by step
+5. Validate each transformation
+6. Provide rollback option
+
+## User Communication During Updates
+
+### Pre-Update Information
+```
+SpecDev Update Available: v0.1.0 → v0.2.0
+
+NEW FEATURES:
+✨ Context Summarization - Reduce token costs
+✨ Real-time Spec Updates - Live file synchronization  
+✨ Enhanced Error Tracking - Better solution reuse
+
+IMPROVEMENTS:
+🔧 Updated rule format (.mdc)
+🔧 Better project analysis
+🔧 Performance optimizations
+
+BREAKING CHANGES:
+⚠️  Rule files will be converted to new format
+⚠️  Some command names have changed
+
+BACKUP: Automatic backup will be created
+TIME: Estimated 30 seconds
+```
+
+### During Update Progress
+```
+🔄 Creating backup...                     ✅ Complete
+🔄 Converting rule formats...              ⏳ In progress
+⏳ Adding new features...                  ⏳ Pending
+⏳ Verifying installation...               ⏳ Pending
+```
+
+### Post-Update Summary
+```
+✅ SpecDev Updated Successfully!
+
+ADDED:
+✨ 3 new rule files
+✨ Context summarization system
+✨ Real-time updates
+
+MIGRATED:
+🔄 5 rule files converted to .mdc format
+🔄 Directory structure updated
+🔄 Version tracking initialized
+
+BACKUP LOCATION:
+📁 .specdev/backup/2025-01-15-103000/
+
+NEXT STEPS:
+1. Try the new /summarize command
+2. Check real-time updates in spec tab
+3. Review updated rules in .cursor/rules/
+```
+
+## Rollback and Recovery
+
+### Automatic Rollback Triggers
+- Migration step fails with error
+- File corruption detected
+- User cancels during process
+- Validation fails after update
+
+### Rollback Process
+```
+1. Stop current migration
+2. Restore from backup directory
+3. Reset version-info.json
+4. Verify original state restored
+5. Report rollback status to user
+```
+
+### Manual Recovery Options
+- `/rollback` command for user-initiated rollback
+- Backup browser to restore specific files
+- Version history to see all changes
+
+## Advanced Update Features
+
+### Selective Updates
+```
+Allow users to choose which features to update:
+□ Core workflow rules
+□ Context summarization  
+□ Enhanced error tracking
+□ Testing framework
+□ Project templates
+```
+
+### Custom Rule Preservation
+```
+DETECT: User-modified rule files
+ACTION: Create .custom suffix backups
+MERGE: Combine user changes with updates
+VALIDATE: Custom rules still work
+```
+
+### Update Channels
+```
+- Stable: Tested, production-ready updates
+- Beta: Early access to new features  
+- Dev: Cutting-edge, experimental features
+```
+
+### Automatic Update Checking
+```
+Check for updates:
+- On extension activation (daily max)
+- When user runs /init or /steering
+- Via manual /check-updates command
+```
+
+## Integration with SpecDev Workflow
+
+### Update-Aware Commands
+All SpecDev commands should:
+- Check version compatibility
+- Offer updates when needed
+- Work with both old and new formats during transition
+
+### Graceful Degradation
+If update fails:
+- Continue with existing version
+- Disable incompatible features
+- Show user recovery options
+- Maintain core functionality
+
+### Update Notifications
+- Non-intrusive update available notifications
+- Critical security update alerts
+- Feature announcement highlights
+- Migration assistance offers
+
+This comprehensive update system ensures that SpecDev users can seamlessly upgrade to new versions while preserving all their work and customizations.

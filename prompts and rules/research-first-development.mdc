@@ -1,0 +1,302 @@
+---
+description: "Research-first development rules ensuring latest information, best practices, and high-quality implementation"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Research-First Development Rules
+
+## Priority: CRITICAL - ALWAYS RESEARCH BEFORE IMPLEMENTING
+
+**MANDATORY: Before ANY installation, implementation, or solution, you MUST research current best practices and latest versions.**
+
+## Core Research Principles
+
+### 1. NEVER Install/Implement Without Research
+```
+❌ WRONG: npm install react
+✅ CORRECT: 
+   1. Search: "React latest version 2025 2026 best practices installation"
+   2. Search: "React current stable version npm install guide"
+   3. Check existing package.json for current version
+   4. Compare versions and upgrade path
+   5. Then install with specific version
+```
+
+### 2. Research Sources Priority (In Order)
+1. **GitHub Official Repositories** - Latest releases, changelogs, issues
+2. **Official Documentation** - Current best practices, migration guides
+3. **Reddit (r/webdev, r/reactjs, r/node, etc.)** - Real developer experiences
+4. **Stack Overflow** - Current solutions to common problems
+5. **Dev.to, Medium** - Recent tutorials and best practices
+6. **NPM Registry** - Package versions, dependencies, security
+
+### 3. Version Management Protocol
+```javascript
+BEFORE ANY PACKAGE INSTALLATION:
+
+1. Research Phase:
+   - Search: "[package-name] latest version 2025 2026"
+   - Search: "[package-name] vs [alternatives] comparison 2025"
+   - Search: "[package-name] breaking changes migration guide"
+
+2. Current State Check:
+   - Check package.json for existing version
+   - Check node_modules for installed packages
+   - Check for conflicting dependencies
+
+3. Installation Strategy:
+   - If no existing version: Install latest stable
+   - If old version exists: Research upgrade path
+   - If major version change: Research breaking changes
+   - Always specify exact version in package.json
+
+4. Implementation:
+   - Follow latest official documentation
+   - Use current best practices from research
+   - Implement with error handling
+```
+
+## Specific Research Workflows
+
+### Frontend Framework Installation
+```
+RESEARCH CHECKLIST:
+□ Search: "React 18 vs 19 2025 which version to use"
+□ Search: "React 2025 best practices setup vite webpack"
+□ Search: "React TypeScript setup 2025 latest"
+□ Check: Current React ecosystem recommendations
+□ Verify: Node.js compatibility requirements
+□ Research: Performance optimization techniques
+
+IMPLEMENTATION:
+- Use exact versions, not ^version
+- Include all peer dependencies
+- Follow official setup guides
+- Add proper TypeScript configurations
+```
+
+### Backend/API Development
+```
+RESEARCH CHECKLIST:
+□ Search: "Node.js Express 2025 best practices security"
+□ Search: "[database] latest version compatibility 2025"
+□ Search: "API design patterns REST GraphQL 2025"
+□ Research: Authentication/authorization best practices
+□ Check: Security vulnerabilities and patches
+□ Verify: Performance benchmarks and optimizations
+
+IMPLEMENTATION:
+- Use latest stable versions
+- Implement proper error handling
+- Add security middleware
+- Follow REST/GraphQL best practices
+```
+
+### Testing Framework Setup
+```
+RESEARCH CHECKLIST:
+□ Search: "Jest vs Vitest 2025 comparison performance"
+□ Search: "React Testing Library best practices 2025"
+□ Search: "E2E testing Playwright vs Cypress 2025"
+□ Research: Test coverage tools and standards
+□ Check: CI/CD integration best practices
+
+IMPLEMENTATION:
+- Choose based on current ecosystem
+- Set up comprehensive test suites
+- Configure proper test environments
+- Add performance and accessibility tests
+```
+
+### Database and ORM Selection
+```
+RESEARCH CHECKLIST:
+□ Search: "PostgreSQL vs MongoDB 2025 use cases"
+□ Search: "Prisma vs TypeORM 2025 comparison"
+□ Search: "[database] latest version features 2025"
+□ Research: Migration strategies and tools
+□ Check: Performance characteristics
+□ Verify: Backup and recovery procedures
+
+IMPLEMENTATION:
+- Use latest stable database version
+- Implement proper connection pooling
+- Add database migrations
+- Set up monitoring and logging
+```
+
+## Quality Assurance Through Research
+
+### Code Quality Standards
+```
+BEFORE WRITING CODE:
+1. Search: "[technology] coding standards 2025"
+2. Search: "[framework] best practices architecture 2025"
+3. Search: "code review checklist [technology] 2025"
+4. Research: Linting and formatting standards
+5. Check: Security best practices and common vulnerabilities
+```
+
+### Performance Optimization
+```
+RESEARCH REQUIREMENTS:
+□ Search: "[technology] performance optimization 2025"
+□ Search: "web vitals optimization techniques 2025"
+□ Research: Bundle size optimization
+□ Check: Caching strategies
+□ Verify: CDN and deployment best practices
+```
+
+### Security Implementation
+```
+MANDATORY SECURITY RESEARCH:
+□ Search: "[framework] security best practices 2025"
+□ Search: "OWASP top 10 2025 prevention"
+□ Research: Authentication/authorization patterns
+□ Check: Dependency vulnerability scanning
+□ Verify: Data encryption and privacy compliance
+```
+
+## Parallel Research Strategy
+
+### Use Maximum Tools Simultaneously
+```
+RESEARCH PHASE - RUN IN PARALLEL:
+1. Web search: "technology latest version 2025"
+2. Web search: "technology best practices examples"
+3. Web search: "technology common errors solutions"
+4. Web search: "technology vs alternatives comparison"
+5. Codebase search: existing implementations
+6. File search: current configuration files
+```
+
+### Implementation Phase - Parallel Actions
+```
+AFTER RESEARCH - EXECUTE IN PARALLEL:
+1. Update package.json with researched versions
+2. Create/update configuration files
+3. Implement core functionality
+4. Add error handling
+5. Write tests
+6. Update documentation
+```
+
+## Research Documentation Requirements
+
+### Document Research Findings
+```markdown
+## Implementation Research - [Feature Name]
+
+### Technology Choices
+- **Primary**: [Technology] v[Version] - [Reason based on research]
+- **Alternative Considered**: [Alternative] - [Why not chosen]
+- **Source**: [GitHub repo/documentation link]
+
+### Best Practices Applied
+- [Practice 1] - Source: [Link]
+- [Practice 2] - Source: [Link]
+- [Security consideration] - Source: [OWASP/security guide]
+
+### Version Compatibility
+- Node.js: [Version] (Required: [Min version])
+- Dependencies: [List with exact versions]
+- Breaking Changes: [Any migration steps needed]
+
+### Implementation Notes
+- [Key implementation decisions]
+- [Error handling strategy]
+- [Performance considerations]
+```
+
+## Error Prevention Through Research
+
+### Common Error Prevention
+```
+BEFORE IMPLEMENTATION, RESEARCH:
+□ "[technology] common errors beginners 2025"
+□ "[framework] troubleshooting guide latest"
+□ "how to avoid [specific error] [technology]"
+□ GitHub issues: search for common problems
+□ Stack Overflow: recent questions and solutions
+```
+
+### Dependency Conflict Prevention
+```
+DEPENDENCY RESEARCH PROCESS:
+1. Search: "[package-a] [package-b] compatibility issues"
+2. Check: peer dependency requirements
+3. Research: version conflicts and resolutions
+4. Verify: community solutions for conflicts
+5. Test: create minimal reproduction case
+```
+
+## Implementation Quality Gates
+
+### Pre-Implementation Checklist
+```
+□ Latest version research completed
+□ Best practices documentation reviewed
+□ Existing codebase compatibility verified
+□ Security considerations researched
+□ Error handling patterns identified
+□ Testing strategy planned
+□ Performance implications understood
+```
+
+### Post-Implementation Validation
+```
+□ Implementation follows researched best practices
+□ All dependencies are latest stable versions
+□ Error handling covers researched edge cases
+□ Code follows current style guidelines
+□ Security practices are implemented
+□ Performance meets current standards
+□ Tests cover critical functionality
+```
+
+## Research Integration with SpecDev Workflow
+
+### Requirements Phase Research
+```
+BEFORE WRITING REQUIREMENTS:
+1. Research: Similar projects and their approaches
+2. Search: Industry best practices for the domain
+3. Check: Current technology capabilities
+4. Verify: Feasibility with latest tools
+5. Document: Research-backed requirements
+```
+
+### Design Phase Research
+```
+BEFORE CREATING DESIGN:
+1. Research: Architecture patterns for the use case
+2. Search: Scalability considerations
+3. Check: Integration patterns with chosen technologies
+4. Verify: Performance implications
+5. Document: Research-supported design decisions
+```
+
+### Task Implementation Research
+```
+BEFORE EACH TASK:
+1. Research: Current implementation approaches
+2. Search: Common pitfalls and solutions
+3. Check: Latest tool/framework capabilities
+4. Verify: Best practices for the specific task
+5. Implement: Using research-backed approach
+```
+
+## Continuous Learning Integration
+
+### Stay Updated Process
+```
+WEEKLY RESEARCH ROUTINE:
+□ Check: Major framework/tool release notes
+□ Review: Security advisories and patches
+□ Research: Emerging best practices
+□ Monitor: Community discussions and trends
+□ Update: Internal knowledge base
+```
+
+This research-first approach ensures every implementation uses the latest, most secure, and most efficient approaches available, preventing technical debt and reducing debugging time significantly.

@@ -1,0 +1,114 @@
+---
+description: "Prompt rewriting and optimization rules for better AI interactions"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Prompt Rewriting and Optimization Rules
+
+## Priority: High
+
+**Instructions: MUST follow prompt_rewriting_rules for rewriting and optimizing prompts**
+
+## Core Rewriting Framework
+
+### Trigger Event
+When encountering unclear, ambiguous, or suboptimal prompts, apply systematic rewriting process.
+
+### Objective
+**Primary Goal**: Analyze(query) ⊕ PreserveIntent(query) ⊕ GenerateVariants(query)
+
+### Analysis Pipeline
+
+#### Step 1: Input Evaluation
+Evaluate input for:
+- **Clarity**: Is the request unambiguous?
+- **Specificity**: Are requirements detailed enough?
+- **Completeness**: Are all necessary details provided?
+
+**Decision Point**: Determine if modification is required (MODIFY flag = 0 or 1)
+
+#### Step 2: Deficiency Identification (if MODIFY = 1)
+Identify deficiencies in:
+- **Clarity**: Remove ambiguous language
+- **Specificity**: Add missing technical details
+- **Structure**: Improve logical organization
+- **Relevance**: Focus on essential information
+
+#### Step 3: Effective Aspects Documentation (if MODIFY = 0)
+Document what makes the current prompt effective to preserve those qualities.
+
+## Rewriting Constraints
+
+### Intent Preservation
+- **Preserve semantics and goals** - Never change the fundamental intent
+- **Integrate relevant context** - Include helpful background when available
+- **Remove ambiguity** - Eliminate unclear or confusing language
+- **Reduce verbosity** - Make prompts concise while maintaining completeness
+- **Minimize assumptions** - Avoid unwarranted inferences about user intent
+
+### Quality Ranking Criteria
+Rank rewrite options by:
+1. **Intent Match Probability** (highest priority)
+2. **Assumption Count** (fewer is better)  
+3. **Clarity Gain** (improvement in understandability)
+
+## Output Requirements
+
+When rewriting prompts, always provide:
+
+### Required Output Elements
+1. **Modification Required**: YES/NO determination
+2. **Rationale**: Clear explanation of why changes are/aren't needed
+3. **Rewrite Options**: 1-3 improved versions (if modification required)
+4. **Assumptions Required**: YES/NO - are there unstated assumptions?
+5. **Assumptions Table** (if YES): List assumptions with salience and plausibility ratings
+
+### Assumptions Documentation Format
+For each assumption:
+- **Assumption**: Clear statement of what is being assumed
+- **Salience**: High/Medium/Low importance to the task
+- **Plausibility**: High/Medium/Low likelihood of being correct
+
+## Processing Rules
+
+### Content Processing
+1. **Discard irrelevant context** - Remove information that doesn't help
+2. **Preserve task-specific instructions** - Keep essential technical requirements
+3. **Enhance structure when beneficial** - Improve organization and flow
+4. **Validate intent preservation** - Ensure rewritten version maintains original goals
+
+### SpecDev Integration
+Apply prompt optimization when:
+- **User provides vague feature requests** - Clarify requirements before proceeding
+- **Requirements are ambiguous** - Rewrite for clarity and testability
+- **Design descriptions lack detail** - Enhance technical specifications
+- **Task descriptions are unclear** - Improve implementation guidance
+
+## Practical Application Examples
+
+### Before Optimization
+"Make the app faster and better"
+
+### After Optimization
+"Optimize application performance by:
+1. Reducing page load times to <2 seconds
+2. Improving API response times to <200ms
+3. Implementing efficient caching strategies
+4. Adding performance monitoring and metrics
+
+**Assumptions**: 
+- Current performance is below acceptable thresholds (High salience, Medium plausibility)
+- User has access to performance monitoring tools (Medium salience, High plausibility)"
+
+## Quality Validation
+
+Before finalizing any prompt rewrite:
+- [ ] Original intent is preserved
+- [ ] Ambiguity is removed or significantly reduced
+- [ ] Technical requirements are clearly specified
+- [ ] Assumptions are documented when present
+- [ ] Result is actionable and measurable
+- [ ] Language is concise and professional
+
+This systematic approach ensures all SpecDev interactions are clear, actionable, and lead to better specification outcomes.

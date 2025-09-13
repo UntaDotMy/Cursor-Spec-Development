@@ -1,0 +1,426 @@
+---
+description: "Enhanced SpecDev workflow with 2025-2026 web search, QA/QC, and adaptive project analysis"
+globs: ["**/*.md", "**/.specdev/**/*"]
+alwaysApply: true
+---
+
+# Enhanced SpecDev Workflow with QA/QC and Modern Practices
+
+## CRITICAL: Auto-Trigger Rules
+
+**IMPORTANT**: These rules should AUTOMATICALLY apply when:
+1. User mentions building, creating, or developing ANY project
+2. User asks for requirements, design, or implementation help
+3. User opens or works with .specdev files
+4. User runs `/specdev init` command
+
+**DO NOT wait for manual trigger - ALWAYS use these rules for project development tasks**
+
+## Overview
+
+This enhanced workflow replaces Context7 with modern web search guidance and adds comprehensive Quality Assurance, Quality Control, error tracking, and adaptive project analysis. The Cursor agent should use web search tools to get the latest 2025-2026 information and best practices.
+
+## MANDATORY: Feature-Based Development
+
+**EVERY project development task MUST:**
+1. **Create a feature** in `.specdev/specs/{feature-name}/` structure
+2. **Generate three documents**: requirements.md, design.md, tasks.md
+3. **Validate each phase** with user before proceeding
+4. **Track implementation** with user confirmation after each task
+
+## Key Enhancements
+
+1. **Modern Information Gathering**: Use web search for latest 2025-2026 content instead of Context7
+2. **Adaptive Project Analysis**: Analyze user's project context and adapt requirements accordingly
+3. **QA/QC Integration**: Quality checks at each phase with user confirmation
+4. **Error Tracking**: Learn from and reuse solutions for similar errors
+5. **Task Validation**: Detailed validation with user confirmation before proceeding
+6. **Feature Management**: Always organize work by features with proper validation
+
+## WORKFLOW: Automatic Feature Creation
+
+### When User Describes ANY Development Task:
+
+1. **IMMEDIATELY identify the feature name** from user's description
+2. **Create feature structure**: `.specdev/specs/{feature-name}/`
+3. **Start the 3-phase workflow**: Requirements → Design → Tasks
+4. **Validate each phase** with user before proceeding
+
+**Example Triggers:**
+- "I want to build a login system" → Feature: "user-authentication"
+- "Create a shopping cart" → Feature: "shopping-cart"
+- "Add payment processing" → Feature: "payment-system"
+- "Build a dashboard" → Feature: "admin-dashboard"
+
+## Phase 1: Project Analysis & Requirements
+
+### Step 1.1: Analyze Project Context
+
+**BEFORE generating any requirements, you MUST:**
+
+1. **Analyze the user's project description** to understand:
+   - Project type (website, web-app, mobile-app, desktop-app, cross-platform, api, game, etc.)
+   - Target platforms (browser, iOS, Android, Windows, Mac, Linux, cross-platform)
+   - Business domain (e-commerce, healthcare, finance, education, productivity, gaming, etc.)
+   - Complexity level (simple, medium, complex, enterprise)
+   - Technologies mentioned or implied
+   - User's specific requirements and constraints
+
+2. **Search for latest information** using web search:
+   ```
+   Search: "[project-type] [platform] [business-domain] best practices examples 2025 2026 requirements"
+   Search: "[technology-stack] latest version 2025 2026 best practices examples"
+   Search: "[business-domain] compliance requirements examples 2025 2026"
+   Search: "[platform] development requirements best practices 2025"
+   ```
+
+3. **Analyze workspace** (if available):
+   - Check package.json for existing technologies
+   - Look for configuration files that indicate architecture
+   - Identify existing patterns and structures
+   - Check for existing test files (DO NOT create new ones if they exist)
+   - Check for existing documentation (USE existing structure)
+
+### Step 1.2: Generate Adaptive Requirements
+
+Create requirements that are **specifically tailored** to the project context:
+
+**Requirements Template:**
+```markdown
+# Requirements Document - [Feature Name]
+
+## Project Context Analysis
+- **Project Type**: [Identified project type]
+- **Business Domain**: [Identified domain]
+- **Technology Stack**: [Technologies identified/mentioned]
+- **Complexity**: [Simple/Medium/Complex]
+- **Compliance Needs**: [Based on domain - GDPR, HIPAA, PCI-DSS, etc.]
+
+## Introduction
+[Context-aware introduction based on project analysis]
+
+## Functional Requirements
+
+### REQ-001: [Requirement Name]
+**User Story:** As a [specific role for this domain], I want [feature], so that [business benefit]
+
+#### Acceptance Criteria (EARS Format)
+1. WHEN [specific event] THEN [system] SHALL [specific response]
+2. IF [precondition] THEN [system] SHALL [response]
+3. WHERE [condition] THEN [system] SHALL [behavior]
+
+**Priority**: [High/Medium/Low based on project context]
+**Compliance**: [If applicable - GDPR, HIPAA, etc.]
+
+## Non-Functional Requirements
+
+### Performance Requirements
+- Response time: < [X seconds based on project complexity]
+- Concurrent users: [Based on project scale]
+- Availability: [Based on business criticality]
+
+### Security Requirements
+[Domain-specific security requirements]
+
+### Compliance Requirements
+[Based on business domain - automatically include relevant compliance]
+
+## Quality Attributes
+[Tailored to project type and domain]
+```
+
+### Step 1.3: QA Check for Requirements
+
+**Quality Assurance Checklist:**
+- [ ] All requirements follow EARS format
+- [ ] Each requirement has unique ID (REQ-XXX)
+- [ ] User stories are complete and domain-appropriate
+- [ ] Acceptance criteria are specific and testable
+- [ ] Domain-specific compliance requirements included
+- [ ] Non-functional requirements match project complexity
+- [ ] No ambiguous terms (replace "fast", "reliable" with specific metrics)
+
+**MANDATORY**: Ask user "Do the requirements look complete and accurate for your [project-type] in [business-domain]? Any missing requirements or changes needed?"
+
+**DO NOT PROCEED until user explicitly approves requirements**
+
+## Phase 2: Design Document with Modern Practices
+
+### Step 2.1: Research Latest Design Patterns
+
+**BEFORE creating design, search for:**
+```
+Search: "[technology-stack] architecture patterns 2025 2026 best practices examples"
+Search: "[project-type] [platform] [business-domain] system design examples 2025 2026"
+Search: "[framework] latest features 2025 2026 breaking changes examples"
+Search: "[business-domain] data protection privacy design examples 2025 2026"
+Search: "[platform] specific design patterns best practices 2025"
+Search: "[technology] real world architecture examples production 2025"
+```
+
+### Step 2.2: Generate Context-Aware Design
+
+**Enhanced Design Template:**
+```markdown
+# Design Document - [Feature Name]
+
+## Technology Research Summary
+**Latest Versions (2025-2026):**
+- [Technology]: v[X.X.X] - [Key changes/features with examples]
+- [Framework]: v[X.X.X] - [Breaking changes and migration examples]
+- [Platform]: [Platform-specific considerations and best practices]
+
+**Recommended Patterns for [Project Type] on [Platform]:**
+[Based on web search results with code examples and real-world implementations]
+
+**Code Documentation Standards:**
+- All components/functions MUST have descriptive comments
+- Section headers MUST clearly indicate purpose
+- Complex logic MUST be explained with inline comments
+- API integrations MUST include error handling documentation
+
+## Architecture Overview
+
+### System Context
+```mermaid
+C4Context
+    title System Context for [Feature Name]
+    
+    Person(user, "[User Type]", "[User description]")
+    System(system, "[System Name]", "[System description]")
+    System_Ext(external, "[External System]", "[If applicable]")
+    
+    Rel(user, system, "Uses")
+    Rel(system, external, "Integrates with")
+```
+
+### Container Diagram
+```mermaid
+C4Container
+    title Container Diagram for [Feature Name]
+    
+    Container(web, "Web Application", "[Technology]", "[Description]")
+    Container(api, "API Application", "[Technology]", "[Description]")
+    ContainerDb(db, "Database", "[Database Type]", "[Description]")
+    
+    Rel(web, api, "Makes API calls to")
+    Rel(api, db, "Reads from and writes to")
+```
+
+## Component Design
+
+### [Component 1] - [Technology-specific implementation]
+**Latest Best Practices (2025-2026):**
+[Include modern patterns found via web search]
+
+**Implementation Approach:**
+[Specific to chosen technology stack]
+
+## Data Flow & Security
+
+### Data Flow Diagram
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant W as Web App
+    participant A as API
+    participant D as Database
+    
+    U->>W: [Action]
+    W->>A: [API Call with security headers]
+    A->>D: [Secure query]
+    D->>A: [Encrypted response]
+    A->>W: [Validated response]
+    W->>U: [UI Update]
+```
+
+### Security Design
+**2025-2026 Security Requirements:**
+[Based on latest security practices from web search]
+
+## Error Handling Strategy
+**Modern Error Handling Patterns:**
+[Include latest error handling best practices]
+
+## Testing Strategy
+**2025-2026 Testing Approaches:**
+[Include modern testing strategies]
+```
+
+### Step 2.3: QC Validation for Design
+
+**Quality Control Checklist:**
+- [ ] Architecture aligns with latest 2025-2026 best practices
+- [ ] All technologies use current stable versions
+- [ ] Security follows modern standards (Zero Trust, etc.)
+- [ ] Mermaid diagrams are present and accurate
+- [ ] Design addresses all requirements (REQ-XXX references)
+- [ ] Error handling strategy is comprehensive
+- [ ] Performance considerations included
+- [ ] Compliance requirements addressed in design
+
+**MANDATORY**: Ask user "Does this design look technically sound and complete? Does it use the right modern approaches for your project?"
+
+**DO NOT PROCEED until user explicitly approves design**
+
+## Phase 3: Enhanced Task Generation with Validation
+
+### Step 3.1: Research Implementation Best Practices
+
+**Search for current implementation guidance:**
+```
+Search: "[technology] implementation guide examples 2025 2026 step by step"
+Search: "[framework] project setup best practices examples 2025 2026"
+Search: "[project-type] [platform] development workflow examples 2025 2026"
+Search: "[technology] code examples best practices production 2025"
+Search: "[platform] specific implementation patterns 2025"
+```
+
+### Step 3.2: Generate Detailed Implementation Tasks
+
+**Enhanced Task Template:**
+```markdown
+# Implementation Plan - [Feature Name]
+
+## Implementation Context
+**Technology Stack**: [Confirmed technologies with latest versions]
+**Target Platform**: [Specific platform requirements and constraints]
+**Development Approach**: Best practices with comprehensive code documentation
+**Quality Gates**: Each task requires user validation before proceeding
+**Documentation Requirements**: All code must include proper comments and documentation
+
+## Sprint Planning
+
+### Sprint 1: Foundation & Setup
+
+- [ ] 1. Project Setup and Modern Tooling
+  - Set up project with latest [framework] v[X.X.X] for [platform]
+  - Configure modern build tools with platform-specific optimizations
+  - Setup TypeScript with strict configuration and platform types
+  - Configure ESLint, Prettier with 2025-2026 rules
+  - Add comprehensive code documentation templates
+  - **Code Documentation**: Add file headers, function documentation templates
+  - **Validation**: Project builds successfully, linting passes, documentation structure in place
+  - **User Confirmation Required**: "Project setup complete and building correctly?"
+  - _Requirements: REQ-001, REQ-002_
+
+- [ ] 2. Core Architecture Implementation  
+  - Implement folder structure following [pattern] pattern
+  - Set up dependency injection/state management
+  - Configure environment variables and secrets management
+  - **Validation**: Architecture follows design, no circular dependencies
+  - **User Confirmation Required**: "Core architecture implemented correctly?"
+  - _Requirements: REQ-003_
+
+### Sprint 2: Core Features
+
+- [ ] 3. [Specific Feature] Implementation
+  - Create [Component/Service] following latest [platform] patterns with examples
+  - Implement error handling with modern error boundaries and best practices
+  - Add comprehensive logging and monitoring with platform-specific tools
+  - **Code Documentation**: Add detailed function comments, section headers, and inline explanations
+  - **Use Existing Tests**: Update existing test files (DO NOT create new ones unless none exist)
+  - **Validation**: Feature works as designed, follows platform conventions, properly documented
+  - **User Confirmation Required**: "Feature working correctly? Any issues encountered?"
+  - _Requirements: REQ-004, REQ-005_
+
+## CRITICAL: Task Execution with User Validation
+
+**For EVERY task completion:**
+
+1. **Complete the task** with best practices and documentation
+2. **Test the implementation** thoroughly
+3. **Ask user for validation**: "Task [X] completed. Please test and confirm:
+   - Does the feature work as expected?
+   - Are there any errors or issues?
+   - Does it meet the requirements?
+   
+   Please respond with 'working' if good, or describe any issues found."
+
+4. **WAIT for user confirmation** before proceeding to next task
+5. **If user reports issues**: Debug and fix before continuing
+6. **If user confirms working**: Proceed to next task
+
+**DO NOT AUTOMATICALLY CONTINUE TO NEXT TASK WITHOUT USER CONFIRMATION**
+
+## Error Tracking Instructions
+
+**For each task, if errors occur:**
+
+1. **Document the Error**:
+   - Exact error message
+   - Context (what you were doing)
+   - Technology stack involved
+   - Steps that led to the error
+
+2. **Search for Solutions**:
+   ```
+   Search: "[exact error message] [technology] 2025 2026 solution examples"
+   Search: "[error type] [framework] fix troubleshooting examples 2025"
+   ```
+
+3. **Apply and Validate Solution**:
+   - Try the most recent/highly-rated solution with examples
+   - Document what worked with code examples
+   - Note prevention tips for future with best practices
+
+4. **Update Error Knowledge Base**:
+   - Add to project's error log with detailed context
+   - Include solution steps with code examples
+   - Mark as verified/working with platform-specific notes
+
+## Quality Gates
+
+**Each task must pass:**
+- [ ] Code review checklist with platform-specific standards
+- [ ] Existing tests updated (avoid creating new test files)
+- [ ] Manual testing completed on target platform
+- [ ] User acceptance confirmed with validation dialog
+- [ ] Error handling tested with real scenarios
+- [ ] Code documentation added (comments, headers, inline explanations)
+- [ ] Platform-specific requirements verified
+
+**User Confirmation Template:**
+"Task [X] completed. Please verify:
+1. [Specific validation point 1]
+2. [Specific validation point 2]
+3. Any errors or issues encountered?
+
+Should I proceed to the next task?"
+
+## Continuous Quality Improvement
+
+### After Each Phase:
+1. **Retrospective**: What worked well? What could be improved?
+2. **Knowledge Update**: Update templates and rules based on learnings
+3. **Error Analysis**: Review errors encountered and solutions found
+4. **Best Practice Updates**: Incorporate new 2025-2026 practices discovered
+
+### Project Completion:
+1. **Quality Review**: Full system validation
+2. **Documentation**: Complete project documentation
+3. **Knowledge Export**: Export error solutions and learnings
+4. **Template Updates**: Update templates based on project experience
+
+## Web Search Guidelines
+
+**When searching for information, prioritize:**
+1. **Recency**: Look for 2025-2026 content
+2. **Authority**: Official documentation, GitHub, Stack Overflow
+3. **Relevance**: Specific to your technology stack
+4. **Completeness**: Solutions with complete examples
+
+**Search Query Patterns:**
+- "[technology] [version] [issue] 2025 2026 examples"
+- "[framework] best practices 2025 latest examples"
+- "[error message] solution fix examples 2025"
+- "[project-type] [domain] implementation guide examples 2025"
+
+## Success Metrics
+
+- **Requirements Quality**: All requirements testable and traceable
+- **Design Quality**: Architecture follows latest best practices
+- **Implementation Quality**: >80% test coverage, no critical issues
+- **User Satisfaction**: User confirms each phase and task before proceeding
+- **Error Resolution**: All errors documented and resolved
+- **Knowledge Reuse**: Error solutions available for future projects

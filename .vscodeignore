@@ -1,0 +1,51 @@
+# Ignore source files and development dependencies
+.vscode/**
+.vscode-test/**
+src/**/*.map
+.gitignore
+vsc-extension-quickstart.md
+**/tsconfig.json
+**/.eslintrc.json
+**/*.map
+**/*.ts
+
+# Ignore webview source files, keep only build
+webview/src/**
+webview/public/**
+webview/node_modules/**
+webview/package-lock.json
+webview/tsconfig.json
+webview/.gitignore
+webview/README.md
+
+# Keep only the webview build
+!webview/build/**
+
+# Ignore development files
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Ignore test files
+**/test/**
+**/*.test.*
+**/*.spec.*
+
+# Ignore documentation source files (keep only essential docs)
+README-Enhanced.md
+examples/**
+
+# Ignore build artifacts except output
+node_modules/**
+out/test/**
+
+# Keep only essential files
+!package.json
+!README.md
+!LICENSE
+!out/extension.js
+!prompts and rules/**
+!webview/build/**

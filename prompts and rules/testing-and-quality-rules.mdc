@@ -1,0 +1,417 @@
+---
+description: "Comprehensive testing and code quality rules with automatic linting and unit test generation"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Testing and Code Quality Rules
+
+## CRITICAL: Mandatory Testing for Every Task
+
+**EVERY development task MUST include:**
+1. **Linter Error Check** - Before and after each task
+2. **Unit Tests** - For each new function/component/service
+3. **Integration Tests** - For features that interact with existing code
+4. **Overall Test Suite** - Run all tests at project completion
+5. **Error Recording** - Document and fix any test failures
+
+## Phase 1: Pre-Task Quality Checks
+
+### Step 1.1: Linter Error Assessment
+
+**BEFORE starting any task:**
+```
+1. Run linter check: npm run lint OR yarn lint OR appropriate linter command
+2. Document current linter errors (if any)
+3. Ensure new task doesn't introduce additional linter errors
+4. Fix critical linter errors that would block development
+```
+
+**Search for linting best practices:**
+```
+Search: "[technology-stack] linting setup 2025 2026 best practices examples"
+Search: "[framework] eslint prettier configuration examples 2025"
+Search: "[language] linting rules 2025 2026 recommended setup"
+```
+
+### Step 1.2: Existing Test Suite Check
+
+**BEFORE starting development:**
+```
+1. Run existing test suite: npm test OR yarn test OR appropriate test command
+2. Ensure all existing tests pass
+3. Document any failing tests and fix if blocking
+4. Identify test patterns used in the project
+```
+
+## Phase 2: Task-Level Testing Requirements
+
+### Step 2.1: Unit Test Generation for Each Task
+
+**For EVERY new function/component/service created:**
+
+```markdown
+## Unit Test Requirements - [Task Name]
+
+### Test Coverage Checklist
+- [ ] **Happy Path Tests**: Normal operation with valid inputs
+- [ ] **Edge Case Tests**: Boundary conditions and edge cases
+- [ ] **Error Handling Tests**: Invalid inputs and error conditions
+- [ ] **Integration Tests**: How it works with existing components
+- [ ] **Performance Tests**: For critical operations
+
+### Test Structure Template
+```[test-framework]
+describe('[Component/Function Name]', () => {
+  // Setup
+  beforeEach(() => {
+    // Initialize test environment
+  });
+
+  // Happy path tests
+  it('should [expected behavior] when [condition]', () => {
+    // Arrange
+    const input = [valid input];
+    
+    // Act
+    const result = [function call];
+    
+    // Assert
+    expect(result).toBe([expected output]);
+  });
+
+  // Edge case tests
+  it('should handle [edge case] correctly', () => {
+    // Test edge case
+  });
+
+  // Error handling tests
+  it('should throw error when [invalid condition]', () => {
+    expect(() => {
+      [function call with invalid input]
+    }).toThrow('[expected error message]');
+  });
+
+  // Integration tests
+  it('should integrate correctly with [existing component]', () => {
+    // Test integration
+  });
+});
+```
+
+### Test File Naming Convention
+```
+Component: Button.tsx → Button.test.tsx
+Service: AuthService.ts → AuthService.test.ts
+Utility: formatDate.js → formatDate.test.js
+API Route: /api/users → users.test.js
+```
+```
+
+### Step 2.2: Test Implementation Guidelines
+
+**Based on project technology stack:**
+
+#### React/Vue/Angular Components
+```markdown
+### Component Testing Requirements
+- [ ] **Rendering Tests**: Component renders without crashing
+- [ ] **Props Tests**: Component handles all prop variations
+- [ ] **Event Tests**: User interactions work correctly
+- [ ] **State Tests**: Component state changes work as expected
+- [ ] **Accessibility Tests**: Component meets accessibility standards
+- [ ] **Snapshot Tests**: Component output remains consistent
+
+### Example React Test
+```javascript
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Button from './Button';
+
+describe('Button Component', () => {
+  it('renders with correct text', () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByText('Click me')).toBeInTheDocument();
+  });
+
+  it('calls onClick handler when clicked', () => {
+    const handleClick = jest.fn();
+    render(<Button onClick={handleClick}>Click me</Button>);
+    fireEvent.click(screen.getByText('Click me'));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('is disabled when disabled prop is true', () => {
+    render(<Button disabled>Click me</Button>);
+    expect(screen.getByText('Click me')).toBeDisabled();
+  });
+});
+```
+```
+
+#### API/Backend Services
+```markdown
+### API Testing Requirements
+- [ ] **Endpoint Tests**: All HTTP methods work correctly
+- [ ] **Authentication Tests**: Protected routes require auth
+- [ ] **Validation Tests**: Input validation works properly
+- [ ] **Database Tests**: Data operations work correctly
+- [ ] **Error Response Tests**: Proper error codes and messages
+- [ ] **Performance Tests**: Response times within acceptable limits
+
+### Example API Test
+```javascript
+const request = require('supertest');
+const app = require('../app');
+
+describe('POST /api/users', () => {
+  it('should create a new user with valid data', async () => {
+    const userData = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      password: 'securePassword123'
+    };
+
+    const response = await request(app)
+      .post('/api/users')
+      .send(userData)
+      .expect(201);
+
+    expect(response.body).toHaveProperty('id');
+    expect(response.body.name).toBe(userData.name);
+    expect(response.body.email).toBe(userData.email);
+    expect(response.body).not.toHaveProperty('password');
+  });
+
+  it('should return 400 for invalid email', async () => {
+    const invalidData = {
+      name: 'John Doe',
+      email: 'invalid-email',
+      password: 'securePassword123'
+    };
+
+    const response = await request(app)
+      .post('/api/users')
+      .send(invalidData)
+      .expect(400);
+
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toContain('email');
+  });
+});
+```
+```
+
+### Step 2.3: Test Execution and Validation
+
+**After implementing each task:**
+
+```markdown
+## Task Completion Testing Protocol
+
+### 1. Run New Tests
+```bash
+# Run only new tests for this task
+npm test -- --testNamePattern="[TaskName]"
+# OR
+yarn test --testNamePattern="[TaskName]"
+```
+
+### 2. Run Full Test Suite
+```bash
+# Run all tests to ensure no regressions
+npm test
+# OR
+yarn test
+```
+
+### 3. Check Test Coverage
+```bash
+# Generate coverage report
+npm test -- --coverage
+# OR
+yarn test --coverage
+```
+
+### 4. Linter Check
+```bash
+# Check for linting errors
+npm run lint
+# OR
+yarn lint
+```
+
+### 5. Fix Any Issues
+- **If tests fail**: Debug and fix the implementation
+- **If coverage is low**: Add missing tests
+- **If linter errors**: Fix code style issues
+- **If regressions**: Fix broken existing functionality
+
+### 6. User Validation Required
+"Task [X] completed with full test suite. Test results:
+- ✅ New unit tests: [X] passing
+- ✅ Integration tests: [X] passing  
+- ✅ Full test suite: [X/X] tests passing
+- ✅ Test coverage: [X]% (target: >80%)
+- ✅ Linter: No errors
+- ✅ No regressions in existing functionality
+
+Please verify the feature works as expected. Any issues found?"
+```
+
+## Phase 3: Project-Level Quality Assurance
+
+### Step 3.1: Overall Test Suite Generation
+
+**At project completion, generate comprehensive test suite:**
+
+```markdown
+# Project Test Suite Summary
+
+## Test Coverage Report
+- **Unit Tests**: [X] tests covering [X] functions/components
+- **Integration Tests**: [X] tests covering feature interactions
+- **E2E Tests**: [X] tests covering user workflows
+- **API Tests**: [X] tests covering all endpoints
+- **Performance Tests**: [X] tests covering critical operations
+
+## Coverage Metrics
+- **Line Coverage**: [X]% (Target: >80%)
+- **Branch Coverage**: [X]% (Target: >75%)
+- **Function Coverage**: [X]% (Target: >90%)
+- **Statement Coverage**: [X]% (Target: >80%)
+
+## Quality Metrics
+- **Linter Errors**: 0
+- **Type Errors**: 0 (if using TypeScript)
+- **Security Vulnerabilities**: 0
+- **Performance Issues**: 0
+
+## Test Execution Commands
+```bash
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm test -- --coverage
+
+# Run specific test suites
+npm test -- --testPathPattern=unit
+npm test -- --testPathPattern=integration
+npm test -- --testPathPattern=e2e
+
+# Run linter
+npm run lint
+
+# Run type checker (if TypeScript)
+npm run type-check
+```
+
+## Continuous Quality Monitoring
+- Set up pre-commit hooks to run tests and linting
+- Configure CI/CD to run full test suite on every push
+- Monitor test coverage and maintain >80% coverage
+- Regular dependency updates and security audits
+```
+
+### Step 3.2: Error Recording and Resolution
+
+**For every error encountered during testing:**
+
+```markdown
+## Error Documentation Template
+
+### Error ID: ERR-TEST-[YYYYMMDD]-[Number]
+**Test Type**: [Unit/Integration/E2E]
+**Component**: [Component/Service/Function name]
+**Error Message**: 
+```
+[Exact error message]
+```
+
+**Error Context**: [What test was running, what was expected vs actual]
+**Root Cause**: [Why the error occurred]
+**Solution Applied**: [How it was fixed]
+**Prevention**: [How to avoid this error in future]
+
+### Test Fix Documentation
+```[language]
+// Before (failing test)
+[original test code]
+
+// After (passing test)  
+[fixed test code]
+
+// Explanation: [Why the fix works]
+```
+
+**Verification**: 
+- [ ] Test now passes
+- [ ] No regressions introduced
+- [ ] Coverage maintained or improved
+- [ ] Error added to knowledge base
+```
+
+### Step 3.3: Quality Gates and Standards
+
+**Every task must pass these quality gates:**
+
+```markdown
+## Quality Gate Checklist
+
+### Code Quality
+- [ ] No linter errors or warnings
+- [ ] No TypeScript errors (if applicable)
+- [ ] Code follows project conventions
+- [ ] All functions/components documented
+- [ ] No console.log or debug code left
+
+### Testing Quality  
+- [ ] All new code has unit tests
+- [ ] Test coverage >80% for new code
+- [ ] All tests pass consistently
+- [ ] No flaky or intermittent test failures
+- [ ] Integration tests cover feature interactions
+
+### Performance Quality
+- [ ] No performance regressions
+- [ ] Critical operations complete within SLA
+- [ ] Memory usage within acceptable limits
+- [ ] No memory leaks detected
+
+### Security Quality
+- [ ] No security vulnerabilities introduced
+- [ ] Input validation implemented
+- [ ] Authentication/authorization working
+- [ ] Sensitive data properly protected
+
+### User Experience Quality
+- [ ] Feature works as designed
+- [ ] Error handling provides clear feedback
+- [ ] Loading states implemented
+- [ ] Accessibility requirements met
+```
+
+## Web Search for Testing Best Practices
+
+**Always search for latest testing approaches:**
+```
+Search: "[technology-stack] testing best practices 2025 2026 examples"
+Search: "[framework] unit testing guide examples 2025"
+Search: "[testing-library] latest features 2025 2026"
+Search: "[project-type] integration testing patterns examples 2025"
+Search: "[technology] test coverage tools 2025 2026"
+Search: "[framework] mocking strategies examples 2025"
+```
+
+## Integration with Development Workflow
+
+**This testing system integrates with the main SpecDev workflow:**
+
+1. **Requirements Phase**: Define testable acceptance criteria
+2. **Design Phase**: Plan testing strategy and test architecture
+3. **Tasks Phase**: Implement with tests for each task
+4. **Validation Phase**: Run comprehensive test suite
+5. **Completion Phase**: Generate final test report and documentation
+
+This ensures every feature is thoroughly tested, maintainable, and reliable.

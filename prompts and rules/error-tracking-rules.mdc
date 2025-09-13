@@ -1,0 +1,290 @@
+---
+description: "Error tracking and resolution system with solution reuse"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Error Tracking and Resolution Rules
+
+## Overview
+
+These rules guide the Cursor agent to track, learn from, and reuse solutions for errors encountered during development. Since extensions cannot make direct API calls, this system uses local storage, pattern matching, and web search to build and maintain an error knowledge base.
+
+## Error Tracking Workflow
+
+### Step 1: Error Detection and Documentation
+
+**When an error occurs during task execution:**
+
+1. **Capture Error Details**
+   ```markdown
+   ## Error Report
+   **Error ID**: ERR-[YYYYMMDD]-[Sequential Number]
+   **Timestamp**: [ISO Date]
+   **Task Context**: [Which task was being executed]
+   **Technology Stack**: [Languages, frameworks, tools involved]
+   
+   ### Error Details
+   **Error Type**: [Compilation, Runtime, Configuration, etc.]
+   **Error Message**: 
+   ```
+   [Exact error message here]
+   ```
+   
+   **Stack Trace** (if available):
+   ```
+   [Full stack trace]
+   ```
+   
+   **Context**: [What you were trying to do when error occurred]
+   **Environment**: [OS, Node version, package versions, etc.]
+   ```
+
+2. **Store in Local Error Database**
+   - Save to `.specdev/error-database.json`
+   - Create searchable entry with keywords
+   - Link to current project and task
+
+### Step 2: Error Analysis and Pattern Recognition
+
+**Before searching for solutions, analyze the error:**
+
+1. **Categorize Error Type**
+   - **Syntax Error**: Code syntax issues
+   - **Type Error**: TypeScript/type-related issues  
+   - **Module Error**: Import/dependency issues
+   - **Configuration Error**: Build tool, config file issues
+   - **Runtime Error**: Logic or execution issues
+   - **Network Error**: API, connection issues
+   - **Permission Error**: File system, access issues
+
+2. **Extract Error Pattern**
+   ```javascript
+   // Common patterns to identify:
+   "Cannot find module" -> Module resolution issue
+   "Type 'X' is not assignable to type 'Y'" -> Type mismatch
+   "Failed to compile" -> Build configuration issue
+   "ENOENT: no such file" -> File path issue
+   "Port already in use" -> Port conflict
+   "Network request failed" -> Connectivity issue
+   ```
+
+3. **Check Local Database First**
+   - Search existing errors for similar patterns
+   - Match by: error message similarity, technology stack, context
+   - If found with confidence > 70%, use existing solution
+
+### Step 3: Solution Search and Discovery
+
+**If no local solution found, search for solutions:**
+
+```
+Search: "[exact error message] [technology] 2025 2026 solution fix examples"
+Search: "[error type] [framework] troubleshooting guide examples 2025"
+Search: "[error pattern] [language] common causes fixes examples 2025"
+```
+
+**Prioritize sources:**
+1. Official documentation (docs.*)
+2. GitHub issues and discussions
+3. Stack Overflow (recent answers)
+4. Technology-specific forums
+5. Community blogs and tutorials
+
+### Step 4: Solution Documentation and Validation
+
+**Document the solution attempt:**
+
+```markdown
+## Solution Attempt #[N]
+**Source**: [URL or documentation reference]
+**Confidence**: [High/Medium/Low based on source authority]
+**Solution Type**: [Configuration change, code fix, dependency update, etc.]
+
+### Steps Taken:
+1. [Specific action 1]
+2. [Specific action 2]
+3. [Verification step]
+
+### Code Changes:
+**File**: [filename]
+**Change Type**: [create/modify/delete]
+```
+Before:
+```[language]
+[original code if applicable]
+```
+
+After:
+```[language]
+[modified code]
+```
+
+### Result:
+- [ ] ✅ Resolved - Error completely fixed
+- [ ] ⚠️ Partial - Error changed or partially resolved  
+- [ ] ❌ Failed - Solution didn't work
+```
+
+### Step 5: Solution Verification and Learning
+
+**After applying solution:**
+
+1. **Test Thoroughly**
+   - Verify error is completely resolved
+   - Test related functionality still works
+   - Run full test suite if available
+
+2. **Document Outcome**
+   - Mark solution as successful/partial/failed
+   - Note any side effects or additional issues
+   - Record prevention tips for future
+
+3. **Update Error Database**
+   ```json
+   {
+     "errorId": "ERR-20241201-001",
+     "errorMessage": "Cannot find module 'react'",
+     "context": "Setting up React project",
+     "technologies": ["React", "Node.js", "npm"],
+     "pattern": "module_not_found",
+     "solutions": [
+       {
+         "id": "SOL-001",
+         "description": "Install missing React dependency",
+         "steps": [
+           "Run npm install react react-dom",
+           "Verify package.json includes react dependencies",
+           "Clear node_modules and reinstall if needed"
+         ],
+         "confidence": 95,
+         "verified": true,
+         "usageCount": 3,
+         "lastUsed": "2024-12-01T10:30:00Z"
+       }
+     ],
+     "preventionTips": [
+       "Always check package.json dependencies before starting development",
+       "Use npm ls to verify installed packages"
+     ]
+   }
+   ```
+
+## Error Pattern Library
+
+### Common Error Patterns and Solutions
+
+**Module Resolution Errors:**
+```
+Pattern: "Cannot find module 'X'"
+Common Causes:
+- Missing dependency in package.json
+- Incorrect import path
+- Node modules not installed
+- Version mismatch
+
+Solution Template:
+1. Check if module is installed: npm ls [module-name]
+2. Install if missing: npm install [module-name]
+3. Verify import path is correct
+4. Clear cache: npm cache clean --force
+5. Reinstall: rm -rf node_modules && npm install
+```
+
+**TypeScript Type Errors:**
+```
+Pattern: "Type 'X' is not assignable to type 'Y'"
+Common Causes:
+- Type definition mismatch
+- Missing type declarations
+- Incorrect type annotations
+- Outdated @types packages
+
+Solution Template:
+1. Check type definitions are installed
+2. Update @types packages: npm update @types/*
+3. Add explicit type annotations
+4. Use type assertions if necessary (carefully)
+5. Check tsconfig.json settings
+```
+
+**Build Configuration Errors:**
+```
+Pattern: "Failed to compile" / "Build failed"
+Common Causes:
+- Webpack/Vite configuration issues
+- Missing build dependencies
+- Incompatible package versions
+- Environment variable issues
+
+Solution Template:
+1. Check build tool configuration
+2. Verify all build dependencies installed
+3. Check for version conflicts
+4. Clear build cache
+5. Review environment variables
+```
+
+## Integration with Task Execution
+
+### During Task Execution
+
+**Enhanced task execution with error handling:**
+
+```markdown
+## Task: [Task Name]
+
+### Pre-Execution Check
+- [ ] Review known errors for this task type
+- [ ] Verify environment setup
+- [ ] Check for technology-specific issues
+
+### Execution Steps
+1. [Implementation step 1]
+   - **Error Watch**: Monitor for [specific error types]
+   - **If Error Occurs**: Follow error tracking workflow
+   
+2. [Implementation step 2]
+   - **Validation**: [How to verify this step worked]
+   - **Common Issues**: [Known problems and quick fixes]
+
+### Post-Execution Validation
+- [ ] All tests pass
+- [ ] No console errors
+- [ ] Functionality works as expected
+- [ ] Document any errors encountered and resolved
+
+### User Confirmation Required
+"Task completed successfully. Any errors or issues encountered during implementation? 
+- Error details: [if any]
+- Solution applied: [if any]
+- Prevention measures: [if any]
+
+Ready to proceed to next task?"
+```
+
+### Error Recovery Procedures
+
+**When errors occur during task execution:**
+
+1. **Immediate Response**
+   - Stop current task execution
+   - Document error completely
+   - Search local database for solutions
+
+2. **Solution Application**
+   - Try highest confidence solution first
+   - Document each attempt
+   - If solution fails, try next alternative
+
+3. **User Communication**
+   - Report error and solution attempts
+   - Ask for user input if multiple solutions available
+   - Confirm resolution before proceeding
+
+4. **Learning Integration**
+   - Update error database with new information
+   - Refine solution confidence based on outcome
+   - Add to prevention guidelines
+
+This error tracking system ensures that the development process becomes more robust over time, with accumulated knowledge helping prevent and quickly resolve similar issues in future projects.
