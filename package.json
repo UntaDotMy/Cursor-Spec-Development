@@ -1,8 +1,8 @@
 {
   "name": "specdev",
   "displayName": "SpecDev - Specification Development Tool",
-  "description": "A Kiro-style workflow plugin for managing requirements, design, and tasks with markdown and Mermaid support",
-  "version": "0.3.0",
+  "description": "Enhanced Kiro-style workflow plugin with mandatory testing validation, error handling protocols, and comprehensive project management for all application types",
+  "version": "0.4.0",
   "publisher": "specdev",
   "author": {
     "name": "SpecDev Team"
@@ -23,8 +23,16 @@
     "specification",
     "kiro",
     "workflow",
+    "testing",
+    "validation",
+    "tdd",
+    "quality-assurance",
+    "error-handling",
     "markdown",
-    "mermaid"
+    "mermaid",
+    "jest",
+    "vitest",
+    "playwright"
   ],
   "engines": {
     "vscode": "^1.74.0"

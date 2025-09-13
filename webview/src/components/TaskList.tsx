@@ -216,7 +216,7 @@ const TaskList: React.FC<TaskListProps> = ({
     const criteria = [
       'Task implementation is complete and functional',
       'Unit tests written and passing (MANDATORY)',
-      'Minimum 75% test coverage achieved',
+      'Minimum 100% test coverage achieved',
       'Code follows project standards and best practices',
       'No console errors or warnings',
       'All edge cases and error scenarios tested'

@@ -1090,14 +1090,18 @@ async function forceUpdateRules() {
   // Ensure .cursor/rules directory exists
   if (!fs.existsSync(cursorRulesPath)) fs.mkdirSync(cursorRulesPath, { recursive: true });
   
-  // Always copy all rules (force update)
+  // Always copy all rules (force update) - ALL 20 FILES
   const rulesToCopy = [
     { src: 'enhanced-spec-workflow.mdc', dest: 'specdev-enhanced-workflow.mdc' },
     { src: 'project-analysis-rules.mdc', dest: 'specdev-project-analysis.mdc' },
     { src: 'error-tracking-rules.mdc', dest: 'specdev-error-tracking.mdc' },
+    { src: 'enhanced-error-handling.mdc', dest: 'specdev-enhanced-error-handling.mdc' },
     { src: 'comprehensive-project-templates.mdc', dest: 'specdev-project-templates.mdc' },
     { src: 'web-search-rules.mdc', dest: 'specdev-web-search-rules.mdc' },
+    { src: 'codebase-steering-rules.mdc', dest: 'specdev-codebase-steering.mdc' },
     { src: 'testing-and-quality-rules.mdc', dest: 'specdev-testing-quality.mdc' },
+    { src: 'mandatory-testing-validation.mdc', dest: 'specdev-mandatory-testing.mdc' },
+    { src: 'package-installation-workflow.mdc', dest: 'specdev-package-workflow.mdc' },
     { src: 'requirements-optimization-rules.mdc', dest: 'specdev-requirements-optimization.mdc' },
     { src: 'prompt-optimization-rules.mdc', dest: 'specdev-prompt-optimization.mdc' },
     { src: 'context-summarization-rules.mdc', dest: 'specdev-context-summarization.mdc' },
@@ -1261,7 +1265,7 @@ async function initializeRulesIfNeeded() {
   if (!specdevRulesExist) {
     if (!fs.existsSync(cursorRulesPath)) fs.mkdirSync(cursorRulesPath, { recursive: true });
     
-    // Copy enhanced rules with proper .mdc format
+    // Copy enhanced rules with proper .mdc format - ALL 20 FILES
     const rulesToCopy = [
       { src: 'enhanced-spec-workflow.mdc', dest: 'specdev-enhanced-workflow.mdc' },
       { src: 'project-analysis-rules.mdc', dest: 'specdev-project-analysis.mdc' },
@@ -1371,7 +1375,7 @@ async function initializeRulesIfNeeded() {
       gitIgnoreMessage = '\n📁 Updated .gitignore with SpecDev exclusions for production';
     }
 
-    vscode.window.showInformationMessage('SpecDev Enhanced rules automatically initialized! Cursor agent now has access to enhanced workflow, QA/QC, and adaptive project analysis.' + gitIgnoreMessage);
+    vscode.window.showInformationMessage('SpecDev Enhanced rules automatically initialized! All 20 rule files copied. Cursor agent now has access to enhanced workflow, QA/QC, testing validation, and adaptive project analysis.' + gitIgnoreMessage);
   }
 }
 
@@ -1419,7 +1423,7 @@ export function activate(context: vscode.ExtensionContext) {
     const cursorRulesPath = path.join(workspaceFolder.uri.fsPath, '.cursor', 'rules');
     if (!fs.existsSync(cursorRulesPath)) fs.mkdirSync(cursorRulesPath, { recursive: true });
     
-    // Copy/update enhanced rules including steering-specific rules
+    // Copy/update enhanced rules including steering-specific rules - ALL 20 FILES
     const rulesToCopy = [
       { src: 'enhanced-spec-workflow.mdc', dest: 'specdev-enhanced-workflow.mdc' },
       { src: 'project-analysis-rules.mdc', dest: 'specdev-project-analysis.mdc' },
@@ -1525,7 +1529,7 @@ export function activate(context: vscode.ExtensionContext) {
     const cursorRulesPath = path.join(workspaceFolder.uri.fsPath, '.cursor', 'rules');
     if (!fs.existsSync(cursorRulesPath)) fs.mkdirSync(cursorRulesPath, { recursive: true });
     
-    // Copy enhanced rules with proper .mdc format
+    // Copy enhanced rules with proper .mdc format - ALL 20 FILES
     const rulesToCopy = [
       { src: 'enhanced-spec-workflow.mdc', dest: 'specdev-enhanced-workflow.mdc' },
       { src: 'project-analysis-rules.mdc', dest: 'specdev-project-analysis.mdc' },
@@ -1563,7 +1567,7 @@ export function activate(context: vscode.ExtensionContext) {
       gitIgnoreMessage = '\n📁 Updated .gitignore with SpecDev exclusions for production';
     }
 
-    vscode.window.showInformationMessage('SpecDev Enhanced System initialized! Enhanced workflow with 2025-2026 web search, comprehensive project templates, QA/QC, error tracking, and adaptive project analysis rules added to .cursor/rules/' + gitIgnoreMessage);
+    vscode.window.showInformationMessage('SpecDev Enhanced System initialized! All 20 rule files copied: enhanced workflow, testing validation, error handling, package workflow, QA/QC, 2025-2026 web search, and adaptive project analysis rules added to .cursor/rules/' + gitIgnoreMessage);
   });
 
   // /specdev generate requirements from prompt
