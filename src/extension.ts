@@ -1,19 +1,41 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as http from 'http';
+import * as https from 'https';
+import * as crypto from 'crypto';
+import { AgentOrchestrator } from './services/agent';
+
+function computeDestPath(rulesDir: string, destFileName: string): string {
+  try {
+    const isWindsurf = /[\\\/]\.windsurf[\\\/]rules/.test(rulesDir);
+    if (isWindsurf) {
+      const mdName = destFileName.endsWith('.mdc') ? destFileName.replace(/\.mdc$/i, '.md') : destFileName;
+      return path.join(rulesDir, mdName);
+    }
+    return path.join(rulesDir, destFileName);
+  } catch {
+    return path.join(rulesDir, destFileName);
+  }
+}
 
 class SpecDevProvider {
   private static currentPanel: vscode.WebviewPanel | undefined;
   private readonly extensionUri: vscode.Uri;
+  private readonly context: vscode.ExtensionContext;
   private currentFeature: string = '';
   private fileWatcher: vscode.FileSystemWatcher | undefined;
+  private fileChangeTimeout: NodeJS.Timeout | undefined;
   private webviewPanel: vscode.WebviewPanel | undefined;
+  private orchestrator: AgentOrchestrator | undefined;
 
-  constructor(extensionUri: vscode.Uri) {
+  constructor(extensionUri: vscode.Uri, context: vscode.ExtensionContext) {
     this.extensionUri = extensionUri;
+    this.context = context;
   }
 
-  public static createOrShow(extensionUri: vscode.Uri) {
+  public static createOrShow(context: vscode.ExtensionContext) {
+    const extensionUri = context.extensionUri;
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
       : undefined;
@@ -23,18 +45,23 @@ class SpecDevProvider {
       return;
     }
 
+    const retain = vscode.workspace.getConfiguration('specdev').get<boolean>('webview.retainContextWhenHidden', false);
     const panel = vscode.window.createWebviewPanel(
       'specdev',
       'SpecDev',
       column || vscode.ViewColumn.One,
       {
         enableScripts: true,
-        localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')],
+        retainContextWhenHidden: retain,
+        localResourceRoots: [
+          vscode.Uri.joinPath(extensionUri, 'media'),
+          vscode.Uri.joinPath(extensionUri, 'webview', 'build')
+        ],
       }
     );
 
     SpecDevProvider.currentPanel = panel;
-    const provider = new SpecDevProvider(extensionUri);
+    const provider = new SpecDevProvider(extensionUri, context);
     provider.setupWebview(panel);
 
     panel.onDidDispose(
@@ -46,12 +73,19 @@ class SpecDevProvider {
     );
   }
 
-  private setupWebview(panel: vscode.WebviewPanel) {
+  public setupWebview(panel: vscode.WebviewPanel) {
     this.webviewPanel = panel;
-    panel.webview.html = this.getHtmlForWebview(panel.webview);
+    // Prefer React-built webview if available, else fallback to legacy inline HTML
+    panel.webview.html = this.getReactHtml(panel.webview) || this.getHtmlForWebview(panel.webview);
     
     // Setup file watcher for real-time updates
     this.setupFileWatcher();
+
+    // Initialize agent orchestrator
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (workspaceFolder) {
+      this.orchestrator = new AgentOrchestrator(workspaceFolder.uri.fsPath);
+    }
 
     panel.webview.onDidReceiveMessage(
       async (message) => {
@@ -116,10 +150,180 @@ class SpecDevProvider {
             summaryPath: summaryPath
           });
             break;
+        case 'persistState':
+          try {
+            await this.context.workspaceState.update('specdev.state', message.state || {});
+          } catch (e) {
+            // ignore
+          }
+          break;
+        case 'loadPersistedState':
+          const saved = this.context.workspaceState.get('specdev.state');
+          panel.webview.postMessage({ command: 'hydratedState', state: saved });
+          break;
+        case 'docCacheFetch': {
+          const { url, force } = message;
+          const result = await this.fetchAndCacheDocument(url, !!force);
+          panel.webview.postMessage({ command: 'docCacheFetched', result });
+          break;
         }
-      },
-      undefined,
-    );
+        case 'docCacheList': {
+          const list = this.listCachedDocuments();
+          panel.webview.postMessage({ command: 'docCacheList', list });
+          break;
+        }
+        case 'docCacheInvalidate': {
+          const { url } = message;
+          const ok = this.invalidateCachedDocument(url);
+          panel.webview.postMessage({ command: 'docCacheInvalidated', url, ok });
+          break;
+        }
+        case 'docCacheRefresh': {
+          const { url } = message;
+          const result = await this.fetchAndCacheDocument(url, true);
+          panel.webview.postMessage({ command: 'docCacheFetched', result });
+          break;
+        }
+        case 'agentStart': {
+          try {
+            const feature = message.feature || this.currentFeature || 'general';
+            const goal = message.goal || `Automated orchestration for feature: ${feature}`;
+            const options = message.options || {};
+            // Allow toggling orchestrator options as well
+            if (this.orchestrator && options) {
+              this.orchestrator.setOptions({
+                autoResearchPrestep: options.autoResearchPrestep ?? true,
+                enableAutomationHooks: options.enableAutomationHooks ?? true,
+              });
+            }
+            const run = this.orchestrator?.startRun(feature, goal, {
+              roles: Array.isArray(options.roles) ? options.roles : undefined,
+              autoResearchPrestep: options.autoResearchPrestep,
+              enableAutomationHooks: options.enableAutomationHooks,
+            });
+            panel.webview.postMessage({ command: 'agentUpdate', run });
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`Agent start failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentListRuns': {
+          try {
+            const runs = this.orchestrator?.listRuns() || [];
+            panel.webview.postMessage({ command: 'agentRuns', runs });
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`Agent list failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentStepAction': {
+          try {
+            const { runId, stepId, action, details, error } = message;
+            const statusMap: Record<string, 'queued' | 'running' | 'paused' | 'completed' | 'failed'> = {
+              start: 'running',
+              pause: 'paused',
+              complete: 'completed',
+              fail: 'failed',
+              retry: 'running',
+            };
+            const status = statusMap[(action || '').toLowerCase()] || 'queued';
+            const updated = this.orchestrator?.updateStepStatus(runId, stepId, status, { details, error });
+            if (updated) {
+              panel.webview.postMessage({ command: 'agentRunUpdated', run: updated });
+            }
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`Agent action failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentAddNote': {
+          try {
+            const { runId, stepId, note } = message;
+            const updated = this.orchestrator?.addStepNote(runId, stepId, note);
+            if (updated) {
+              panel.webview.postMessage({ command: 'agentRunUpdated', run: updated });
+            }
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`Add note failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentListErrors': {
+          try {
+            const errors = this.orchestrator?.listErrors() || [];
+            panel.webview.postMessage({ command: 'agentErrors', errors });
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`List errors failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentGetPersonas': {
+          try {
+            const { runId } = message;
+            const personas = runId ? (this.orchestrator?.getPersonasForRun(runId) || {}) : {};
+            panel.webview.postMessage({ command: 'agentPersonas', runId, personas });
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`Get personas failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentUpdateRoles': {
+          try {
+            const { runId, roles, merge } = message;
+            const updated = this.orchestrator?.updateRunRoles(runId, roles || [], !!merge);
+            if (updated) {
+              panel.webview.postMessage({ command: 'agentRunUpdated', run: updated });
+            }
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`Update roles failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentListKnowledge': {
+          try {
+            const list = this.orchestrator?.listKnowledge() || [];
+            panel.webview.postMessage({ command: 'knowledgeList', list });
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`List knowledge failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentSearchKnowledge': {
+          try {
+            const { query } = message;
+            const list = this.orchestrator?.searchKnowledge(query || '') || [];
+            panel.webview.postMessage({ command: 'knowledgeSearchResults', list, query });
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`Search knowledge failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentGetKnowledge': {
+          try {
+            const { idOrPath } = message;
+            const item = this.orchestrator?.getKnowledge(idOrPath);
+            panel.webview.postMessage({ command: 'knowledgeItem', item });
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`Get knowledge failed: ${e?.message || e}`);
+          }
+          break;
+        }
+        case 'agentSaveResearch': {
+          try {
+            const { title, content, runId, stepId, errorId, tags } = message;
+            const item = this.orchestrator?.saveResearch(title, content, { runId, stepId, errorId, tags });
+            if (item) {
+              panel.webview.postMessage({ command: 'researchSaved', item });
+            }
+          } catch (e:any) {
+            vscode.window.showErrorMessage(`Save research failed: ${e?.message || e}`);
+          }
+          break;
+        }
+      }
+    },
+    undefined,
+  );
   }
 
   private async getAvailableFeatures(): Promise<string[]> {
@@ -424,8 +628,6 @@ sequenceDiagram
     this.fileWatcher.onDidDelete((uri) => this.handleFileChange(uri));
   }
 
-  private fileChangeTimeout: NodeJS.Timeout | undefined;
-
   private async handleFileChange(uri: vscode.Uri) {
     // Debounce rapid changes
     clearTimeout(this.fileChangeTimeout);
@@ -529,6 +731,120 @@ sequenceDiagram
     }
     if (this.fileChangeTimeout) {
       clearTimeout(this.fileChangeTimeout);
+    }
+  }
+
+  // ---------- Document Cache Utilities ----------
+  private getCacheDir(): string {
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    const root = workspaceFolder ? workspaceFolder.uri.fsPath : this.extensionUri.fsPath;
+    const cacheDir = path.join(root, '.specdev', 'cache');
+    if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
+    return cacheDir;
+  }
+
+  private getCacheIndexPath(): string {
+    return path.join(this.getCacheDir(), 'index.json');
+  }
+
+  private readCacheIndex(): Record<string, { etag?: string; lastModified?: string; cachedPath: string; lastFetched: string; size: number; }> {
+    const p = this.getCacheIndexPath();
+    if (!fs.existsSync(p)) return {} as any;
+    try {
+      return JSON.parse(fs.readFileSync(p, 'utf8')) || {};
+    } catch {
+      return {} as any;
+    }
+  }
+
+  private writeCacheIndex(idx: Record<string, { etag?: string; lastModified?: string; cachedPath: string; lastFetched: string; size: number; }>) {
+    fs.writeFileSync(this.getCacheIndexPath(), JSON.stringify(idx, null, 2));
+  }
+
+  private hashUrl(url: string): string {
+    return crypto.createHash('sha1').update(url).digest('hex');
+  }
+
+  private async httpFetch(url: string, headers: Record<string, string>): Promise<{ status: number; headers: any; body?: Buffer; }> {
+    const lib = url.startsWith('https') ? https : http;
+    return new Promise((resolve, reject) => {
+      const req = lib.request(url, { method: 'GET', headers }, (res) => {
+        const chunks: Buffer[] = [];
+        res.on('data', (d) => chunks.push(Buffer.isBuffer(d) ? d : Buffer.from(d)));
+        res.on('end', () => {
+          const body = Buffer.concat(chunks);
+          resolve({ status: res.statusCode || 0, headers: res.headers, body });
+        });
+      });
+      req.on('error', reject);
+      req.end();
+    });
+  }
+
+  private listCachedDocuments() {
+    const idx = this.readCacheIndex();
+    return Object.entries(idx).map(([url, meta]) => ({ url, ...meta }));
+  }
+
+  private invalidateCachedDocument(url: string): boolean {
+    const idx = this.readCacheIndex();
+    const entry = idx[url];
+    if (!entry) return false;
+    try {
+      if (fs.existsSync(entry.cachedPath)) fs.unlinkSync(entry.cachedPath);
+    } catch {}
+    delete idx[url];
+    this.writeCacheIndex(idx);
+    return true;
+  }
+
+  private async fetchAndCacheDocument(url: string, force: boolean): Promise<{ url: string; fromCache: boolean; path?: string; error?: string; size?: number; lastFetched?: string; }> {
+    if (!url || typeof url !== 'string') return { url, fromCache: false, error: 'Invalid URL' } as any;
+    const ttlDays = vscode.workspace.getConfiguration().get<number>('specdev.cache.ttlDays', 7);
+    const idx = this.readCacheIndex();
+    const existing = idx[url];
+    const now = new Date();
+
+    if (existing && !force) {
+      const last = new Date(existing.lastFetched);
+      const ageDays = (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24);
+      if (ageDays < ttlDays && fs.existsSync(existing.cachedPath)) {
+        return { url, fromCache: true, path: existing.cachedPath, size: existing.size, lastFetched: existing.lastFetched } as any;
+      }
+    }
+
+    // Conditional fetch with ETag/Last-Modified
+    const headers: Record<string, string> = {};
+    if (existing?.etag) headers['If-None-Match'] = existing.etag;
+    if (existing?.lastModified) headers['If-Modified-Since'] = existing.lastModified;
+
+    try {
+      const res = await this.httpFetch(url, headers);
+      if (res.status === 304 && existing && fs.existsSync(existing.cachedPath)) {
+        existing.lastFetched = now.toISOString();
+        this.writeCacheIndex(idx);
+        return { url, fromCache: true, path: existing.cachedPath, size: existing.size, lastFetched: existing.lastFetched } as any;
+      }
+      if (res.status >= 200 && res.status < 300 && res.body) {
+        const cacheDir = this.getCacheDir();
+        const filename = `${this.hashUrl(url)}.txt`;
+        const filePath = path.join(cacheDir, filename);
+        fs.writeFileSync(filePath, res.body);
+
+        const updated = {
+          etag: (res.headers['etag'] as string) || existing?.etag,
+          lastModified: (res.headers['last-modified'] as string) || existing?.lastModified,
+          cachedPath: filePath,
+          lastFetched: now.toISOString(),
+          size: res.body.length,
+        };
+        idx[url] = updated as any;
+        this.writeCacheIndex(idx);
+        return { url, fromCache: false, path: filePath, size: updated.size, lastFetched: updated.lastFetched } as any;
+      }
+      return { url, fromCache: false, error: `HTTP ${res.status}` } as any;
+    } catch (e: any) {
+      return { url, fromCache: false, error: String(e?.message || e) } as any;
     }
   }
 
@@ -810,6 +1126,39 @@ sequenceDiagram
     </body>
     </html>`;
   }
+
+  private getReactHtml(webview: vscode.Webview): string | undefined {
+    try {
+      const buildDir = path.join(this.extensionUri.fsPath, 'webview', 'build');
+      const indexPath = path.join(buildDir, 'index.html');
+      if (!fs.existsSync(indexPath)) {
+        return undefined;
+      }
+
+      let html = fs.readFileSync(indexPath, 'utf8');
+      const baseUri = webview.asWebviewUri(vscode.Uri.joinPath(this.extensionUri, 'webview', 'build')).toString();
+      const nonce = crypto.randomBytes(16).toString('base64');
+
+      // Inject CSP compatible with VS Code webviews
+      const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https: data:; script-src 'nonce-${nonce}' ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; font-src ${webview.cspSource}; connect-src ${webview.cspSource} https: http:;">`;
+      html = html.replace('</title>', '</title>\n' + csp);
+
+      // Fix absolute asset paths to webview URIs
+      html = html.replace(/(href|src)="\/(static\/[^"]+)"/g, (_m, attr, p1) => `${attr}="${baseUri}/${p1}"`);
+      html = html.replace(/href="\/favicon\.ico"/g, `href="${baseUri}/favicon.ico"`);
+      html = html.replace(/href="\/manifest\.json"/g, `href="${baseUri}/manifest.json"`);
+
+      // Add nonce to all script tags
+      html = html.replace(/<script\b/gi, `<script nonce="${nonce}"`);
+
+      // Expose VS Code API to the React app (inline script needs nonce)
+      html = html.replace('</body>', `<script nonce="${nonce}">try{window.vscode = acquireVsCodeApi();}catch(e){}</script>\n</body>`);
+      return html;
+    } catch (err) {
+      console.error('Failed to load React webview:', err);
+      return undefined;
+    }
+  }
 }
 
 async function analyzeExistingProject(projectPath: string) {
@@ -1085,7 +1434,7 @@ async function forceUpdateRules() {
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
   if (!workspaceFolder) return;
 
-  const cursorRulesPath = path.join(workspaceFolder.uri.fsPath, '.cursor', 'rules');
+  const cursorRulesPath = getAgentRulesPath(workspaceFolder.uri.fsPath);
   
   // Ensure .cursor/rules directory exists
   if (!fs.existsSync(cursorRulesPath)) fs.mkdirSync(cursorRulesPath, { recursive: true });
@@ -1110,6 +1459,7 @@ async function forceUpdateRules() {
     { src: 'parallel-processing-optimization.mdc', dest: 'specdev-parallel-processing.mdc' },
     { src: 'high-quality-requirements-design-tasks.mdc', dest: 'specdev-high-quality-deliverables.mdc' },
     { src: 'think-first-development.mdc', dest: 'specdev-think-first.mdc' },
+    { src: 'agent-personas.mdc', dest: 'specdev-agent-personas.mdc' },
     { src: 'spec.mdc', dest: 'specdev-spec.mdc' },
     { src: 'tasks.mdc', dest: 'specdev-tasks.mdc' }
   ];
@@ -1119,7 +1469,7 @@ async function forceUpdateRules() {
   
   rulesToCopy.forEach(({ src, dest }) => {
     const srcPath = path.join(__dirname, '..', 'prompts and rules', src);
-    const destPath = path.join(cursorRulesPath, dest);
+    const destPath = computeDestPath(cursorRulesPath, dest);
     if (fs.existsSync(srcPath)) {
       fs.copyFileSync(srcPath, destPath);
       copiedCount++;
@@ -1258,7 +1608,7 @@ async function initializeRulesIfNeeded() {
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
   if (!workspaceFolder) return;
 
-  const cursorRulesPath = path.join(workspaceFolder.uri.fsPath, '.cursor', 'rules');
+  const cursorRulesPath = getAgentRulesPath(workspaceFolder.uri.fsPath);
   const specdevRulesExist = fs.existsSync(path.join(cursorRulesPath, 'specdev-enhanced-workflow.mdc'));
   
   // Auto-initialize rules if they don't exist
@@ -1281,13 +1631,14 @@ async function initializeRulesIfNeeded() {
       { src: 'parallel-processing-optimization.mdc', dest: 'specdev-parallel-processing.mdc' },
       { src: 'high-quality-requirements-design-tasks.mdc', dest: 'specdev-high-quality-deliverables.mdc' },
       { src: 'think-first-development.mdc', dest: 'specdev-think-first.mdc' },
+      { src: 'agent-personas.mdc', dest: 'specdev-agent-personas.mdc' },
       { src: 'spec.mdc', dest: 'specdev-spec.mdc' },
       { src: 'tasks.mdc', dest: 'specdev-tasks.mdc' }
     ];
     
     rulesToCopy.forEach(({ src, dest }) => {
       const srcPath = path.join(__dirname, '..', 'prompts and rules', src);
-      const destPath = path.join(cursorRulesPath, dest);
+      const destPath = computeDestPath(cursorRulesPath, dest);
       if (fs.existsSync(srcPath)) {
         fs.copyFileSync(srcPath, destPath);
       }
@@ -1387,7 +1738,7 @@ export function activate(context: vscode.ExtensionContext) {
   checkForUpdates();
 
   const provider = vscode.commands.registerCommand('specdev.openSpecDev', () => {
-    SpecDevProvider.createOrShow(context.extensionUri);
+    SpecDevProvider.createOrShow(context);
   });
 
   // /specdev steering - for existing projects
@@ -1420,7 +1771,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     // Ensure enhanced .cursor/rules files are up to date
-    const cursorRulesPath = path.join(workspaceFolder.uri.fsPath, '.cursor', 'rules');
+    const cursorRulesPath = getAgentRulesPath(workspaceFolder.uri.fsPath);
     if (!fs.existsSync(cursorRulesPath)) fs.mkdirSync(cursorRulesPath, { recursive: true });
     
     // Copy/update enhanced rules including steering-specific rules - ALL 20 FILES
@@ -1440,13 +1791,14 @@ export function activate(context: vscode.ExtensionContext) {
       { src: 'parallel-processing-optimization.mdc', dest: 'specdev-parallel-processing.mdc' },
       { src: 'high-quality-requirements-design-tasks.mdc', dest: 'specdev-high-quality-deliverables.mdc' },
       { src: 'think-first-development.mdc', dest: 'specdev-think-first.mdc' },
+      { src: 'agent-personas.mdc', dest: 'specdev-agent-personas.mdc' },
       { src: 'spec.mdc', dest: 'specdev-spec.mdc' },
       { src: 'tasks.mdc', dest: 'specdev-tasks.mdc' }
     ];
     
     rulesToCopy.forEach(({ src, dest }) => {
       const srcPath = path.join(__dirname, '..', 'prompts and rules', src);
-      const destPath = path.join(cursorRulesPath, dest);
+      const destPath = computeDestPath(cursorRulesPath, dest);
       if (fs.existsSync(srcPath)) {
         fs.copyFileSync(srcPath, destPath);
       }
@@ -1545,13 +1897,14 @@ export function activate(context: vscode.ExtensionContext) {
       { src: 'parallel-processing-optimization.mdc', dest: 'specdev-parallel-processing.mdc' },
       { src: 'high-quality-requirements-design-tasks.mdc', dest: 'specdev-high-quality-deliverables.mdc' },
       { src: 'think-first-development.mdc', dest: 'specdev-think-first.mdc' },
+      { src: 'agent-personas.mdc', dest: 'specdev-agent-personas.mdc' },
       { src: 'spec.mdc', dest: 'specdev-spec.mdc' },
       { src: 'tasks.mdc', dest: 'specdev-tasks.mdc' }
     ];
     
     rulesToCopy.forEach(({ src, dest }) => {
       const srcPath = path.join(__dirname, '..', 'prompts and rules', src);
-      const destPath = path.join(cursorRulesPath, dest);
+      const destPath = computeDestPath(cursorRulesPath, dest);
       if (fs.existsSync(srcPath)) {
         fs.copyFileSync(srcPath, destPath);
       }
@@ -1735,8 +2088,8 @@ Each task should include:
       placeHolder: 'Leave empty for general project summary'
     });
 
-    const provider = new SpecDevProvider(context.extensionUri);
-    const summaryPath = await (provider as any).createContextSummary(featureName || 'general');
+    const providerForSummary = new SpecDevProvider(context.extensionUri, context);
+    const summaryPath = await (providerForSummary as any).createContextSummary(featureName || 'general');
     
     if (summaryPath) {
       // Open the created summary file
@@ -1744,8 +2097,8 @@ Each task should include:
       await vscode.window.showTextDocument(document);
       
       vscode.window.showInformationMessage(
-        'Summary template created! Use Cursor agent to populate it with conversation context. ' +
-        'The agent will automatically use the context-summarization rules to fill in the details.'
+        'Summary template created! Use your AI agent to populate it with conversation context. ' +
+        'The context-summarization rules will guide the agent to fill in the details.'
       );
     }
   });
@@ -1874,7 +2227,56 @@ TIME: Estimated 30 seconds`;
     }
   });
 
-  context.subscriptions.push(provider, steeringCmd, initCmd, summarizeCmd, updateCmd, genReqCmd, genDesignCmd, genTasksCmd);
+  // Register webview serializer so panel can be restored after reload
+  const serializer = vscode.window.registerWebviewPanelSerializer('specdev', {
+    async deserializeWebviewPanel(panel: vscode.WebviewPanel, _state: any) {
+      const providerInstance = new SpecDevProvider(context.extensionUri, context);
+      providerInstance.setupWebview(panel);
+      // The webview will self-hydrate from saved state and workspace state
+    }
+  });
+
+  context.subscriptions.push(
+    provider,
+    steeringCmd,
+    initCmd,
+    summarizeCmd,
+    updateCmd,
+    genReqCmd,
+    genDesignCmd,
+    genTasksCmd,
+    serializer
+  );
 }
 
 export function deactivate() {}
+
+// Determine rules path to support multiple IDEs (Cursor, Windsurf, custom)
+function getAgentRulesPath(projectPath: string): string {
+  try {
+    const cfg = vscode.workspace.getConfiguration('specdev');
+    const location = (cfg.get<string>('rules.location') || 'auto').toLowerCase();
+    const custom = cfg.get<string>('rules.customPath') || '';
+    let target: string;
+
+    if (location === 'custom' && custom) {
+      target = path.isAbsolute(custom) ? custom : path.join(projectPath, custom);
+    } else if (location === 'windsurf') {
+      target = path.join(projectPath, '.windsurf', 'rules');
+    } else if (location === 'cursor') {
+      target = path.join(projectPath, '.cursor', 'rules');
+    } else {
+      // auto: prefer existing dirs, fallback to Cursor convention
+      const windsurf = path.join(projectPath, '.windsurf', 'rules');
+      const cursor = path.join(projectPath, '.cursor', 'rules');
+      if (fs.existsSync(windsurf)) target = windsurf; else target = cursor;
+    }
+
+    if (!fs.existsSync(target)) fs.mkdirSync(target, { recursive: true });
+    return target;
+  } catch {
+    const fallback = path.join(projectPath, '.cursor', 'rules');
+    if (!fs.existsSync(fallback)) fs.mkdirSync(fallback, { recursive: true });
+    return fallback;
+  }
+}

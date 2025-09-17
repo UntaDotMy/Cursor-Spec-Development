@@ -2,6 +2,36 @@
 
 > **Enhanced by [UntaDotMy](https://github.com/UntaDotMy)** - Building on the solid foundation of the original SpecDev with research-first, think-first development principles.
 
+## ⚡ Quickstart (TL;DR)
+
+SpecDev now orchestrates a dynamic expert team per project with a mandatory Research agent and a built‑in knowledge base. It auto-detects the stack and spawns the right roles (e.g., PM, TechLead, Dev, QA, Docs, plus DevOps/Security/Performance/UX/Data as needed). Research is always included and feeds Docs and Dev.
+
+- **Start**: Command Palette → “SpecDev: Open SpecDev” → choose a feature → set goal (optional) → Start Agent.
+- **Roles**: Auto-generated from your goal. Edit per-run roles in the UI (Runs → Details → Edit Roles). Research is always on.
+- **Automation Hooks**:
+  - Dev step fails → Research is queued with the error context.
+  - Research completes → Findings saved to `.specdev/knowledge/*.md` and linked to Docs.
+  - Docs starts → Prefills internal knowledge references for quick documentation.
+- **Personas**: Click “Get Personas” inside a run to view role-specific senior personas adapted to your stack.
+- **Errors**: View `.specdev/error-database.json` via the “Errors” panel.
+- **Knowledge**: “Knowledge” panel lets you list/search prior research and open items.
+
+Files and paths:
+
+- `.specdev/specs/{feature}/requirements.md|design.md|tasks.md` — specs per feature
+- `.specdev/error-database.json` — recorded errors & suggestions
+- `.specdev/knowledge/*.md` — saved Research findings (with metadata)
+
+Minimal commands:
+
+- Initialize: “SpecDev: Init SpecDev Project”
+- Analyze an existing repo: “SpecDev: Analyze Existing Project (Steering)”
+- Open UI: “SpecDev: Open SpecDev”
+
+Note: If you edit the webview (React) code under `webview/src/`, build it once: `cd webview && npm install && npm run build`.
+
+---
+
 ## 🚀 Overview
 
 SpecDev is a comprehensive VS Code/Cursor extension that implements an advanced Kiro-style workflow for specification-driven development. Originally designed as a structured approach to managing requirements, design, and tasks, it has been enhanced with modern QA/QC processes, research-first development principles, adaptive project analysis, error tracking, and comprehensive quality assurance.

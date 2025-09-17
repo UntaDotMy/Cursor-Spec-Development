@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import MarkdownEditor from './components/MarkdownEditor';
 import TaskList from './components/TaskList';
@@ -9,6 +9,41 @@ interface FileContent {
   requirements: string;
   design: string;
   tasks: string;
+}
+
+type AgentStatus = 'queued' | 'running' | 'completed' | 'failed' | 'paused';
+type RoleType = 'PM' | 'TechLead' | 'Dev' | 'QA' | 'Docs' | 'Research' | 'DevOps' | 'Security' | 'Performance' | 'UX' | 'Data';
+
+interface AgentStep {
+  id: string;
+  role: RoleType;
+  summary: string;
+  details?: string;
+  startedAt: string;
+  finishedAt?: string;
+  status: AgentStatus;
+}
+interface AgentRun {
+  id: string;
+  feature: string;
+  goal: string;
+  status: AgentStatus;
+  startedAt: string;
+  finishedAt?: string;
+  steps: AgentStep[];
+}
+
+interface AgentError {
+  id: string;
+  timestamp: string;
+  runId: string;
+  stepId?: string;
+  role?: AgentStep['role'];
+  message: string;
+  details?: string;
+  file?: string;
+  severity?: 'low' | 'medium' | 'high' | 'critical';
+  suggestion?: string;
 }
 
 const App: React.FC = () => {
@@ -34,9 +69,53 @@ const App: React.FC = () => {
     tasks: 'pending',
   });
   const [showAgentInfo, setShowAgentInfo] = useState(true);
+  // Agent orchestration
+  const [agentRunning, setAgentRunning] = useState(false);
+  const [agentGoal, setAgentGoal] = useState('');
+  const [showRuns, setShowRuns] = useState(false);
+  const [runs, setRuns] = useState<AgentRun[]>([]);
+  const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
+  const [showPersonas, setShowPersonas] = useState(false);
+  const [personas, setPersonas] = useState<Record<string, string>>({});
+  const [showErrors, setShowErrors] = useState(false);
+  const [errors, setErrors] = useState<AgentError[]>([]);
+  const [notes, setNotes] = useState<Record<string, string>>({});
+  const [showRoleEditor, setShowRoleEditor] = useState(false);
+  const [roleSelections, setRoleSelections] = useState<Record<RoleType, boolean>>({
+    PM: true, TechLead: true, Dev: true, QA: true, Docs: true,
+    Research: true, DevOps: false, Security: false, Performance: false, UX: false, Data: false,
+  });
+  const allRoles: RoleType[] = ['Research','PM','TechLead','Dev','QA','Docs','DevOps','Security','Performance','UX','Data'];
+
+  // Knowledge panel
+  const [showKnowledge, setShowKnowledge] = useState(false);
+  const [knowledgeQuery, setKnowledgeQuery] = useState('');
+  const [knowledgeList, setKnowledgeList] = useState<Array<{id: string; title: string; file: string; createdAt: string}>>([]);
+  const [knowledgeItem, setKnowledgeItem] = useState<{title: string; content: string; file: string} | null>(null);
+  // Start options
+  const [autoResearchPrestep, setAutoResearchPrestep] = useState(true);
+  const [enableAutomationHooks, setEnableAutomationHooks] = useState(true);
+  // Docs cache UI
+  const [showCache, setShowCache] = useState(false);
+  const [cacheUrl, setCacheUrl] = useState('');
+  const [cacheList, setCacheList] = useState<Array<{url: string; cachedPath?: string; lastFetched?: string; size?: number}>>([]);
 
   useEffect(() => {
+    // Hydrate from webview state first for instant restore
+    try {
+      const state = (window as any)?.vscode?.getState?.();
+      if (state) {
+        if (state.activeTab) setActiveTab(state.activeTab);
+        if (state.currentFeature) setCurrentFeature(state.currentFeature);
+        if (state.reviewStatus) setReviewStatus(state.reviewStatus);
+        if (typeof state.showAgentInfo === 'boolean') setShowAgentInfo(state.showAgentInfo);
+      }
+    } catch {}
     loadFeatures();
+    // Ask extension for any workspace-level persisted state
+    window.vscode?.postMessage({ command: 'loadPersistedState' });
+    // Ask extension for cached docs list
+    window.vscode?.postMessage({ command: 'docCacheList' });
   }, []);
 
   useEffect(() => {
@@ -71,6 +150,75 @@ const App: React.FC = () => {
             loadSpecDevFiles(message.featureName);
           }
           break;
+        case 'hydratedState': {
+          const st = message.state || {};
+          if (st.activeTab) setActiveTab(st.activeTab);
+          if (st.currentFeature) {
+            setCurrentFeature(st.currentFeature);
+            loadSpecDevFiles(st.currentFeature);
+          }
+          if (st.reviewStatus) setReviewStatus(st.reviewStatus);
+          if (typeof st.showAgentInfo === 'boolean') setShowAgentInfo(st.showAgentInfo);
+          break;
+        }
+        case 'docCacheList': {
+          const list = (message.list || []).map((i: any) => ({
+            url: i.url,
+            cachedPath: i.cachedPath || i.cached_path || i.cachedPath,
+            lastFetched: i.lastFetched,
+            size: i.size,
+          }));
+          setCacheList(list);
+          break;
+        }
+        case 'docCacheFetched': {
+          // Refresh list after fetch
+          window.vscode?.postMessage({ command: 'docCacheList' });
+          break;
+        }
+        case 'docCacheInvalidated': {
+          window.vscode?.postMessage({ command: 'docCacheList' });
+          break;
+        }
+        case 'agentUpdate': {
+          setAgentRunning(true);
+          break;
+        }
+        case 'agentRuns': {
+          setRuns(message.runs || []);
+          break;
+        }
+        case 'agentRunUpdated': {
+          const updated: AgentRun = message.run;
+          setRuns(prev => prev.map(r => (r.id === updated.id ? updated : r)));
+          break;
+        }
+        case 'agentErrors': {
+          setErrors(message.errors || []);
+          break;
+        }
+        case 'agentPersonas': {
+          setPersonas(message.personas || {});
+          break;
+        }
+        case 'knowledgeList': {
+          setKnowledgeList(message.list || []);
+          setKnowledgeItem(null);
+          break;
+        }
+        case 'knowledgeSearchResults': {
+          setKnowledgeList(message.list || []);
+          break;
+        }
+        case 'knowledgeItem': {
+          setKnowledgeItem(message.item || null);
+          break;
+        }
+        case 'researchSaved': {
+          // Refresh list to include the new item
+          window.vscode?.postMessage({ command: 'agentListKnowledge' });
+          break;
+        }
       }
     };
 
@@ -286,7 +434,258 @@ sequenceDiagram
           ))}
         </select>
         <button onClick={() => setShowCreateFeature(true)}>Create New Feature</button>
+        <button onClick={() => setShowCache(s => !s)}>{showCache ? 'Hide Docs Cache' : 'Docs Cache'}</button>
+        <input
+          style={{ flex: 1, minWidth: 200 }}
+          placeholder="Agent goal (optional)"
+          value={agentGoal}
+          onChange={(e) => setAgentGoal(e.target.value)}
+        />
+        <button
+          onClick={() => {
+            if (!currentFeature) { alert('Select a feature first'); return; }
+            window.vscode?.postMessage({ command: 'agentStart', feature: currentFeature, goal: agentGoal, options: { autoResearchPrestep, enableAutomationHooks } });
+            setAgentRunning(true);
+          }}
+        >{agentRunning ? 'Agent Running...' : 'Start Agent'}</button>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 8 }}>
+          <input type="checkbox" checked={autoResearchPrestep} onChange={(e) => setAutoResearchPrestep(e.target.checked)} /> Auto Research
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 8 }}>
+          <input type="checkbox" checked={enableAutomationHooks} onChange={(e) => setEnableAutomationHooks(e.target.checked)} /> Automation Hooks
+        </label>
+        <button
+          onClick={() => {
+            setShowRuns(s => !s);
+            window.vscode?.postMessage({ command: 'agentListRuns' });
+          }}
+        >{showRuns ? 'Hide Runs' : 'Runs'}</button>
+        <button
+          onClick={() => {
+            setShowErrors(s => !s);
+            window.vscode?.postMessage({ command: 'agentListErrors' });
+          }}
+        >{showErrors ? 'Hide Errors' : 'Errors'}</button>
+        <button
+          onClick={() => {
+            setShowKnowledge(s => !s);
+            window.vscode?.postMessage({ command: 'agentListKnowledge' });
+          }}
+        >{showKnowledge ? 'Hide Knowledge' : 'Knowledge'}</button>
       </div>
+
+      {showRuns && (
+        <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--vscode-panel-border)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+            <b>Agent Runs</b>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button onClick={() => window.vscode?.postMessage({ command: 'agentListRuns' })}>Refresh</button>
+              {selectedRunId && (
+                <button onClick={() => {
+                  window.vscode?.postMessage({ command: 'agentGetPersonas', runId: selectedRunId });
+                  setShowPersonas(true);
+                }}>Get Personas</button>
+              )}
+            </div>
+          </div>
+          {runs.length === 0 ? (
+            <div style={{ color: 'var(--vscode-descriptionForeground)', marginTop: 8 }}>No runs yet.</div>
+          ) : (
+            <ul>
+              {runs.map(run => (
+                <li key={run.id} style={{ margin: '8px 0' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span><b>{run.feature}</b> — {run.goal}</span>
+                    <button onClick={() => setSelectedRunId(prev => prev === run.id ? null : run.id)}>
+                      {selectedRunId === run.id ? 'Hide Details' : 'Details'}
+                    </button>
+                    {selectedRunId === run.id && (
+                      <>
+                        <button onClick={() => {
+                          window.vscode?.postMessage({ command: 'agentGetPersonas', runId: run.id });
+                          setShowPersonas(true);
+                        }}>Get Personas</button>
+                        <button onClick={() => {
+                          // Initialize selections from current run
+                          const sel: Record<RoleType, boolean> = { PM:false, TechLead:false, Dev:false, QA:false, Docs:false, Research:false, DevOps:false, Security:false, Performance:false, UX:false, Data:false } as any;
+                          for (const s of run.steps) sel[s.role as RoleType] = true;
+                          setRoleSelections(sel);
+                          setShowRoleEditor(s => !s);
+                        }}>{showRoleEditor ? 'Close Roles' : 'Edit Roles'}</button>
+                      </>
+                    )}
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--vscode-descriptionForeground)' }}>
+                    {run.status} • started {new Date(run.startedAt).toLocaleString()}
+                  </div>
+                  {selectedRunId === run.id && showRoleEditor && (
+                    <div style={{ marginTop: 6, padding: 8, border: '1px solid var(--vscode-panel-border)' }}>
+                      <div style={{ fontWeight: 600, marginBottom: 6 }}>Roles</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                        {allRoles.map(r => (
+                          <label key={r} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <input type="checkbox" checked={!!roleSelections[r]} onChange={(e) => setRoleSelections(prev => ({ ...prev, [r]: e.target.checked }))} /> {r}
+                          </label>
+                        ))}
+                      </div>
+                      <div style={{ marginTop: 8 }}>
+                        <button onClick={() => {
+                          const roles = allRoles.filter(r => roleSelections[r]);
+                          window.vscode?.postMessage({ command: 'agentUpdateRoles', runId: run.id, roles, merge: true });
+                        }}>Apply (Merge)</button>
+                        <button style={{ marginLeft: 8 }} onClick={() => {
+                          const roles = allRoles.filter(r => roleSelections[r]);
+                          window.vscode?.postMessage({ command: 'agentUpdateRoles', runId: run.id, roles, merge: false });
+                        }}>Apply (Replace)</button>
+                      </div>
+                    </div>
+                  )}
+                  {selectedRunId === run.id && (
+                    <ul style={{ marginTop: 6 }}>
+                      {run.steps?.map(step => (
+                        <li key={step.id} style={{ fontSize: 12, marginBottom: 8 }}>
+                          <div>
+                            <b>{step.role}</b>: {step.summary} — <i>{step.status}</i>
+                          </div>
+                          {step.details && (
+                            <div style={{ whiteSpace: 'pre-wrap', color: 'var(--vscode-descriptionForeground)' }}>{step.details}</div>
+                          )}
+                          {showPersonas && personas[step.role] && (
+                            <div style={{ marginTop: 6, padding: 6, borderLeft: '3px solid var(--vscode-panel-border)' }}>
+                              <div style={{ fontWeight: 600 }}>Persona — {step.role}</div>
+                              <div style={{ whiteSpace: 'pre-wrap' }}>{personas[step.role]}</div>
+                            </div>
+                          )}
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
+                            <button onClick={() => window.vscode?.postMessage({ command: 'agentStepAction', runId: run.id, stepId: step.id, action: 'start' })}>Start</button>
+                            <button onClick={() => window.vscode?.postMessage({ command: 'agentStepAction', runId: run.id, stepId: step.id, action: 'pause' })}>Pause</button>
+                            <button onClick={() => window.vscode?.postMessage({ command: 'agentStepAction', runId: run.id, stepId: step.id, action: 'complete' })}>Complete</button>
+                            <button onClick={() => window.vscode?.postMessage({ command: 'agentStepAction', runId: run.id, stepId: step.id, action: 'fail', error: { message: 'Manual failure' } })}>Fail</button>
+                            <button onClick={() => window.vscode?.postMessage({ command: 'agentStepAction', runId: run.id, stepId: step.id, action: 'retry' })}>Retry</button>
+                            {step.role === 'Research' && step.details && (
+                              <button onClick={() => {
+                                const defaultTitle = `Research Findings - ${run.feature}`;
+                                window.vscode?.postMessage({ command: 'agentSaveResearch', title: defaultTitle, content: step.details, runId: run.id, stepId: step.id, tags: ['research', run.feature] });
+                              }}>Save to Knowledge</button>
+                            )}
+                          </div>
+                          <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                            <input
+                              style={{ flex: 1, minWidth: 200 }}
+                              placeholder="Add note..."
+                              value={notes[step.id] || ''}
+                              onChange={(e) => setNotes(prev => ({ ...prev, [step.id]: e.target.value }))}
+                            />
+                            <button onClick={() => {
+                              const note = notes[step.id];
+                              if (note && note.trim()) {
+                                window.vscode?.postMessage({ command: 'agentAddNote', runId: run.id, stepId: step.id, note });
+                                setNotes(prev => ({ ...prev, [step.id]: '' }));
+                              }
+                            }}>Add Note</button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {showErrors && (
+        <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--vscode-panel-border)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <b>Agent Errors</b>
+            <button onClick={() => window.vscode?.postMessage({ command: 'agentListErrors' })}>Refresh</button>
+          </div>
+          {errors.length === 0 ? (
+            <div style={{ color: 'var(--vscode-descriptionForeground)', marginTop: 8 }}>No errors recorded.</div>
+          ) : (
+            <ul>
+              {errors.map(err => (
+                <li key={err.id} style={{ margin: '6px 0' }}>
+                  <div><b>{err.severity?.toUpperCase() || 'INFO'}</b> — {err.message}</div>
+                  <div style={{ fontSize: 12, color: 'var(--vscode-descriptionForeground)' }}>
+                    {new Date(err.timestamp).toLocaleString()} • run {err.runId}{err.stepId ? ` • step ${err.stepId}` : ''}{err.role ? ` • ${err.role}` : ''}
+                  </div>
+                  {err.details && <div style={{ whiteSpace: 'pre-wrap' }}>{err.details}</div>}
+                  {err.suggestion && <div style={{ whiteSpace: 'pre-wrap', marginTop: 4 }}><i>Suggestion:</i> {err.suggestion}</div>}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {showKnowledge && (
+        <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--vscode-panel-border)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <b>Knowledge</b>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input placeholder="Search knowledge..." value={knowledgeQuery} onChange={(e) => setKnowledgeQuery(e.target.value)} />
+              <button onClick={() => window.vscode?.postMessage({ command: 'agentSearchKnowledge', query: knowledgeQuery })}>Search</button>
+              <button onClick={() => window.vscode?.postMessage({ command: 'agentListKnowledge' })}>List All</button>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+            <div style={{ flex: 1 }}>
+              {knowledgeList.length === 0 ? (
+                <div style={{ color: 'var(--vscode-descriptionForeground)' }}>No knowledge items yet.</div>
+              ) : (
+                <ul>
+                  {knowledgeList.map(item => (
+                    <li key={item.id} style={{ margin: '6px 0' }}>
+                      <button onClick={() => window.vscode?.postMessage({ command: 'agentGetKnowledge', idOrPath: item.id })}>
+                        {item.title}
+                      </button>
+                      <div style={{ fontSize: 12, color: 'var(--vscode-descriptionForeground)' }}>Created {new Date(item.createdAt).toLocaleString()}</div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div style={{ flex: 1, borderLeft: '1px solid var(--vscode-panel-border)', paddingLeft: 12 }}>
+              {knowledgeItem ? (
+                <div>
+                  <div style={{ fontWeight: 600, marginBottom: 6 }}>{knowledgeItem.title}</div>
+                  <pre style={{ whiteSpace: 'pre-wrap' }}>{knowledgeItem.content}</pre>
+                </div>
+              ) : (
+                <div style={{ color: 'var(--vscode-descriptionForeground)' }}>Select a knowledge item to view</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCache && (
+        <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--vscode-panel-border)' }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <input
+              style={{ flex: 1 }}
+              placeholder="https://docs.example.com/page"
+              value={cacheUrl}
+              onChange={(e) => setCacheUrl(e.target.value)}
+            />
+            <button onClick={() => window.vscode?.postMessage({ command: 'docCacheFetch', url: cacheUrl })}>Fetch</button>
+            <button onClick={() => window.vscode?.postMessage({ command: 'docCacheFetch', url: cacheUrl, force: true })}>Force Refresh</button>
+          </div>
+          <div style={{ marginTop: 10 }}>
+            <b>Cached Docs:</b>
+            <ul>
+              {cacheList.map(item => (
+                <li key={item.url}>
+                  <span title={item.cachedPath}>{item.url}</span>
+                  {item.lastFetched && <span> — last fetched: {new Date(item.lastFetched).toLocaleString()}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
 
       {showCreateFeature && (
         <div className="create-feature-modal">
@@ -390,6 +789,8 @@ declare global {
   interface Window {
     vscode?: {
       postMessage: (message: any) => void;
+      setState?: (state: any) => void;
+      getState?: () => any;
     };
   }
 }

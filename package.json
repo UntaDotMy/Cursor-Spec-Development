@@ -1,4 +1,5 @@
 {
+  "$schema": "vscode://schemas/vscode-extensions",
   "name": "specdev",
   "displayName": "SpecDev - Specification Development Tool",
   "description": "Enhanced Kiro-style workflow plugin with mandatory testing validation, error handling protocols, and comprehensive project management for all application types",
@@ -35,12 +36,10 @@
     "playwright"
   ],
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.75.0"
   },
   "categories": ["Other"],
-  "activationEvents": [
-    "onCommand:specdev.openSpecDev"
-  ],
+  
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -102,10 +101,38 @@
                 { "command": "specdev.generateDesignFromRequirements" },
                 { "command": "specdev.generateTasksFromDesign" }
               ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "SpecDev Settings",
+      "properties": {
+        "specdev.cache.ttlDays": {
+          "type": "number",
+          "default": 7,
+          "minimum": 0,
+          "description": "Number of days to cache fetched documents (docs, web pages) before revalidating."
+        },
+        "specdev.rules.location": {
+          "type": "string",
+          "enum": ["auto", "cursor", "windsurf", "custom"],
+          "default": "auto",
+          "description": "Where to install and read agent rule files (.mdc). Auto prefers existing .windsurf/rules or falls back to .cursor/rules."
+        },
+        "specdev.rules.customPath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom relative or absolute path for agent rules when rules.location is set to 'custom'."
+        },
+        "specdev.webview.retainContextWhenHidden": {
+          "type": "boolean",
+          "default": false,
+          "description": "Keep webview state alive when hidden. Prefer getState/setState over this for performance."
+        }
+      }
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run compile && npm run build-webview",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",

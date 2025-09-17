@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface TestingValidationProps {
   taskName: string;
@@ -53,12 +53,7 @@ const TestingValidation: React.FC<TestingValidationProps> = ({
   const [detectedTechStack, setDetectedTechStack] = useState<string>('');
   const [recommendedFramework, setRecommendedFramework] = useState<string>('');
 
-  useEffect(() => {
-    // Auto-detect technology stack and recommend testing framework
-    detectTechnologyStack();
-  }, []);
-
-  const detectTechnologyStack = () => {
+  const detectTechnologyStack = useCallback(() => {
     // This would typically read package.json or project files
     // For now, we'll provide common recommendations
     const techStackPatterns = [
@@ -84,7 +79,12 @@ const TestingValidation: React.FC<TestingValidationProps> = ({
     } else {
       setRecommendedFramework('Jest (Universal JavaScript Testing)');
     }
-  };
+  }, [taskDescription]);
+
+  useEffect(() => {
+    // Auto-detect technology stack and recommend testing framework
+    detectTechnologyStack();
+  }, [detectTechnologyStack]);
 
   const handleChecklistChange = (item: keyof TestingChecklist, checked: boolean) => {
     setTestingChecklist(prev => ({
@@ -140,7 +140,7 @@ const TestingValidation: React.FC<TestingValidationProps> = ({
     });
   };
 
-  const validateTestingComplete = () => {
+  const validateTestingComplete = useCallback(() => {
     const allChecklistComplete = Object.values(testingChecklist).every(Boolean);
     const minimumRequirementsMet = 
       testResults.testsPassing > 0 && 
@@ -150,11 +150,11 @@ const TestingValidation: React.FC<TestingValidationProps> = ({
     if (allChecklistComplete && minimumRequirementsMet) {
       onTestingComplete(testResults);
     }
-  };
+  }, [onTestingComplete, testingChecklist, testResults]);
 
   useEffect(() => {
     validateTestingComplete();
-  }, [testingChecklist, testResults]);
+  }, [validateTestingComplete]);
 
   const getTestingInstructions = () => {
     const instructions = {

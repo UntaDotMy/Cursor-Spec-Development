@@ -409,7 +409,6 @@ const TaskList: React.FC<TaskListProps> = ({
             const lineContent = lines[currentLineIndex] || '';
             const isTask = lineContent.includes('- [ ]') || lineContent.includes('- [x]');
             const isChecked = lineContent.includes('- [x]');
-            const isActive = currentLineIndex === firstIncomplete;
             currentLineIndex++;
             if (isTask) {
               const task = tasks[currentLineIndex - 1];
