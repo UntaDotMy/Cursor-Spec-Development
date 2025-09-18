@@ -25,7 +25,7 @@ Tool policy: Use Windsurf file tools (read_file/list_dir/glob_file_search/apply_
      - `{{KIRO_DIR}}/steering/product.md` - Business context, product vision, user needs
      - `{{KIRO_DIR}}/steering/tech.md` - Technology stack, frameworks, libraries
      - `{{KIRO_DIR}}/steering/structure.md` - File organization, naming conventions, code patterns
-   - **Custom steering files** (load all EXCEPT "Manual" mode in `AGENTS.md`):
+   - **Custom steering files** (load all EXCEPT "Manual" mode in `WINDSURF.md`):
      - Any additional `*.md` files in `{{KIRO_DIR}}/steering/` directory
      - Examples: `api.md`, `testing.md`, `security.md`, etc.
    - (Task planning benefits from comprehensive context)

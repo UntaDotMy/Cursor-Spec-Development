@@ -70,7 +70,7 @@ Write requirements.md with project description:
 ```
 
 
-### 5. Update AGENTS.md Reference
+### 5. Update WINDSURF.md Reference
 Add the new spec to the active specifications list with the generated feature name and a brief description.
 
 
