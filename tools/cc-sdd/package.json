@@ -1,6 +1,6 @@
 {
   "name": "cc-ssd-enh",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Enhanced Spec-Driven Development with AI-DLC, WebSearch Integration, Knowledge Management, Error Documentation, and Self-Review Mistake Detection. Transform your coding workflow with intelligent research, documentation, and automatic quality control.",
   "keywords": [
     "claude-code",

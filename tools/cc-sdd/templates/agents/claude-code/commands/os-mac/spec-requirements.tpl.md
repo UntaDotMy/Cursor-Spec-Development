@@ -8,26 +8,37 @@ argument-hint: <feature-name>
 
 Generate comprehensive requirements for feature: **$1** with automated research and knowledge documentation.
 
-## Phase 1: Research & Documentation
+## ⚠️ CRITICAL: MANDATORY RESEARCH FIRST ⚠️
 
-### 1.1 Technology Research (MANDATORY)
-**CRITICAL**: Before generating requirements, conduct comprehensive research:
+**YOU CANNOT PROCEED TO REQUIREMENTS GENERATION WITHOUT COMPLETING RESEARCH FIRST**
 
-1. **Latest Version Research**:
-   - Use WebSearch to find latest versions of relevant technologies, frameworks, libraries
-   - Search for "latest version [technology] 2024" and official documentation
-   - Document findings in `{{KNOWLEDGE_DIR}}/research-{technology}-{number}.md`
+This command has been structured to FORCE research before requirements generation. You must complete ALL research steps and produce the required documentation files before you can proceed to generate requirements.
 
-2. **Best Practices Research**:
-   - Use WebSearch to find current best practices for the feature type
-   - Search GitHub for popular implementations and examples
-   - Search Stack Overflow, Reddit for community insights
-   - Document in `{{KNOWLEDGE_DIR}}/bestpractices-{feature-type}-{number}.md`
+## STEP 1: FORCED RESEARCH PHASE (CANNOT BE SKIPPED)
 
-3. **Official Documentation**:
-   - Use WebFetch to retrieve official documentation pages
-   - Extract key capabilities, limitations, configuration options
-   - Document in `{{KNOWLEDGE_DIR}}/docs-{technology}-{number}.md`
+### 1.1 Execute Mandatory WebSearch (NO EXCEPTIONS)
+
+**STOP HERE AND PERFORM RESEARCH IMMEDIATELY - DO NOT PROCEED WITHOUT COMPLETING THIS**
+
+Execute the following WebSearch commands RIGHT NOW - you cannot continue until you have real research data:
+
+1. **REQUIRED WebSearch Query 1**: Search for "latest version [technology stack relevant to $1] 2025 2026 official documentation"
+   - **EXECUTE NOW**: Use WebSearch tool immediately
+   - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-latest-versions-001.md`
+
+2. **REQUIRED WebSearch Query 2**: Search for "[feature type for $1] best practices implementation examples GitHub"
+   - **EXECUTE NOW**: Use WebSearch tool immediately  
+   - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-best-practices-001.md`
+
+3. **REQUIRED WebSearch Query 3**: Search for "[feature name $1] implementation challenges common issues Stack Overflow"
+   - **EXECUTE NOW**: Use WebSearch tool immediately
+   - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-challenges-001.md`
+
+### 1.2 Create Research Documentation (MANDATORY OUTPUT)
+
+**YOU MUST CREATE THESE FILES - REQUIREMENTS GENERATION DEPENDS ON THEM**
+
+For EACH WebSearch result, create documentation using this EXACT format:
 
 ### 1.2 Knowledge Documentation Format
 For each research finding, create structured documentation:
@@ -56,32 +67,52 @@ For each research finding, create structured documentation:
 - **Requirements Impact**: [how this affects requirements]
 ```
 
-## Phase 2: Context Validation
+## ✅ STEP 2: VALIDATION CHECKPOINT
 
-### Steering Context
+**BEFORE PROCEEDING TO REQUIREMENTS, VERIFY YOU HAVE COMPLETED:**
+
+- [ ] ✅ Executed WebSearch Query 1 and saved results
+- [ ] ✅ Executed WebSearch Query 2 and saved results  
+- [ ] ✅ Executed WebSearch Query 3 and saved results
+- [ ] ✅ Created research documentation files in `{{KNOWLEDGE_DIR}}/`
+- [ ] ✅ Have real web research data (not assumptions)
+
+**IF ANY CHECKBOX IS EMPTY, STOP AND GO BACK TO STEP 1**
+
+## STEP 3: CONTEXT LOADING (ONLY AFTER RESEARCH COMPLETED)
+
+### Load Research-Based Context
+**FIRST**: Read and incorporate your research findings:
+- **REQUIRED**: Read `{{KNOWLEDGE_DIR}}/research-latest-versions-001.md`
+- **REQUIRED**: Read `{{KNOWLEDGE_DIR}}/research-best-practices-001.md`  
+- **REQUIRED**: Read `{{KNOWLEDGE_DIR}}/research-challenges-001.md`
+
+### Load Project Context
 - Architecture context: @{{KIRO_DIR}}/steering/structure.md
 - Technical constraints: @{{KIRO_DIR}}/steering/tech.md
 - Product context: @{{KIRO_DIR}}/steering/product.md
 - Custom steering: Load all "Always" mode custom steering files from {{KIRO_DIR}}/steering/
 
-### Existing Spec Context
+### Load Existing Spec Context
 - Current spec directory: !`ls -la {{KIRO_DIR}}/specs/$1/`
 - Current requirements: `{{KIRO_DIR}}/specs/$1/requirements.md`
 - Spec metadata: `{{KIRO_DIR}}/specs/$1/spec.json`
 
-### Knowledge Context
-- Review all research documents in `{{KNOWLEDGE_DIR}}/` relevant to this feature
-- Incorporate latest findings into requirements generation
-
-## Phase 3: Generate Requirements
+## STEP 4: REQUIREMENTS GENERATION (RESEARCH-INFORMED)
 
 ### 1. Read Existing Requirements Template
 Read the existing requirements.md file created by spec-init to extract the project description.
 
-### 2. Generate Complete Requirements
-Generate an initial set of requirements in EARS format based on the project description, then iterate with the user to refine them until they are complete and accurate.
+### 4.2 Generate Research-Based Requirements
 
-Don't focus on implementation details in this phase. Instead, just focus on writing requirements which will later be turned into a design.
+**CRITICAL**: Base ALL requirements on your completed research findings.
+
+1. **Incorporate Latest Technology**: Use version information and capabilities from your research
+2. **Apply Best Practices**: Implement patterns and approaches found in your research
+3. **Address Known Challenges**: Include requirements that handle issues discovered in research
+4. **Reference Research**: Each requirement section should reference relevant research findings
+
+Generate an initial set of requirements in EARS format that is INFORMED BY YOUR RESEARCH, then iterate with the user to refine them until they are complete and accurate.
 
 ### Requirements Generation Guidelines
 1. **Focus on Core Functionality**: Start with the essential features from the user's idea
@@ -168,15 +199,24 @@ Request changes, then re-run this command after modifications
 
 The `-y` flag auto-approves requirements and generates design directly, streamlining the workflow while maintaining review enforcement.
 
-## Instructions
+## EXECUTION INSTRUCTIONS
 
-1. **Check spec.json for language** - Use the language specified in the metadata
-2. **Generate initial requirements** based on the feature idea WITHOUT asking sequential questions first
-3. **Apply EARS format** - Use proper EARS syntax patterns for all acceptance criteria
-4. **Focus on core functionality** - Start with essential features and user workflows
-5. **Structure clearly** - Group related functionality into logical requirement areas
-6. **Make requirements testable** - Each acceptance criterion should be verifiable
-7. **Update tracking metadata** upon completion
+**MANDATORY EXECUTION ORDER** (Cannot be changed):
 
-Generate requirements that provide a solid foundation for the design phase, focusing on the core functionality from the feature idea.
-think
+1. **RESEARCH FIRST** - Execute ALL WebSearch queries and create documentation files
+2. **VALIDATE RESEARCH** - Confirm you have real web data, not assumptions
+3. **LOAD CONTEXTS** - Read research files and project contexts
+4. **GENERATE REQUIREMENTS** - Create requirements based on research findings
+5. **UPDATE METADATA** - Update spec.json upon completion
+
+**REQUIREMENTS MUST INCLUDE**:
+- Latest technology versions from research
+- Best practices from research
+- Solutions to challenges found in research
+- References to research documents
+- EARS format compliance
+- Testable acceptance criteria
+
+**FAILURE TO COMPLETE RESEARCH FIRST WILL RESULT IN INCOMPLETE/OUTDATED REQUIREMENTS**
+
+**Remember: The quality of your requirements depends entirely on the quality of your research. Poor research = poor requirements. Thorough web research = excellent, up-to-date requirements.**

@@ -29,26 +29,35 @@ Validate required files exist for feature **$1**:
 - Review all relevant research documents in `{{KNOWLEDGE_DIR}}/`
 - Check for existing error solutions in `{{KNOWLEDGE_DIR}}/errors/`
 
-### 1.2 Knife Surgery Preparation (MANDATORY)
-**CRITICAL**: Before making ANY code changes, understand the existing codebase:
+### 1.2 Knife Surgery Preparation (MANDATORY - CANNOT BE SKIPPED)
 
-1. **Target File Analysis**:
-   - **ALWAYS** read target files FIRST using Read tool
-   - Understand existing code structure, patterns, dependencies
-   - Identify integration points and potential impact areas
-   - Map existing functions, classes, and interfaces
+**⚠️ CRITICAL: THIS STEP CANNOT BE BYPASSED ⚠️**
 
-2. **Context Understanding**:
-   - Analyze file dependencies and imports
-   - Understand data flow and business logic
-   - Identify existing error handling patterns
-   - Note coding style and conventions
+**YOU MUST READ TARGET FILES BEFORE ANY CODE CHANGES - NO EXCEPTIONS**
 
-3. **Impact Assessment**:
-   - Determine minimal change approach
-   - Identify which functions/classes need modification
-   - Plan surgical changes to avoid breaking functionality
-   - Consider backward compatibility
+Before making ANY code changes, you MUST understand the existing codebase by completing ALL of these steps:
+
+1. **MANDATORY Target File Reading**:
+   - **EXECUTE NOW**: Use Read tool to read ALL target files that will be modified
+   - **REQUIRED**: Understand existing code structure, patterns, dependencies  
+   - **REQUIRED**: Identify integration points and potential impact areas
+   - **REQUIRED**: Map existing functions, classes, and interfaces
+   - **CANNOT PROCEED**: Until you have read and analyzed target files
+
+2. **MANDATORY Context Understanding**:
+   - **EXECUTE NOW**: Analyze file dependencies and imports using Read/Grep tools
+   - **REQUIRED**: Understand data flow and business logic
+   - **REQUIRED**: Identify existing error handling patterns
+   - **REQUIRED**: Note coding style and conventions
+   - **VALIDATION**: Confirm you understand the existing code before proceeding
+
+3. **MANDATORY Impact Assessment**:
+   - **REQUIRED**: Determine minimal change approach based on actual code analysis
+   - **REQUIRED**: Identify EXACTLY which functions/classes need modification
+   - **REQUIRED**: Plan surgical changes to avoid breaking functionality
+   - **REQUIRED**: Consider backward compatibility with existing integrations
+
+**CHECKPOINT**: You cannot proceed to TDD implementation until you have completed file reading and analysis.
 
 ## Phase 2: Enhanced TDD Implementation
 
@@ -59,10 +68,11 @@ Validate required files exist for feature **$1**:
 
 ### 2.2 Enhanced TDD Cycle with Error Handling
 
-**Step 1: UNDERSTAND (NEW)**
-- Read and analyze all target files thoroughly
-- Understand existing patterns and architecture
-- Plan minimal, surgical changes
+**Step 1: UNDERSTAND (MANDATORY - NO BYPASSING)**
+- **EXECUTE NOW**: Use Read tool to read and analyze ALL target files thoroughly
+- **VALIDATE**: Confirm you understand existing patterns and architecture  
+- **PLAN**: Document minimal, surgical changes based on actual code analysis
+- **CHECKPOINT**: Cannot proceed until target files are read and understood
 
 **Step 2: RED - Write Failing Tests**
 - Write failing tests first
@@ -87,21 +97,26 @@ Validate required files exist for feature **$1**:
   - Use WebSearch for best practices
   - Document approach in knowledge base
 
-**Step 5: SELF-REVIEW & MISTAKE CHECK (NEW)**
-- **MANDATORY**: Re-read ALL modified files using Read tool
-- **Systematic Review**: Check for common mistakes:
-  - Syntax errors and typos
-  - Logic errors and edge cases
-  - Integration issues with existing code
-  - Missing imports or dependencies
-  - Inconsistent naming or patterns
-  - Performance issues
-- **Mistake Documentation**: If mistakes found, document in `{{KNOWLEDGE_DIR}}/errors/mistake-{description}-{number}.md`
-- **Self-Correction Loop**: If mistakes detected:
-  1. Document the mistake with context
-  2. Fix the mistake using surgical changes
-  3. Re-read modified files again
-  4. Repeat until no obvious mistakes remain
+**Step 5: SELF-REVIEW & MISTAKE CHECK (MANDATORY - CANNOT BE SKIPPED)**
+
+**⚠️ YOU MUST PERFORM THIS STEP - NO EXCEPTIONS ⚠️**
+
+- **EXECUTE NOW**: Use Read tool to re-read ALL modified files completely
+- **MANDATORY Systematic Review**: Check for these mistake categories:
+  - ✅ Syntax errors and typos
+  - ✅ Logic errors and edge cases  
+  - ✅ Integration issues with existing code
+  - ✅ Missing imports or dependencies
+  - ✅ Inconsistent naming or patterns
+  - ✅ Performance issues
+- **REQUIRED**: If ANY mistakes found, document in `{{KNOWLEDGE_DIR}}/errors/mistake-{description}-{number}.md`
+- **MANDATORY Self-Correction Loop**: If mistakes detected:
+  1. **MUST DO**: Document the mistake with context
+  2. **MUST DO**: Fix the mistake using surgical changes  
+  3. **MUST DO**: Use Read tool to re-read modified files again
+  4. **MUST DO**: Repeat until no obvious mistakes remain
+
+**VALIDATION CHECKPOINT**: Confirm ALL modified files have been re-read and checked for mistakes before proceeding to verification.
 
 **Step 6: VERIFY & DOCUMENT**
 - All tests pass
