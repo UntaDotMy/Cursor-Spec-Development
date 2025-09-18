@@ -1,16 +1,34 @@
 {
   "name": "cc-ssd-enh",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Enhanced Spec-Driven Development with AI-DLC, WebSearch Integration, Knowledge Management, Error Documentation, and Self-Review Mistake Detection. Transform your coding workflow with intelligent research, documentation, and automatic quality control.",
-  "keywords": ["claude-code", "spec-driven-development", "kiro", "steering", "ai-development", "tdd", "ai-dlc", "ai-driven-development-life-cycle", "websearch", "knowledge-management", "error-documentation", "research-automation", "self-review", "mistake-detection"],
-  "author": "Gota",
+  "keywords": [
+    "claude-code",
+    "spec-driven-development",
+    "kiro",
+    "steering",
+    "ai-development",
+    "tdd",
+    "ai-dlc",
+    "ai-driven-development-life-cycle",
+    "websearch",
+    "knowledge-management",
+    "error-documentation",
+    "research-automation",
+    "self-review",
+    "mistake-detection"
+  ],
+  "author": "UntaDotMy (Enhanced version based on cc-sdd by Gota)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gotalab/cc-sdd.git",
+    "url": "https://github.com/UntaDotMy/Cursor-Spec-Development.git",
     "directory": "tools/cc-sdd"
   },
-  
+  "homepage": "https://github.com/UntaDotMy/Cursor-Spec-Development#readme",
+  "bugs": {
+    "url": "https://github.com/UntaDotMy/Cursor-Spec-Development/issues"
+  },
   "type": "module",
   "bin": {
     "cc-ssd-enh": "./dist/cli.js"

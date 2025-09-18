@@ -1,0 +1,194 @@
+name: Release
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'tools/cc-sdd/package.json'
+  workflow_dispatch:
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.package-version.outputs.version }}
+      version-changed: ${{ steps.package-version.outputs.version-changed }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+    
+    - name: Get package version
+      id: package-version
+      run: |
+        CURRENT_VERSION=$(node -p "require('./tools/cc-sdd/package.json').version")
+        echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        
+        # Check if version changed in the latest commit
+        git show HEAD~1:tools/cc-sdd/package.json > package-old.json || echo '{"version":"0.0.0"}' > package-old.json
+        OLD_VERSION=$(node -p "require('./package-old.json').version" || echo "0.0.0")
+        
+        if [ "$CURRENT_VERSION" != "$OLD_VERSION" ]; then
+          echo "version-changed=true" >> $GITHUB_OUTPUT
+          echo "Version changed from $OLD_VERSION to $CURRENT_VERSION"
+        else
+          echo "version-changed=false" >> $GITHUB_OUTPUT
+          echo "Version unchanged: $CURRENT_VERSION"
+        fi
+
+  test:
+    needs: check-version
+    if: needs.check-version.outputs.version-changed == 'true'
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18, 20, 22]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: tools/cc-sdd/package-lock.json
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: tools/cc-sdd
+    
+    - name: Run tests
+      run: npm test
+      working-directory: tools/cc-sdd
+    
+    - name: Build package
+      run: npm run build
+      working-directory: tools/cc-sdd
+    
+    - name: Test CLI
+      run: node dist/cli.js --version
+      working-directory: tools/cc-sdd
+
+  create-release:
+    needs: [check-version, test]
+    if: needs.check-version.outputs.version-changed == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+        cache-dependency-path: tools/cc-sdd/package-lock.json
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: tools/cc-sdd
+    
+    - name: Build package
+      run: npm run build
+      working-directory: tools/cc-sdd
+    
+    - name: Generate changelog
+      id: changelog
+      run: |
+        VERSION="${{ needs.check-version.outputs.version }}"
+        echo "Generating changelog for version $VERSION"
+        
+        # Get commits since last tag
+        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        if [ -z "$LAST_TAG" ]; then
+          COMMITS=$(git log --pretty=format:"- %s" --no-merges)
+        else
+          COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"- %s" --no-merges)
+        fi
+        
+        # Create changelog
+        cat > changelog.md << EOF
+        ## What's New in v$VERSION
+        
+        ### Enhanced Features
+        - **WebSearch Integration**: Automatic research for latest versions, best practices, and official documentation
+        - **Knowledge Management**: Structured documentation in \`{kiro-dir}/knowledge/\` with research findings and error solutions  
+        - **Self-Review & Mistake Detection**: Automatically re-reads modified files to detect and fix mistakes before testing
+        - **Knife Surgery Coding**: Context-aware code changes with minimal impact
+        - **Error Documentation**: Web-searched solutions documented for reuse
+        
+        ### Recent Changes
+        $COMMITS
+        
+        ### Credits
+        This enhanced version builds upon the excellent foundation of [cc-sdd](https://github.com/gotalab/cc-sdd) by [Gota](https://github.com/gotalab).
+        
+        **Enhanced by**: [UntaDotMy](https://github.com/UntaDotMy)
+        
+        ### Installation
+        \`\`\`bash
+        npm install -g cc-ssd-enh@$VERSION
+        \`\`\`
+        
+        ### Quick Start
+        \`\`\`bash
+        npx cc-ssd-enh@latest --lang en
+        /kiro:spec-init "Your feature description"
+        \`\`\`
+        EOF
+        
+        echo "changelog<<EOF" >> $GITHUB_OUTPUT
+        cat changelog.md >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+    
+    - name: Create Release
+      uses: actions/create-release@v1
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ needs.check-version.outputs.version }}
+        release_name: cc-ssd-enh v${{ needs.check-version.outputs.version }}
+        body: ${{ steps.changelog.outputs.changelog }}
+        draft: false
+        prerelease: false
+
+  publish:
+    needs: [check-version, test, create-release]
+    if: needs.check-version.outputs.version-changed == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+        cache-dependency-path: tools/cc-sdd/package-lock.json
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: tools/cc-sdd
+    
+    - name: Build package
+      run: npm run build
+      working-directory: tools/cc-sdd
+    
+    - name: Publish to NPM
+      run: npm publish
+      working-directory: tools/cc-sdd
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    
+    - name: Update README on NPM
+      run: |
+        echo "Package published to NPM: https://www.npmjs.com/package/cc-ssd-enh"
+        echo "Version: ${{ needs.check-version.outputs.version }}"

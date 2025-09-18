@@ -6,13 +6,20 @@
 [![npm version](https://img.shields.io/npm/v/cc-ssd-enh?logo=npm)](https://www.npmjs.com/package/cc-ssd-enh?activeTab=readme)
 [![install size](https://packagephobia.com/badge?p=cc-ssd-enh)](https://packagephobia.com/result?p=cc-ssd-enh)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Build Status](https://github.com/gotalab/cc-sdd/workflows/CI/badge.svg)](https://github.com/gotalab/cc-sdd/actions)
+[![Build Status](https://github.com/UntaDotMy/Cursor-Spec-Development/workflows/CI/badge.svg)](https://github.com/UntaDotMy/Cursor-Spec-Development/actions)
+[![GitHub release](https://img.shields.io/github/release/UntaDotMy/Cursor-Spec-Development.svg)](https://github.com/UntaDotMy/Cursor-Spec-Development/releases)
 
 > **Enhanced version of [cc-sdd](https://github.com/gotalab/cc-sdd) by [Gota](https://github.com/gotalab)** with WebSearch integration, knowledge management, error documentation, and knife surgery coding capabilities.
 
 <div align="center" style="margin-bottom: 1rem; font-size: 1.2rem;"><sub>
-English | <a href="https://github.com/gotalab/cc-sdd/blob/main/tools/cc-sdd/README_ja.md">日本語</a> | <a href="https://github.com/gotalab/cc-sdd/blob/main/tools/cc-sdd/README_zh-TW.md">繁體中文</a>
+English | <a href="https://github.com/UntaDotMy/Cursor-Spec-Development/blob/main/tools/cc-sdd/README_ja.md">日本語</a> | <a href="https://github.com/UntaDotMy/Cursor-Spec-Development/blob/main/tools/cc-sdd/README_zh-TW.md">繁體中文</a>
 </sub></div>
+
+<div align="center">
+<p><strong>📦 NPM Package:</strong> <a href="https://www.npmjs.com/package/cc-ssd-enh">cc-ssd-enh</a></p>
+<p><strong>🏠 Repository:</strong> <a href="https://github.com/UntaDotMy/Cursor-Spec-Development">UntaDotMy/Cursor-Spec-Development</a></p>
+<p><strong>👨‍💻 Enhanced by:</strong> <a href="https://github.com/UntaDotMy">@UntaDotMy</a></p>
+</div>
 
 Brings **AI-DLC (AI Driven Development Lifecycle)** to Claude Code, Cursor IDE and Gemini CLI. **AI-native processes** with **minimal human approval gates**: AI drives execution while humans validate critical decisions at each phase.
 
@@ -225,22 +232,51 @@ npm uninstall -g cc-ssd-enh
 
 ## 📚 Documentation & Support
 
+- **[Enhanced Repository](https://github.com/UntaDotMy/Cursor-Spec-Development)** - This enhanced version
+- **[Issues & Support](https://github.com/UntaDotMy/Cursor-Spec-Development/issues)** - Bug reports and questions for enhanced version
 - **[Original Project](https://github.com/gotalab/cc-sdd)** - Created by [Gota](https://github.com/gotalab)
-- **[Full Documentation](https://github.com/gotalab/cc-sdd/tree/main/docs/README)** - Complete setup guide
-- **[Issues & Support](https://github.com/gotalab/cc-sdd/issues)** - Bug reports and questions
+- **[NPM Package](https://www.npmjs.com/package/cc-ssd-enh)** - Install cc-ssd-enh
 - **[Kiro IDE](https://kiro.dev)** - Professional spec-driven development environment
 
-## 🙏 Credits
+## 🙏 Credits & Attribution
 
-This enhanced version is built upon the excellent foundation of [cc-sdd](https://github.com/gotalab/cc-sdd) created by **[Gota](https://github.com/gotalab)**. All core spec-driven development methodology and AI-DLC concepts are credited to the original author.
+### Original Author
+This enhanced version is built upon the **excellent foundation** of [cc-sdd](https://github.com/gotalab/cc-sdd) created by **[Gota](https://github.com/gotalab)**. 
 
-**Enhancements**: WebSearch integration, knowledge management, error documentation, self-review mistake detection, and knife surgery coding capabilities.
+**🌟 Original Project**: https://github.com/gotalab/cc-sdd  
+**👨‍💻 Original Author**: [Gota](https://github.com/gotalab)  
+**📦 Original NPM**: [cc-sdd](https://www.npmjs.com/package/cc-sdd)
+
+All core spec-driven development methodology, AI-DLC concepts, and foundational architecture are **credited to the original author**.
+
+### Enhanced Version  
+**🚀 Enhanced by**: [UntaDotMy](https://github.com/UntaDotMy)  
+**📦 Enhanced NPM**: [cc-ssd-enh](https://www.npmjs.com/package/cc-ssd-enh)  
+**🏠 Enhanced Repository**: https://github.com/UntaDotMy/Cursor-Spec-Development
+
+**✨ Enhancements Added**: WebSearch integration, knowledge management, error documentation, self-review mistake detection, and knife surgery coding capabilities.
+
+### Original Author
+This enhanced version is built upon the **excellent foundation** of [cc-sdd](https://github.com/gotalab/cc-sdd) created by **[Gota](https://github.com/gotalab)**. 
+
+**🌟 Original Project**: https://github.com/gotalab/cc-sdd  
+**👨‍💻 Original Author**: [Gota](https://github.com/gotalab)  
+**📦 Original NPM**: [cc-sdd](https://www.npmjs.com/package/cc-sdd)
+
+All core spec-driven development methodology, AI-DLC concepts, and foundational architecture are **credited to the original author**.
+
+### Enhanced Version  
+**🚀 Enhanced by**: [UntaDotMy](https://github.com/UntaDotMy)  
+**📦 Enhanced NPM**: [cc-ssd-enh](https://www.npmjs.com/package/cc-ssd-enh)  
+**🏠 Enhanced Repository**: https://github.com/UntaDotMy/Cursor-Spec-Development
+
+**✨ Enhancements Added**: WebSearch integration, knowledge management, error documentation, self-review mistake detection, and knife surgery coding capabilities.
 
 ---
 
 **Enhanced Release v1.3.0** - Ready for production use with advanced research, documentation, and self-review mistake detection capabilities. 
 
-MIT License | Built with ❤️ on the foundation by [Gota](https://github.com/gotalab)
+MIT License | Built with ❤️ on the foundation by [Gota](https://github.com/gotalab) | Enhanced by [UntaDotMy](https://github.com/UntaDotMy)
 
 ### Platform Support
 - Supported OS: macOS, Linux, Windows (auto-detected by default)
