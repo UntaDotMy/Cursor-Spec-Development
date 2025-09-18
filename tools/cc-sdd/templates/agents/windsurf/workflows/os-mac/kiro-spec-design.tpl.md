@@ -1,7 +1,7 @@
-<meta>
-description: Create comprehensive technical design for a specification  
-argument-hint: [feature-name] [-y]
-</meta>
+---
+description: Create comprehensive technical design for a specification
+auto_execution_mode: 2
+---
 
 # Technical Design
 

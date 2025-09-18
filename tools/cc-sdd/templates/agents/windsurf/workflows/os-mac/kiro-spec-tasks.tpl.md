@@ -1,7 +1,7 @@
-<meta>
+---
 description: Generate implementation tasks for a specification
-argument-hint: [feature-name] [-y]
-</meta>
+auto_execution_mode: 2
+---
 
 # Implementation Tasks
 

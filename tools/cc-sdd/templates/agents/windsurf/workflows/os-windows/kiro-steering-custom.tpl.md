@@ -1,6 +1,7 @@
-<meta>
+---
 description: Create custom Kiro steering documents for specialized project contexts
-</meta>
+auto_execution_mode: 2
+---
 
 # Kiro Custom Steering Creation
 

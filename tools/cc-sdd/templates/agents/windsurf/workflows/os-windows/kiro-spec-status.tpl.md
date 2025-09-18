@@ -1,6 +1,7 @@
-<meta>
+---
 description: Show specification status and progress
-</meta>
+auto_execution_mode: 2
+---
 
 # Specification Status
 

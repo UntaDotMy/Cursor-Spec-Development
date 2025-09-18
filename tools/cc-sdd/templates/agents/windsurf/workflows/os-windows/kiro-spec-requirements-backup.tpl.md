@@ -1,7 +1,7 @@
-<meta>
-description: Generate comprehensive requirements for a specification with research documentation
-argument-hint: [feature-name]
-</meta>
+---
+description: Generate comprehensive requirements for a specification with research documentation (backup)
+auto_execution_mode: 2
+---
 
 <requirements_command>
 

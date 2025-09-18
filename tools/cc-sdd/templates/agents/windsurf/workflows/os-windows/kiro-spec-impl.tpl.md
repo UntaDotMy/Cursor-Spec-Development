@@ -1,7 +1,7 @@
-<meta>
-description: Execute spec tasks using TDD methodology
-argument-hint: [feature-name] <task-numbers>
-</meta>
+---
+description: Execute spec tasks using TDD methodology with knife surgery coding and self-review
+auto_execution_mode: 2
+---
 
 # Execute Spec Tasks with TDD
 

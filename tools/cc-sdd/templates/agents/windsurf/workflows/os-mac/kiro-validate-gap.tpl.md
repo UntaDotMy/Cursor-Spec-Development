@@ -1,7 +1,7 @@
-<meta>
+---
 description: Analyze implementation gap between requirements and existing codebase
-argument-hint: <feature-name>
-</meta>
+auto_execution_mode: 2
+---
 
 # Implementation Gap Validation
 

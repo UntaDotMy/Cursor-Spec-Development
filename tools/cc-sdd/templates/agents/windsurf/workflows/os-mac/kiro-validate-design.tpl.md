@@ -1,7 +1,7 @@
-<meta>
+---
 description: Interactive technical design quality review and validation
-argument-hint: <feature-name>
-</meta>
+auto_execution_mode: 2
+---
 
 # Technical Design Validation
 

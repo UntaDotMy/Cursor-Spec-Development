@@ -1,6 +1,7 @@
-<meta>
+---
 description: Create or update Kiro steering documents intelligently based on project state
-</meta>
+auto_execution_mode: 2
+---
 
 # Kiro Steering Management
 

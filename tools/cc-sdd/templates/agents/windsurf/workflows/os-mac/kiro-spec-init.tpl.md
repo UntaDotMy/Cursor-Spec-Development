@@ -1,7 +1,7 @@
-<meta>
+---
 description: Initialize a new specification with detailed project description and requirements
-argument-hint: <project-descriptions>
-</meta>
+auto_execution_mode: 2
+---
 
 # Spec Initialization
 
