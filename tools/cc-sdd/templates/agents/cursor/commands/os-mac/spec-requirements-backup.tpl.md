@@ -19,7 +19,7 @@ argument-hint: [feature-name]
   
   1. **Latest Version Research**:
      - Use web_search to find latest versions of relevant technologies, frameworks, libraries
-     - Search for "latest version [technology] 2024" and official documentation
+     - Search for "latest version [technology] 2025 2026" and official documentation
      - Document findings in `{{KNOWLEDGE_DIR}}/research-{technology}-{number}.md`
   
   2. **Best Practices Research**:

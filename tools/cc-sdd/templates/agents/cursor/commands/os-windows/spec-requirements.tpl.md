@@ -61,7 +61,7 @@ argument-hint: [feature-name]
 
   Execute the following web_search commands RIGHT NOW - you cannot continue until you have real research data:
 
-  1. **REQUIRED Web Search Query 1**: Search for "latest version [technology stack relevant to feature] 2024 official documentation"
+  1. **REQUIRED Web Search Query 1**: Search for "latest version [technology stack relevant to feature] 2025 2026 official documentation"
      - **EXECUTE NOW**: Use web_search tool immediately
      - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-latest-versions-001.md`
 
