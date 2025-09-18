@@ -5,7 +5,7 @@
       "id": "commands_os_mac",
       "source": {
         "type": "templateDir",
-        "fromDir": "templates/agents/{{AGENT}}/commands/os-mac",
+        "fromDir": "templates/agents/{{AGENT}}/workflows/os-mac",
         "toDir": "{{AGENT_COMMANDS_DIR}}"
       },
       "when": { "agent": "windsurf", "os": ["mac"] }
@@ -14,7 +14,7 @@
       "id": "commands_os_windows",
       "source": {
         "type": "templateDir",
-        "fromDir": "templates/agents/{{AGENT}}/commands/os-windows",
+        "fromDir": "templates/agents/{{AGENT}}/workflows/os-windows",
         "toDir": "{{AGENT_COMMANDS_DIR}}"
       },
       "when": { "agent": "windsurf", "os": ["windows", "linux"] }

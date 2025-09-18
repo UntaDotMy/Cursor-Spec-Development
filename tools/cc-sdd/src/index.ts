@@ -177,7 +177,7 @@ export const runCli = async (
           break;
         case 'windsurf':
           io.log('\x1b[93m\x1b[1mRecommended: Leverage Windsurf\'s Cascade AI for enhanced code understanding during spec workflow\x1b[0m');
-          io.log('\n🚀 Try: Open Windsurf chat and use \x1b[36m /kiro/spec-init [your feature description or what to build]\x1b[0m commands to get started!');
+          io.log('\n🚀 Try: Open Windsurf chat and use \x1b[36m /kiro-spec-init [your feature description or what to build]\x1b[0m commands to get started!');
           break;
         case 'qwen-code':
           io.log('\n🚀 Try: Use \x1b[36m/kiro:spec-init [your feature description]\x1b[0m to get started!');

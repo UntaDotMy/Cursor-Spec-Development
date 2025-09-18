@@ -32,11 +32,11 @@ export const resolveAgentLayout = (agent: AgentType, config?: CCSddConfig): Agen
       agentDir: '.cursor',
       docFile: 'AGENTS.md',
     },
-    'windsurf': {
-      commandsDir: '.windsurf/commands/kiro',
-      agentDir: '.windsurf',
-      docFile: 'WINDSURF.md',
-    },
+  'windsurf': {
+    commandsDir: '.windsurf/workflows',
+    agentDir: '.windsurf',
+    docFile: 'WINDSURF.md',
+  },
   };
 
   const base = defaults[agent];

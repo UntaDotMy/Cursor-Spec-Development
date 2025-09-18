@@ -44,7 +44,7 @@ describe('resolveAgentLayout', () => {
   it('returns defaults for windsurf', () => {
     const res = resolveAgentLayout('windsurf');
     expect(res).toEqual({
-      commandsDir: '.windsurf/commands/kiro',
+      commandsDir: '.windsurf/workflows',
       agentDir: '.windsurf',
       docFile: 'WINDSURF.md',
     });

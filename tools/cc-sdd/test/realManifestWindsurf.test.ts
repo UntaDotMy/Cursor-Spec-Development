@@ -33,7 +33,7 @@ describe('real windsurf manifest', () => {
     expect(code).toBe(0);
     const out = ctx.logs.join('\n');
     expect(out).toMatch(/Plan \(dry-run\)/);
-    expect(out).toContain('[templateDir] commands_os_mac: templates/agents/windsurf/commands/os-mac -> .windsurf/commands/kiro');
+    expect(out).toContain('[templateDir] commands_os_mac: templates/agents/windsurf/workflows/os-mac -> .windsurf/workflows');
     expect(out).toContain('[templateFile] doc_main: templates/agents/windsurf/docs/WINDSURF.tpl.md -> ./WINDSURF.md');
   });
   
@@ -46,7 +46,7 @@ describe('real windsurf manifest', () => {
     expect(code).toBe(0);
     const out = ctx.logs.join('\n');
     expect(out).toMatch(/Plan \(dry-run\)/);
-    expect(out).toContain('[templateDir] commands_os_windows: templates/agents/windsurf/commands/os-windows -> .windsurf/commands/kiro');
+    expect(out).toContain('[templateDir] commands_os_windows: templates/agents/windsurf/workflows/os-windows -> .windsurf/workflows');
     expect(out).toContain('[templateFile] doc_main: templates/agents/windsurf/docs/WINDSURF.tpl.md -> ./WINDSURF.md');
   });
   

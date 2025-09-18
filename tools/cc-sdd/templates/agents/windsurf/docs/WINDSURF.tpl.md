@@ -7,7 +7,7 @@ Kiro-style Spec Driven Development implementation on AI-DLC (AI Development Life
 ### Paths
 - Steering: `{{KIRO_DIR}}/steering/`
 - Specs: `{{KIRO_DIR}}/specs/`
-- Commands: `.windsurf/commands/`
+- Workflows: `.windsurf/workflows/`
 - Knowledge Base: `{{KNOWLEDGE_DIR}}/`
 
 ### Steering vs Specification
@@ -30,29 +30,29 @@ Kiro-style Spec Driven Development implementation on AI-DLC (AI Development Life
 
 ### Active Specifications
 - Check `{{KIRO_DIR}}/specs/` for active specifications
-- Use `/kiro/spec-status [feature-name]` to check progress
+- Use `/kiro-spec-status [feature-name]` to check progress
 
 ## Enhanced Workflow
 
 ### Phase 0: Steering (Optional)
-`/kiro/steering` - Create/update steering documents
-`/kiro/steering-custom` - Create custom steering for specialized contexts
+`/kiro-steering` - Create/update steering documents
+`/kiro-steering-custom` - Create custom steering for specialized contexts
 
 **Note**: Optional for new features or small additions. Can proceed directly to spec-init.
 
 ### Phase 1: Specification Creation (Research-Enhanced)
-1. `/kiro/spec-init [detailed description]` - Initialize spec with detailed project description
-2. `/kiro/spec-requirements [feature]` - **MANDATORY RESEARCH PHASE** → Generate requirements document
-3. `/kiro/spec-design [feature]` - Interactive: "Have you reviewed requirements.md? [y/N]"
-4. `/kiro/spec-tasks [feature]` - Interactive: Confirms both requirements and design review
+1. `/kiro-spec-init [detailed description]` - Initialize spec with detailed project description
+2. `/kiro-spec-requirements [feature]` - **MANDATORY RESEARCH PHASE** → Generate requirements document
+3. `/kiro-spec-design [feature]` - Interactive: "Have you reviewed requirements.md? [y/N]"
+4. `/kiro-spec-tasks [feature]` - Interactive: Confirms both requirements and design review
 
 ### Phase 2: Implementation (Enhanced)
-5. `/kiro/spec-impl [feature] [task-numbers]` - **KNIFE SURGERY + SELF-REVIEW** → Execute tasks
+5. `/kiro-spec-impl [feature] [task-numbers]` - **KNIFE SURGERY + SELF-REVIEW** → Execute tasks
 6. **Automated Self-Review**: Check for mistakes before testing
 7. **Error Documentation**: Auto-document and research solutions for any errors
 
 ### Phase 3: Progress Tracking
-`/kiro/spec-status [feature]` - Check current progress and phases
+`/kiro-spec-status [feature]` - Check current progress and phases
 
 ## Enhanced Features
 
