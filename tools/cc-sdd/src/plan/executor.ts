@@ -50,7 +50,8 @@ const writeTextFile = async (
   const exists = await fileExists(target);
   if (exists && policy === 'skip') return 'skipped';
   if (exists && policy === 'prompt') {
-    const rel = path.relative(cwd, target);
+    // Use POSIX separators for callback to make tests/platforms consistent
+    const rel = path.relative(cwd, target).split(path.sep).join('/');
     const decision = opts.onConflict ? await opts.onConflict(rel) : 'skip';
     if (decision === 'skip') return 'skipped';
     // else 'overwrite'
@@ -72,7 +73,7 @@ const copyStaticFile = async (
   const exists = await fileExists(dest);
   if (exists && policy === 'skip') return 'skipped';
   if (exists && policy === 'prompt') {
-    const rel = path.relative(cwd, dest);
+    const rel = path.relative(cwd, dest).split(path.sep).join('/');
     const decision = opts.onConflict ? await opts.onConflict(rel) : 'skip';
     if (decision === 'skip') return 'skipped';
   }

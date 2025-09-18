@@ -1,10 +1,14 @@
 import { readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import path from 'node:path';
 import type { UserConfig } from './config.js';
 
 export const CONFIG_FILE = '.cc-sdd.json';
 
-export const resolveConfigPath = (cwd: string): string => join(cwd, CONFIG_FILE);
+// Normalize resolve behavior for tests that provide POSIX-like paths even on Windows
+const isPosixLike = (p: string): boolean => p.startsWith('/');
+
+export const resolveConfigPath = (cwd: string): string =>
+  isPosixLike(cwd) ? path.posix.join(cwd, CONFIG_FILE) : path.join(cwd, CONFIG_FILE);
 
 export const loadUserConfig = async (cwd: string): Promise<UserConfig> => {
   const file = resolveConfigPath(cwd);
