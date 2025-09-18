@@ -2,33 +2,51 @@
 <a href="./tools/cc-sdd/README.md">English</a> | <a href="./tools/cc-sdd/README_ja.md">日本語</a> | <a href="./tools/cc-sdd/README_zh-TW.md">繁體中文</a>
 </sub></div>
 
-# cc-sdd / prev. Claude Code Spec
+# cc-ssd-enh (Enhanced)
 
-✨ **Transform Claude Code/ Cursor IDE / Gemini CLI from prototype to production-ready development**
+✨ **Enhanced Spec-Driven Development with WebSearch Integration & Knowledge Management**
 
 <!-- npm badges -->
-[![npm version](https://img.shields.io/npm/v/cc-sdd?logo=npm)](https://www.npmjs.com/package/cc-sdd?activeTab=readme)
-[![install size](https://packagephobia.com/badge?p=cc-sdd)](https://packagephobia.com/result?p=cc-sdd)
+[![npm version](https://img.shields.io/npm/v/cc-ssd-enh?logo=npm)](https://www.npmjs.com/package/cc-ssd-enh?activeTab=readme)
+[![install size](https://packagephobia.com/badge?p=cc-ssd-enh)](https://packagephobia.com/result?p=cc-ssd-enh)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green.svg)](tools/cc-sdd/LICENSE)
+[![Build Status](https://github.com/UntaDotMy/Cursor-Spec-Development/workflows/CI/badge.svg)](https://github.com/UntaDotMy/Cursor-Spec-Development/actions)
+[![GitHub release](https://img.shields.io/github/release/UntaDotMy/Cursor-Spec-Development.svg)](https://github.com/UntaDotMy/Cursor-Spec-Development/releases)
+
+> **Enhanced version of [cc-sdd](https://github.com/gotalab/cc-sdd) by [Gota](https://github.com/gotalab)** with WebSearch integration, knowledge management, error documentation, and knife surgery coding capabilities.
+
+<div align="center">
+<p><strong>📦 NPM Package:</strong> <a href="https://www.npmjs.com/package/cc-ssd-enh">cc-ssd-enh</a></p>
+<p><strong>🏠 Repository:</strong> <a href="https://github.com/UntaDotMy/Cursor-Spec-Development">UntaDotMy/Cursor-Spec-Development</a></p>
+<p><strong>👨‍💻 Enhanced by:</strong> <a href="https://github.com/UntaDotMy">@UntaDotMy</a></p>
+</div>
 
 
 One command installs **AI-DLC** (AI-Driven Development Life Cycle) with **SDD** (Spec-Driven Development) workflows for Claude Code, Cursor IDE and Gemini CLI.
+
+## ✨ Enhanced Features
+
+- **🔍 WebSearch Integration** - Automatic research for latest versions, best practices, and official documentation
+- **📚 Knowledge Management** - Structured documentation in `{kiro-dir}/knowledge/` with research findings and error solutions  
+- **🔍 Self-Review & Mistake Detection** - Automatically re-reads modified files to detect and fix mistakes before testing
+- **⚡ Knife Surgery Coding** - Context-aware code changes with minimal impact, reads target files before modification
+- **🛠️ Error Documentation** - Web-searched solutions documented for reuse, no assumptions allowed
 
 ## 🚀 Quick Start
 
 ```bash
 # Basic installation (default: Claude Code)
-npx cc-sdd@latest
+npx cc-ssd-enh@latest
 
 # With language: --lang en|ja|zh-TW|zh|es|pt|de|fr|ru|it|ko|ar
 # With OS: --os mac | --os windows | --os linux (if auto-detection fails)
-npx cc-sdd@latest --lang ja --os mac
+npx cc-ssd-enh@latest --lang ja --os mac
 
 # With different agents: gemini-cli, cursor
-npx cc-sdd@latest --gemini-cli
-npx cc-sdd@latest --cursor
+npx cc-ssd-enh@latest --gemini-cli
+npx cc-ssd-enh@latest --cursor
 
-# Ready to go! Now Claude Code and Gemini CLI can leverage `/kiro:spec-init <what to build>` and the full SDD workflow
+# Ready to go! Now Claude Code and Gemini CLI can leverage `/kiro:spec-init <what to build>` and the full enhanced SDD workflow
 ```
 
 ## ✨ What You Get
@@ -130,26 +148,35 @@ Brings to Claude Code, Cursor IDE and Gemini CLI your project context, Project M
 
 ```bash
 # Choose language and OS
-npx cc-sdd@latest --lang ja --os mac
+npx cc-ssd-enh@latest --lang ja --os mac
 
 # Preview changes before applying
-npx cc-sdd@latest --dry-run
+npx cc-ssd-enh@latest --dry-run
 
 # Safe update with backup
-npx cc-sdd@latest --backup --overwrite force
+npx cc-ssd-enh@latest --backup --overwrite force
 
 # Custom specs directory
-npx cc-sdd@latest --kiro-dir docs/specs
+npx cc-ssd-enh@latest --kiro-dir docs/specs
 ```
 
 ## Features
 
+### Core Features (from original cc-sdd)
 ✅ **AI-DLC Integration** - Complete AI-Driven Development Life Cycle  
 ✅ **Project Memory** - Steering documents that maintain comprehensive context (architecture, patterns, rules, domain knowledge) across all sessions  
 ✅ **Spec-Driven Development** - Structured requirements → design → tasks → implementation  
 ✅ **Cross-Platform** - macOS, Linux, and Windows support with auto-detection (Linux reuses mac templates)  
-✅ **Multi-Language** - Japanese, English, Traditional Chinese  
-✅ **Safe Updates** - Interactive prompts with backup options  
+✅ **Multi-Language** - Japanese, English, Traditional Chinese, and more  
+✅ **Safe Updates** - Interactive prompts with backup options
+
+### Enhanced Features (NEW in cc-ssd-enh)
+🆕 **WebSearch Integration** - Mandatory research phase for requirements and design  
+🆕 **Knowledge Management** - Structured documentation of research findings and solutions  
+🆕 **Self-Review & Mistake Detection** - Automatic post-modification code review and correction  
+🆕 **Knife Surgery Coding** - Context-aware modifications with minimal impact  
+🆕 **Error Documentation** - Web-searched solutions with systematic documentation  
+🆕 **Enhanced CI/CD** - Automated testing, releases, and NPM publishing  
 
 ## 📚 Related Resources
 
@@ -161,30 +188,59 @@ npx cc-sdd@latest --kiro-dir docs/specs
 
 ## 📦 Package Information
 
-This repository contains the **cc-sdd** NPM package located in [`tools/cc-sdd/`](tools/cc-sdd/).
+This repository contains the **cc-ssd-enh** NPM package located in [`tools/cc-sdd/`](tools/cc-sdd/).
 
 For detailed documentation, installation instructions, and usage examples, see:
-- [**Tool Documentation**](tools/cc-sdd/README.md) - Complete cc-sdd tool guide
+- [**Tool Documentation**](tools/cc-sdd/README.md) - Complete cc-ssd-enh tool guide
 - [**Japanese Documentation**](tools/cc-sdd/README_ja.md) - 日本語版ツール説明
+- [**NPM Package**](https://www.npmjs.com/package/cc-ssd-enh) - Published package
+- [**GitHub Releases**](https://github.com/UntaDotMy/Cursor-Spec-Development/releases) - Version history
 
 ## Project Structure
 
 ```
-claude-code-spec/
-├── tools/cc-sdd/              # Main cc-sdd NPM package
+Cursor-Spec-Development/
+├── tools/cc-sdd/              # Main cc-ssd-enh NPM package
 │   ├── src/                   # TypeScript source code
-│   ├── templates/             # Agent templates (Claude Code, Cursor IDE, Gemini CLI)
+│   ├── templates/             # Enhanced agent templates (Claude Code, Cursor IDE, Gemini CLI)
+│   │   └── agents/            # Agent-specific templates with enhanced features
+│   ├── .github/workflows/     # CI/CD pipeline (NEW)
+│   ├── scripts/               # Release and maintenance scripts (NEW)
 │   ├── package.json           # Package configuration
-│   └── README.md              # Tool documentation
+│   ├── README.md              # Enhanced tool documentation
+│   ├── CHANGELOG.md           # Version history (NEW)
+│   └── CONTRIBUTING.md        # Contribution guidelines (NEW)
 ├── docs/                      # Documentation
 ├── .claude/                   # Example Claude Code commands
 ├── .gemini/                   # Example Gemini CLI commands
-├── README.md                  # This file (English)
+├── README.md                  # This file (Enhanced version)
 ├── README_ja.md               # Japanese project README
 └── README_zh-TW.md            # Traditional Chinese project README
 ```
 
 
+## 🙏 Credits & Attribution
+
+### Original Author
+This enhanced version is built upon the **excellent foundation** of [cc-sdd](https://github.com/gotalab/cc-sdd) created by **[Gota](https://github.com/gotalab)**.
+
+**🌟 Original Project**: https://github.com/gotalab/cc-sdd  
+**👨‍💻 Original Author**: [Gota](https://github.com/gotalab)  
+**📦 Original NPM**: [cc-sdd](https://www.npmjs.com/package/cc-sdd)
+
+All core spec-driven development methodology, AI-DLC concepts, and foundational architecture are **credited to the original author**.
+
+### Enhanced Version  
+**🚀 Enhanced by**: [UntaDotMy](https://github.com/UntaDotMy)  
+**📦 Enhanced NPM**: [cc-ssd-enh](https://www.npmjs.com/package/cc-ssd-enh)  
+**🏠 Enhanced Repository**: https://github.com/UntaDotMy/Cursor-Spec-Development
+
+**✨ Enhancements Added**: WebSearch integration, knowledge management, error documentation, self-review mistake detection, and knife surgery coding capabilities.
+
+---
+
+**Enhanced Release v1.3.1** - Ready for production use with advanced research, documentation, and self-review mistake detection capabilities.
+
 ## License
 
-MIT License
+MIT License | Built with ❤️ on the foundation by [Gota](https://github.com/gotalab) | Enhanced by [UntaDotMy](https://github.com/UntaDotMy)
