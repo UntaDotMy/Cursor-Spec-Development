@@ -5,25 +5,35 @@ prompt = """
 
 Generate comprehensive requirements for feature: **{{args}}** with automated research and knowledge documentation.
 
-## Phase 1: Research & Documentation (MANDATORY)
+## ⚠️ CRITICAL: MANDATORY RESEARCH FIRST ⚠️
 
-**CRITICAL**: Before generating requirements, conduct comprehensive research:
+**YOU CANNOT PROCEED TO REQUIREMENTS GENERATION WITHOUT COMPLETING RESEARCH FIRST**
 
-1. **Latest Version Research**:
-   - Use web search to find latest versions of relevant technologies, frameworks, libraries
-   - Search for "latest version [technology] 2024" and official documentation
-   - Document findings in `{{KNOWLEDGE_DIR}}/research-{technology}-{number}.md`
+This command has been structured to FORCE research before requirements generation. You must complete ALL research steps and produce the required documentation files before you can proceed to generate requirements.
 
-2. **Best Practices Research**:
-   - Use web search to find current best practices for the feature type
-   - Search GitHub for popular implementations and examples
-   - Search Stack Overflow, Reddit for community insights
-   - Document in `{{KNOWLEDGE_DIR}}/bestpractices-{feature-type}-{number}.md`
+## STEP 1: FORCED RESEARCH PHASE (CANNOT BE SKIPPED)
 
-3. **Official Documentation**:
-   - Use web search to find official documentation pages
-   - Extract key capabilities, limitations, configuration options
-   - Document in `{{KNOWLEDGE_DIR}}/docs-{technology}-{number}.md`
+### 1.1 Execute Mandatory Web Search (NO EXCEPTIONS)
+
+**STOP HERE AND PERFORM RESEARCH IMMEDIATELY - DO NOT PROCEED WITHOUT COMPLETING THIS**
+
+Execute the following web search commands RIGHT NOW - you cannot continue until you have real research data:
+
+1. **REQUIRED Web Search Query 1**: Search for "latest version [technology stack relevant to {{args}}] 2024 official documentation"
+   - **EXECUTE NOW**: Use web search immediately
+   - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-latest-versions-001.md`
+
+2. **REQUIRED Web Search Query 2**: Search for "[feature type for {{args}}] best practices implementation examples GitHub"
+   - **EXECUTE NOW**: Use web search immediately  
+   - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-best-practices-001.md`
+
+3. **REQUIRED Web Search Query 3**: Search for "[feature name {{args}}] implementation challenges common issues Stack Overflow"
+   - **EXECUTE NOW**: Use web search immediately
+   - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-challenges-001.md`
+
+### 1.2 Create Research Documentation (MANDATORY OUTPUT)
+
+**YOU MUST CREATE THESE FILES - REQUIREMENTS GENERATION DEPENDS ON THEM**
 
 ### Knowledge Documentation Format
 For each research finding, create structured documentation:
@@ -51,7 +61,27 @@ For each research finding, create structured documentation:
 - **Requirements Impact**: [how this affects requirements]
 ```
 
-## Phase 2: Context Validation
+## ✅ STEP 2: VALIDATION CHECKPOINT
+
+**BEFORE PROCEEDING TO REQUIREMENTS, VERIFY YOU HAVE COMPLETED:**
+
+- [ ] ✅ Executed Web Search Query 1 and saved results
+- [ ] ✅ Executed Web Search Query 2 and saved results  
+- [ ] ✅ Executed Web Search Query 3 and saved results
+- [ ] ✅ Created research documentation files in `{{KNOWLEDGE_DIR}}/`
+- [ ] ✅ Have real web research data (not assumptions)
+
+**IF ANY CHECKBOX IS EMPTY, STOP AND GO BACK TO STEP 1**
+
+## STEP 3: CONTEXT LOADING (ONLY AFTER RESEARCH COMPLETED)
+
+### Load Research-Based Context
+**FIRST**: Read and incorporate your research findings:
+- **REQUIRED**: Read `{{KNOWLEDGE_DIR}}/research-latest-versions-001.md`
+- **REQUIRED**: Read `{{KNOWLEDGE_DIR}}/research-best-practices-001.md`  
+- **REQUIRED**: Read `{{KNOWLEDGE_DIR}}/research-challenges-001.md`
+
+## STEP 4: CONTEXT VALIDATION
 
 ### Steering Context
 - Architecture context: @{{KIRO_DIR}}/steering/structure.md
