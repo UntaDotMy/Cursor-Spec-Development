@@ -1,0 +1,91 @@
+name: Release
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'tools/cc-sdd/package.json'
+  workflow_dispatch:
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.pkg.outputs.version }}
+      changed: ${{ steps.pkg.outputs.changed }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+    - id: pkg
+      run: |
+        CURR=$(node -p "require('./tools/cc-sdd/package.json').version")
+        echo "version=$CURR" >> $GITHUB_OUTPUT
+        git show HEAD~1:tools/cc-sdd/package.json > old.json || echo '{"version":"0.0.0"}' > old.json
+        PREV=$(node -p "require('./old.json').version")
+        if [ "$CURR" != "$PREV" ]; then echo "changed=true" >> $GITHUB_OUTPUT; else echo "changed=false" >> $GITHUB_OUTPUT; fi
+
+  test:
+    needs: check-version
+    if: needs.check-version.outputs.changed == 'true'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18, 20, 22]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: tools/cc-sdd/package-lock.json
+    - run: npm ci
+      working-directory: tools/cc-sdd
+    - run: npm test
+      working-directory: tools/cc-sdd
+    - run: npm run build
+      working-directory: tools/cc-sdd
+
+  create-release:
+    needs: [check-version, test]
+    if: needs.check-version.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ needs.check-version.outputs.version }}
+        name: cc-ssd-enh v${{ needs.check-version.outputs.version }}
+        body: | 
+          Automated release for v${{ needs.check-version.outputs.version }}
+          - Enforced 2025–2026 research context
+          - Mandatory WebSearch and validation gates across all IDE agents
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    needs: [check-version, test, create-release]
+    if: needs.check-version.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        registry-url: 'https://registry.npmjs.org'
+        cache: 'npm'
+        cache-dependency-path: tools/cc-sdd/package-lock.json
+    - run: npm ci
+      working-directory: tools/cc-sdd
+    - run: npm run build
+      working-directory: tools/cc-sdd
+    - name: Publish to NPM
+      run: npm publish
+      working-directory: tools/cc-sdd
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
