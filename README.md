@@ -22,7 +22,7 @@
 </div>
 
 
-One command installs **AI-DLC** (AI-Driven Development Life Cycle) with **SDD** (Spec-Driven Development) workflows for Claude Code, Cursor IDE and Gemini CLI.
+One command installs **AI-DLC** (AI-Driven Development Life Cycle) with **SDD** (Spec-Driven Development) workflows for Claude Code, Cursor IDE, Gemini CLI and Windsurf IDE.
 
 ## ✨ Enhanced Features
 
@@ -42,9 +42,10 @@ npx cc-ssd-enh@latest
 # With OS: --os mac | --os windows | --os linux (if auto-detection fails)
 npx cc-ssd-enh@latest --lang ja --os mac
 
-# With different agents: gemini-cli, cursor
+# With different agents: gemini-cli, cursor, windsurf
 npx cc-ssd-enh@latest --gemini-cli
 npx cc-ssd-enh@latest --cursor
+npx cc-ssd-enh@latest --windsurf
 
 # Ready to go! Now Claude Code and Gemini CLI can leverage `/kiro:spec-init <what to build>` and the full enhanced SDD workflow
 ```
@@ -81,7 +82,7 @@ After running cc-sdd, you'll have:
 
 ## About
 
-Brings to Claude Code, Cursor IDE and Gemini CLI your project context, Project Memory (steering) and development patterns: **requirements → design → tasks → implementation**. **Kiro IDE compatible** — Reuse Kiro-style SDD specs and workflows seamlessly.
+Brings to Claude Code, Cursor IDE, Gemini CLI and Windsurf IDE your project context, Project Memory (steering) and development patterns: **requirements → design → tasks → implementation**. **Kiro IDE compatible** — Reuse Kiro-style SDD specs and workflows seamlessly.
 
 **【Claude Code/Cursor IDE/Gemini CLI】**
 ワンライナーで **AI-DLC（AI-Driven Development Life Cycle）** と **Spec-Driven Development（仕様駆動開発）** のワークフローを導入。プロジェクト直下に **10個のSlash Commands** 一式と設定ファイル（Claude Code用の **CLAUDE.md** / Cursor IDE用の **AGENTS.md** / Gemini CLI用の **GEMINI.md**）を配置、プロジェクトの文脈と開発パターン（**要件 → 設計 → タスク → 実装**）、**プロジェクトメモリ（ステアリング）** を含む。
@@ -104,6 +105,7 @@ Brings to Claude Code, Cursor IDE and Gemini CLI your project context, Project M
 - **✅ Claude Code** - Fully supported with all 10 custom slash commands and CLAUDE.md
 - **✅ Gemini CLI** - Fully supported with all 10 custom commands and GEMINI.md
 - **✅ Cursor IDE** - Fully supported with all 10 custom commands and AGENTS.md
+- **✅ Windsurf IDE** - Fully supported with all 10 custom commands and WINDSURF.md
 - **📅 More agents** - Additional AI coding assistants planned
 
 *Currently optimized for Claude Code. Use `--agent claude-code` (default) for full functionality.*
@@ -238,8 +240,6 @@ All core spec-driven development methodology, AI-DLC concepts, and foundational 
 **✨ Enhancements Added**: WebSearch integration, knowledge management, error documentation, self-review mistake detection, and knife surgery coding capabilities.
 
 ---
-
-**Enhanced Release v1.3.1** - Ready for production use with advanced research, documentation, and self-review mistake detection capabilities.
 
 ## License
 

@@ -73,6 +73,21 @@ For each research finding, create structured documentation:
 
 **IF ANY CHECKBOX IS EMPTY, STOP AND GO BACK TO STEP 1**
 
+## STEP 2.1: ACCURACY GATE & ITERATIVE SEARCH (MANDATORY)
+
+Before proceeding, run this accuracy gate. If any check fails, you MUST refine queries and repeat web search until all pass.
+
+### Accuracy Gate
+- [ ] At least **2 independent sources**, including the **official documentation/site**
+- [ ] Findings reference **2025 or 2026** releases/notes (or latest stable with date evidence)
+- [ ] Version numbers and capabilities **match across sources**
+- [ ] Constraints/limits and deprecations explicitly captured
+
+### Iterative Search Rules
+- Modify queries if data is missing/unclear (add product, version, “release notes”, “breaking changes”, “migration guide”, “2025 2026”).
+- Prefer queries including **vendor name + “official docs”**.
+- **Do NOT rely on prior model knowledge**; proceed only with corroborated sources saved in `{{KNOWLEDGE_DIR}}/`.
+
 ## STEP 3: CONTEXT LOADING (ONLY AFTER RESEARCH COMPLETED)
 
 ### Load Research-Based Context

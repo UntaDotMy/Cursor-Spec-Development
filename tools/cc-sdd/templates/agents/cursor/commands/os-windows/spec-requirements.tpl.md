@@ -118,6 +118,21 @@ argument-hint: [feature-name]
 
   **IF ANY CHECKBOX IS EMPTY, STOP AND GO BACK TO STEP 1**
 
+  ## STEP 2.1: ACCURACY GATE & ITERATIVE SEARCH (MANDATORY)
+
+  **Before proceeding**, run this accuracy gate. If any check fails, you MUST refine queries and repeat web_search until all pass.
+
+  ### Accuracy Gate
+  - [ ] At least **2 independent sources**, including the **official documentation/site**
+  - [ ] Findings reference **2025 or 2026** releases/notes (or the latest stable version with date evidence)
+  - [ ] Version numbers and capabilities **match across sources** (no contradictions)
+  - [ ] Constraints/limits and deprecations explicitly captured
+
+  ### Iterative Search Rules
+  - Modify queries if data is missing/unclear (add product name, version, “release notes”, “breaking changes”, “migration guide”, “2025 2026”).
+  - Prefer queries including **vendor name + “official docs”**.
+  - **Do NOT rely on prior model knowledge**; only proceed with corroborated sources saved under `{{KNOWLEDGE_DIR}}/`.
+
   ## STEP 3: CONTEXT LOADING (ONLY AFTER RESEARCH COMPLETED)
 
   ### Load Research-Based Context

@@ -1,4 +1,4 @@
-export type AgentType = 'claude-code' | 'gemini-cli' | 'qwen-code' | 'cursor';
+export type AgentType = 'claude-code' | 'gemini-cli' | 'qwen-code' | 'cursor' | 'windsurf';
 
 export interface AgentLayout {
   commandsDir: string;
@@ -31,6 +31,11 @@ export const resolveAgentLayout = (agent: AgentType, config?: CCSddConfig): Agen
       commandsDir: '.cursor/commands/kiro',
       agentDir: '.cursor',
       docFile: 'AGENTS.md',
+    },
+    'windsurf': {
+      commandsDir: '.windsurf/commands/kiro',
+      agentDir: '.windsurf',
+      docFile: 'WINDSURF.md',
     },
   };
 

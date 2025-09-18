@@ -28,7 +28,7 @@ export type ParsedArgs = {
   profile?: 'full' | 'minimal';
 };
 
-const booleanFlags = new Set(['yes', 'y', 'dry-run', 'claude-code', 'gemini-cli', 'qwen-code', 'cursor', 'backup']);
+const booleanFlags = new Set(['yes', 'y', 'dry-run', 'claude-code', 'gemini-cli', 'qwen-code', 'cursor', 'windsurf', 'backup']);
 const valueFlags = new Set(['agent', 'lang', 'os', 'overwrite', 'kiro-dir', 'backup', 'manifest', 'profile']);
 
 const isKnownFlag = (name: string): boolean => booleanFlags.has(name) || valueFlags.has(name);
@@ -159,7 +159,7 @@ export const parseArgs = (argv: string[]): ParsedArgs => {
         }
         case 'agent': {
           const v = String(value) as AgentType;
-          if (!isEnum(v, ['claude-code', 'gemini-cli', 'qwen-code', 'cursor'] as const)) throw new Error('agent value invalid');
+          if (!isEnum(v, ['claude-code', 'gemini-cli', 'qwen-code', 'cursor', 'windsurf'] as const)) throw new Error('agent value invalid');
           setAgent(v);
           break;
         }
@@ -174,6 +174,9 @@ export const parseArgs = (argv: string[]): ParsedArgs => {
           break;
         case 'cursor':
           setAgent('cursor');
+          break;
+        case 'windsurf':
+          setAgent('windsurf');
           break;
         default:
           // should not reach

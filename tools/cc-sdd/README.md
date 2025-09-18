@@ -21,7 +21,7 @@ English | <a href="https://github.com/UntaDotMy/Cursor-Spec-Development/blob/mai
 <p><strong>👨‍💻 Enhanced by:</strong> <a href="https://github.com/UntaDotMy">@UntaDotMy</a></p>
 </div>
 
-Brings **AI-DLC (AI Driven Development Lifecycle)** to Claude Code, Cursor IDE and Gemini CLI. **AI-native processes** with **minimal human approval gates**: AI drives execution while humans validate critical decisions at each phase.
+Brings **AI-DLC (AI Driven Development Lifecycle)** to Claude Code, Cursor IDE, Gemini CLI and Windsurf IDE. **AI-native processes** with **minimal human approval gates**: AI drives execution while humans validate critical decisions at each phase.
 
 🎯 **Perfect for**: Escaping the 70% overhead trap of traditional development (meetings, documentation, ceremonies) to achieve **weeks-to-hours delivery** with AI-native execution and human quality gates.
 
@@ -41,6 +41,7 @@ npx cc-ssd-enh@latest --lang zh-TW # Traditional Chinese
 # With agent options (default: claude-code)
 npx cc-ssd-enh@latest --gemini-cli --lang ja # For Gemini CLI instead
 npx cc-ssd-enh@latest --cursor --lang ja # For Cursor IDE instead
+npx cc-ssd-enh@latest --windsurf --lang ja # For Windsurf IDE instead
 ```
 
 ## 🌐 Supported Languages
@@ -108,6 +109,7 @@ npx cc-ssd-enh@latest --cursor --lang ja # For Cursor IDE instead
 | **Claude Code** | ✅ Full | 10 slash commands | `CLAUDE.md` |
 | **Gemini CLI** | ✅ Full | 10 commands | `GEMINI.md` |
 | **Cursor IDE** | ✅ Full | 10 commands | `AGENTS.md` |
+| **Windsurf IDE** | ✅ Full | 10 commands | `WINDSURF.md` |
 | Others | 📅 Planned | - | - |
  
 ## 📋 Commands
@@ -182,10 +184,10 @@ project/
 
 ```bash
 # Remove all generated files and folders
-rm -rf .claude .cursor .gemini .kiro CLAUDE.md AGENTS.md GEMINI.md
+rm -rf .claude .cursor .gemini .windsurf .kiro CLAUDE.md AGENTS.md GEMINI.md WINDSURF.md
 
 # Windows PowerShell
-Remove-Item -Recurse -Force .claude, .cursor, .gemini, .kiro, CLAUDE.md, AGENTS.md, GEMINI.md
+Remove-Item -Recurse -Force .claude, .cursor, .gemini, .windsurf, .kiro, CLAUDE.md, AGENTS.md, GEMINI.md, WINDSURF.md
 ```
 
 ### Agent-Specific Cleanup
@@ -203,6 +205,11 @@ rm -rf .cursor AGENTS.md
 **Gemini CLI**
 ```bash
 rm -rf .gemini GEMINI.md
+```
+
+**Windsurf IDE**
+```bash
+rm -rf .windsurf WINDSURF.md
 ```
 
 ### Global Package Removal
@@ -273,8 +280,6 @@ All core spec-driven development methodology, AI-DLC concepts, and foundational 
 **✨ Enhancements Added**: WebSearch integration, knowledge management, error documentation, self-review mistake detection, and knife surgery coding capabilities.
 
 ---
-
-**Enhanced Release v1.3.0** - Ready for production use with advanced research, documentation, and self-review mistake detection capabilities. 
 
 MIT License | Built with ❤️ on the foundation by [Gota](https://github.com/gotalab) | Enhanced by [UntaDotMy](https://github.com/UntaDotMy)
 

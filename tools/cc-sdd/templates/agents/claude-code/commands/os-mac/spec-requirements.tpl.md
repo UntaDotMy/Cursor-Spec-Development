@@ -220,3 +220,19 @@ The `-y` flag auto-approves requirements and generates design directly, streamli
 **FAILURE TO COMPLETE RESEARCH FIRST WILL RESULT IN INCOMPLETE/OUTDATED REQUIREMENTS**
 
 **Remember: The quality of your requirements depends entirely on the quality of your research. Poor research = poor requirements. Thorough web research = excellent, up-to-date requirements.**
+
+## STEP 1.3: ACCURACY GATE & ITERATIVE SEARCH (MANDATORY)
+
+Before proceeding, run this accuracy gate. If any check fails, you MUST refine queries and repeat WebSearch until all pass.
+
+### Accuracy Gate
+- [ ] At least **2 independent sources**, including the **official documentation/site**
+- [ ] Findings reference **2025 or 2026** releases/notes (or the latest stable version with date evidence)
+- [ ] Version numbers and capabilities **match across sources** (no contradictions)
+- [ ] Constraints/limits and deprecations explicitly captured
+
+### Iterative Search Rules
+- If information is missing/unclear, **modify search queries** (broaden/narrow; add product name, version, “release notes”, “breaking changes”, “migration guide”, “2025 2026”).
+- Prefer queries that include the **vendor name + “official docs”**.
+- When conflicts are found, **prioritize official** and recent (2025–2026) sources, then corroborate with community.
+- **Do NOT rely on prior model knowledge** for facts; everything must be backed by sources saved in `{{KNOWLEDGE_DIR}}/`.

@@ -6,7 +6,7 @@ argument-hint: [feature-name]
 <requirements_command>
 
   <tool_policy>
-  - Principle: Use Cursor file tools (read_file, list_dir, glob_file_search, apply_patch, edit_file) and web tools (web_search).
+  - Principle: Use Windsurf file tools (read_file, list_dir, glob_file_search, apply_patch, edit_file) and web tools (web_search).
   - Enhanced: Use web_search for research and documentation before requirements generation.
   - Self-Review: After code changes, mandatory re-read all modified files to check for mistakes.
   - Shell: Do not use shell. If a capability gap is encountered, stop and report instead of attempting a workaround.

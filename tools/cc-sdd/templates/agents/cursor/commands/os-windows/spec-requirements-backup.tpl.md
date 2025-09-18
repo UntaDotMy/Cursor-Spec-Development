@@ -8,76 +8,30 @@ argument-hint: [feature-name]
   <tool_policy>
   - Principle: Use Cursor file tools (read_file, list_dir, glob_file_search, apply_patch, edit_file) and web tools (web_search).
   - Enhanced: Use web_search for research and documentation before requirements generation.
-  - Self-Review: After code changes, mandatory re-read all modified files to check for mistakes.
   - Shell: Do not use shell. If a capability gap is encountered, stop and report instead of attempting a workaround.
   </tool_policy>
 
-  <self_review_enhancement>
-  
-  ## Self-Review & Mistake Detection (NEW)
-  
-  **MANDATORY**: After any code modifications, perform systematic self-review:
-  
-  ### Mistake Detection Process
-  1. **Re-read ALL modified files** using read_file tool
-  2. **Check systematically** for:
-     - Syntax errors and typos
-     - Logic errors and integration issues  
-     - Missing imports or dependencies
-     - Performance and security issues
-  3. **Document mistakes** in `{{KNOWLEDGE_DIR}}/errors/mistake-{description}-{number}.md`
-  4. **Self-correction loop**: Fix mistakes immediately and re-read until clean
-  5. **Only proceed to testing** after self-review confirms no obvious mistakes
-  
-  ### Mistake Documentation
-  ```markdown
-  # Mistake: {Type/Description}
-  
-  ## Detection Details
-  - **File(s)**: [affected files]
-  - **Mistake Type**: [syntax/logic/integration/performance]  
-  - **Context**: [implementation context]
-  
-  ## Correction Applied  
-  - **Fix**: [detailed correction]
-  - **Verification**: [how fix was verified]
-  ```
-  
-  </self_review_enhancement>
-
   <research_phase>
   
-  ## ⚠️ CRITICAL: MANDATORY RESEARCH FIRST ⚠️
+  ## Phase 1: Research & Documentation (MANDATORY)
   
-  **YOU CANNOT PROCEED TO REQUIREMENTS GENERATION WITHOUT COMPLETING RESEARCH FIRST**
-
-  This command has been structured to FORCE research before requirements generation. You must complete ALL research steps and produce the required documentation files before you can proceed to generate requirements.
-
-  ## STEP 1: FORCED RESEARCH PHASE (CANNOT BE SKIPPED)
-
-  ### 1.1 Execute Mandatory Web Search (NO EXCEPTIONS)
-
-  **STOP HERE AND PERFORM RESEARCH IMMEDIATELY - DO NOT PROCEED WITHOUT COMPLETING THIS**
-
-  Execute the following web_search commands RIGHT NOW - you cannot continue until you have real research data:
-
-  1. **REQUIRED Web Search Query 1**: Search for "latest version [technology stack relevant to feature] 2025 2026 official documentation"
-     - **EXECUTE NOW**: Use web_search tool immediately
-     - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-latest-versions-001.md`
-
-  2. **REQUIRED Web Search Query 2**: Search for "[feature type] best practices implementation examples GitHub"
-     - **EXECUTE NOW**: Use web_search tool immediately  
-     - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-best-practices-001.md`
-
-  3. **REQUIRED Web Search Query 3**: Search for "[feature name] implementation challenges common issues Stack Overflow"
-     - **EXECUTE NOW**: Use web_search tool immediately
-     - **REQUIRED OUTPUT**: Save results to `{{KNOWLEDGE_DIR}}/research-challenges-001.md`
-
-  ### 1.2 Create Research Documentation (MANDATORY OUTPUT)
-
-  **YOU MUST CREATE THESE FILES - REQUIREMENTS GENERATION DEPENDS ON THEM**
-
-  For EACH web_search result, create documentation using this EXACT format:
+  **CRITICAL**: Before generating requirements, conduct comprehensive research:
+  
+  1. **Latest Version Research**:
+     - Use web_search to find latest versions of relevant technologies, frameworks, libraries
+     - Search for "latest version [technology] 2025 2026" and official documentation
+     - Document findings in `{{KNOWLEDGE_DIR}}/research-{technology}-{number}.md`
+  
+  2. **Best Practices Research**:
+     - Use web_search to find current best practices for the feature type
+     - Search GitHub for popular implementations and examples
+     - Search Stack Overflow, Reddit for community insights
+     - Document in `{{KNOWLEDGE_DIR}}/bestpractices-{feature-type}-{number}.md`
+  
+  3. **Official Documentation**:
+     - Use web_search to find official documentation pages
+     - Extract key capabilities, limitations, configuration options
+     - Document in `{{KNOWLEDGE_DIR}}/docs-{technology}-{number}.md`
   
   ### Knowledge Documentation Format
   For each research finding, create structured documentation:
@@ -104,42 +58,6 @@ argument-hint: [feature-name]
   - **Further Research Needed**: [if any]
   - **Requirements Impact**: [how this affects requirements]
   ```
-  
-  
-  ## ✅ STEP 2: VALIDATION CHECKPOINT
-
-  **BEFORE PROCEEDING TO REQUIREMENTS, VERIFY YOU HAVE COMPLETED:**
-
-  - [ ] ✅ Executed Web Search Query 1 and saved results
-  - [ ] ✅ Executed Web Search Query 2 and saved results  
-  - [ ] ✅ Executed Web Search Query 3 and saved results
-  - [ ] ✅ Created research documentation files in `{{KNOWLEDGE_DIR}}/`
-  - [ ] ✅ Have real web research data (not assumptions)
-
-  **IF ANY CHECKBOX IS EMPTY, STOP AND GO BACK TO STEP 1**
-
-  ## STEP 2.1: ACCURACY GATE & ITERATIVE SEARCH (MANDATORY)
-
-  **Before proceeding**, run this accuracy gate. If any check fails, you MUST refine queries and repeat web_search until all pass.
-
-  ### Accuracy Gate
-  - [ ] At least **2 independent sources**, including the **official documentation/site**
-  - [ ] Findings reference **2025 or 2026** releases/notes (or the latest stable version with date evidence)
-  - [ ] Version numbers and capabilities **match across sources** (no contradictions)
-  - [ ] Constraints/limits and deprecations explicitly captured
-
-  ### Iterative Search Rules
-  - Modify queries if data is missing/unclear (add product name, version, “release notes”, “breaking changes”, “migration guide”, “2025 2026”).
-  - Prefer queries including **vendor name + “official docs”**.
-  - **Do NOT rely on prior model knowledge**; only proceed with corroborated sources saved under `{{KNOWLEDGE_DIR}}/`.
-
-  ## STEP 3: CONTEXT LOADING (ONLY AFTER RESEARCH COMPLETED)
-
-  ### Load Research-Based Context
-  **FIRST**: Read and incorporate your research findings:
-  - **REQUIRED**: Read `{{KNOWLEDGE_DIR}}/research-latest-versions-001.md`
-  - **REQUIRED**: Read `{{KNOWLEDGE_DIR}}/research-best-practices-001.md`  
-  - **REQUIRED**: Read `{{KNOWLEDGE_DIR}}/research-challenges-001.md`
   
   </research_phase>
 
@@ -288,3 +206,5 @@ JSON update: update via file tools, set ISO `updated_at`, merge only needed keys
   </self_reflection>
 
 </requirements_command>
+
+
