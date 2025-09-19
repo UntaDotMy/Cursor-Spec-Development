@@ -162,6 +162,17 @@ npx cc-ssd-enh@latest --backup --overwrite force
 npx cc-ssd-enh@latest --kiro-dir docs/specs
 ```
 
+### Update Mode and Mandatory Policies
+
+```bash
+# Refresh agent commands/workflows to the latest templates (preserves specs/knowledge)
+npx cc-ssd-enh@latest --cursor --update
+# or --claude-code / --gemini-cli / --windsurf
+```
+
+- Overwrites only agent commands/workflows; preserves `{{KIRO_DIR}}/specs` and `{{KNOWLEDGE_DIR}}/`.
+- Mandatory policies: research-first (read docs before web tools), base-first implementation, required self-review/error docs, and no assumptions.
+
 ## Features
 
 ### Core Features (from original cc-sdd)
